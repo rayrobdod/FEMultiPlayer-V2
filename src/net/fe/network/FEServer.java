@@ -101,15 +101,15 @@ public class FEServer extends Game {
 		maps.put("decay", new Objective[]{rout, seize});
 		
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
-		DefaultListModel sModel = new DefaultListModel();
+		final DefaultListModel selectedModifiersListModel = new DefaultListModel();
 		// Modifiers
-		DefaultListModel model = new DefaultListModel();
-		model.addElement(new MadeInChina());
-		model.addElement(new Treasury());
-		model.addElement(new Veterans());
-		model.addElement(new DivineIntervention());
-		model.addElement(new SuddenDeath());
-		model.addElement(new Vegas());
+		final DefaultListModel modifiersListModel = new DefaultListModel();
+		modifiersListModel.addElement(new MadeInChina());
+		modifiersListModel.addElement(new Treasury());
+		modifiersListModel.addElement(new Veterans());
+		modifiersListModel.addElement(new DivineIntervention());
+		modifiersListModel.addElement(new SuddenDeath());
+		modifiersListModel.addElement(new Vegas());
 		
 		final JPanel mainPanel = new JPanel();
 		frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
@@ -161,8 +161,7 @@ public class FEServer extends Game {
 		pickModeBox.setModel(pModel);
 		objectivePanel.add(pickModeBox);
 		
-		JSeparator separator = new JSeparator();
-		mainPanel.add(separator);
+		mainPanel.add(new JSeparator());
 		
 		JLabel modifiersLabel = new JLabel("Modifiers");
 		modifiersLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -183,13 +182,13 @@ public class FEServer extends Game {
 		final ModifierList modifiersList = new ModifierList();
 		modifiersList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		modifiersScrollPane.add(modifiersList);
-		modifiersList.setModel(model);
+		modifiersList.setModel(modifiersListModel);
 		modifiersScrollPane.setViewportView(modifiersList);
 		
 		final ModifierList selectedModifiersList = new ModifierList();
 		selectedModifiersList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		selectedModifiersScrollPane.add(selectedModifiersList);
-		selectedModifiersList.setModel(sModel);
+		selectedModifiersList.setModel(selectedModifiersListModel);
 		selectedModifiersScrollPane.setViewportView(selectedModifiersList);
 		
 		JPanel buttonsPanel = new JPanel();
@@ -200,9 +199,9 @@ public class FEServer extends Game {
 			public void actionPerformed(ActionEvent arg0) {
 				int index = modifiersList.getSelectedIndex();
 				if(index != -1) {
-					Object o = modifiersList.getModel().getElementAt(index);
-					((DefaultListModel)modifiersList.getModel()).remove(modifiersList.getSelectedIndex());
-					((DefaultListModel)selectedModifiersList.getModel()).add(0,o);
+					Object o = modifiersListModel.getElementAt(index);
+					modifiersListModel.remove(index);
+					selectedModifiersListModel.add(0,o);
 				}
 			}
 		});
@@ -214,9 +213,9 @@ public class FEServer extends Game {
 			public void actionPerformed(ActionEvent e) {
 				int index = selectedModifiersList.getSelectedIndex();
 				if(index != -1) {
-					Object o = selectedModifiersList.getModel().getElementAt(index);
-					((DefaultListModel)selectedModifiersList.getModel()).remove(selectedModifiersList.getSelectedIndex());
-					((DefaultListModel)modifiersList.getModel()).add(0,o);
+					Object o = selectedModifiersListModel.getElementAt(index);
+					selectedModifiersListModel.remove(index);
+					modifiersListModel.add(0,o);
 				}
 			}
 		});
