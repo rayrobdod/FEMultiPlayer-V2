@@ -179,8 +179,8 @@ public class Summon extends OverworldContext {
 	public static Unit generateSummon(Unit summoner) {
 		net.fe.unit.WeaponFactory.loadWeapons();
 		
-		HashMap<String, Integer> bases = new HashMap();
-		HashMap<String, Integer> growths = new HashMap();
+		HashMap<String, Integer> bases = new HashMap<String, Integer>();
+		HashMap<String, Integer> growths = new HashMap<String, Integer>();
 		bases.put("HP", 1);
 		bases.put("Str", 5);
 		bases.put("Def", 0);
