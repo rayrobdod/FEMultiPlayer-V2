@@ -73,19 +73,19 @@ public class LevelEditorStage extends Stage {
 		tiles = new int[3][3];
 		spawns = new HashSet<SpawnPoint>();
 		try {
-            FileInputStream in = new FileInputStream(new File("levels/"+levelName+".lvl"));
-            ObjectInputStream ois = new ObjectInputStream(in);
-            Level level = (Level) ois.readObject();
-            tiles = level.tiles;
-            spawns = level.spawns;
-            if(spawns == null) spawns = new HashSet<SpawnPoint>();
-            ois.close();
-            in.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+			FileInputStream in = new FileInputStream(new File("levels/"+levelName+".lvl"));
+			ObjectInputStream ois = new ObjectInputStream(in);
+			Level level = (Level) ois.readObject();
+			tiles = level.tiles;
+			spawns = level.spawns;
+			if(spawns == null) spawns = new HashSet<SpawnPoint>();
+			ois.close();
+			in.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/* (non-Javadoc)
@@ -163,21 +163,21 @@ public class LevelEditorStage extends Stage {
 					} else if (ke.key == Keyboard.KEY_F1) { 
 						Level level = new Level(tiles[0].length, tiles.length, tiles, spawns);
 						File file = new File("levels/"+levelName+".lvl");
-		                FileOutputStream fo;
-		                ObjectOutputStream oos;
-		                try {
-		                        fo = new FileOutputStream(file);
-		                        oos = new ObjectOutputStream(fo);
-		                        oos.writeObject(level);
-		                        oos.close();
-		                        System.out.println("Level serialization successful.");
-		                } catch (FileNotFoundException e) {
-		                        System.out.println("Invalid file path!");
-		                        e.printStackTrace();
-		                } catch (IOException e) {
-		                        System.err.println("Failed to create object output stream");
-		                        e.printStackTrace();
-		                }
+						FileOutputStream fo;
+						ObjectOutputStream oos;
+						try {
+							fo = new FileOutputStream(file);
+							oos = new ObjectOutputStream(fo);
+							oos.writeObject(level);
+							oos.close();
+							System.out.println("Level serialization successful.");
+						} catch (FileNotFoundException e) {
+							System.out.println("Invalid file path!");
+							e.printStackTrace();
+						} catch (IOException e) {
+							System.err.println("Failed to create object output stream");
+							e.printStackTrace();
+						}
 					}
 				}
 			}

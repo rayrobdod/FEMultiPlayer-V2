@@ -143,10 +143,10 @@ public class Unit extends GriddedEntity implements Serializable, DoNotDestroy{
 		assist = new HashSet<Unit>();
 		skills = new ArrayList<CombatTrigger>();
 		battleStats = new HashMap<String, Integer>();
-        battleStats.put("Kills", 0);
-        battleStats.put("Assists", 0);
-        battleStats.put("Damage", 0);
-        battleStats.put("Healing", 0);
+		battleStats.put("Kills", 0);
+		battleStats.put("Assists", 0);
+		battleStats.put("Damage", 0);
+		battleStats.put("Healing", 0);
 		this.name = name;
 		clazz = c;
 
@@ -186,16 +186,16 @@ public class Unit extends GriddedEntity implements Serializable, DoNotDestroy{
 	 * @throws ClassNotFoundException the class not found exception
 	 */
 	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-        in.defaultReadObject();
-        tempMods = new HashMap<String, Integer>();
-        assist = new HashSet<Unit>();
-        skills = new ArrayList<CombatTrigger>();
-        battleStats = new HashMap<String, Integer>();
-        battleStats.put("Kills", 0);
-        battleStats.put("Assists", 0);
-        battleStats.put("Damage", 0);
-        battleStats.put("Healing", 0);
-    }
+		in.defaultReadObject();
+		tempMods = new HashMap<String, Integer>();
+		assist = new HashSet<Unit>();
+		skills = new ArrayList<CombatTrigger>();
+		battleStats = new HashMap<String, Integer>();
+		battleStats.put("Kills", 0);
+		battleStats.put("Assists", 0);
+		battleStats.put("Damage", 0);
+		battleStats.put("Healing", 0);
+	}
 	
 	/**
 	 * Functional class name.
@@ -299,8 +299,8 @@ public class Unit extends GriddedEntity implements Serializable, DoNotDestroy{
 	public void beginStep(){
 		super.beginStep();
 		if(Game.glContextExists() && !sprite.hasAnimation("IDLE")) {
-    		loadMapSprites();
-        }
+			loadMapSprites();
+		}
 		if(path != null){
 			String name;
 			if(rX > 0) 		name = "left";
