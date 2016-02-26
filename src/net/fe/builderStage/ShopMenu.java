@@ -66,7 +66,7 @@ public class ShopMenu extends Entity {
 		for(Weapon w: WeaponFactory.getAllWeapons()){
 			ItemDisplay i = new ItemDisplay(0, 0, w.getCopy(), false);
 			if(w.pref != null || w.name.startsWith("Debug") || w.getCost() == 1) continue;
-			switch(w.type){
+			switch(w.getPrimaryType()){
 			case SWORD: shops[0].addItem(i); break;
 			case LANCE: shops[1].addItem(i); break;
 			case AXE: shops[2].addItem(i); break;

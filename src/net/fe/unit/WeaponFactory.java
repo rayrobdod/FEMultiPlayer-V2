@@ -45,21 +45,24 @@ public class WeaponFactory {
 			String name = args[0];
 			Weapon w = new Weapon(name);
 			w.id = id++;
-			w.type = Weapon.Type.valueOf(args[1].toUpperCase());
+			Weapon.Type type = Weapon.Type.valueOf(args[1].toUpperCase());
 			
 			
-			List<Integer> range = new ArrayList<Integer>();
+			HashMap<Integer, Weapon.Type> range = new HashMap<Integer, Weapon.Type>();
 			String[] rangeArgs = args[2].split("-");
 			if(rangeArgs.length == 1){
-				range.add(Integer.parseInt(rangeArgs[0]));
+				range.put(Integer.parseInt(rangeArgs[0]), type);
 			} else {
 				int min = Integer.parseInt(rangeArgs[0]);
 				int max = Integer.parseInt(rangeArgs[1]);
 				for(int i = min; i <= max; i++){
-					range.add(i);
+					range.put(i, type);
 				}
 			}
-			w.range = range;
+			if ("Light Brand".equals(name)) {
+				range.put(2, Weapon.Type.LIGHT);
+			}
+			w.distanceType = range;
 			
 			w.mt = Integer.parseInt(args[3]);
 			w.hit = Integer.parseInt(args[4]);

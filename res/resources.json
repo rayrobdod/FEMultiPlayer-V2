@@ -366,6 +366,97 @@
 			"freeze":	0
 		},
 		{
+			"name":		"eirika_magic_attack",
+			"path":		"res/battle_anim/eirika_sword_attack.png",
+			"width":	114,
+			"height":	67,
+			"frames":	28,
+			"columns":	6,
+			"offsetX":	71,
+			"offsetY":	63,
+			"freeze":	0,
+			"hitframes":[11],
+			"soundMap": [
+				{
+					"frame":	5,
+					"sound":	"sheath"
+				},
+				{
+					"frame":	7,
+					"sound":	"horse_step"
+				},
+				{
+					"frame":	8,
+					"sound":	"horse_step"
+				},
+				{
+					"frame":	10,
+					"sound":	"sword_swipe3"
+				},
+				{
+					"frame":	13,
+					"sound":	"horse_step"
+				},
+				{
+					"frame":	22,
+					"sound":	"horse_step"
+				},
+				{
+					"frame":	23,
+					"sound":	"horse_step"
+				},
+			]
+		},
+		{
+			"name":		"eirika_magic_critical",
+			"path":		"res/battle_anim/eirika_sword_critical.png",
+			"width":	116,
+			"height":	70,
+			"frames":	32,
+			"columns":	6,
+			"offsetX":	71,
+			"offsetY":	66,
+			"freeze":	0,
+			"hitframes":[15],
+			"soundMap": [
+				{
+					"frame":	6,
+					"sound":	"spin_short"
+				},
+				{
+					"frame":	14,
+					"sound":	"sword_swipe3"
+				},
+				{
+					"frame":	16,
+					"sound":	"horse_step"
+				},
+				{
+					"frame":	17,
+					"sound":	"horse_step"
+				},
+				{
+					"frame":	26,
+					"sound":	"horse_step"
+				},
+				{
+					"frame":	27,
+					"sound":	"horse_step"
+				},
+			]
+		},
+		{
+			"name":		"eirika_magic_dodge",
+			"path":		"res/battle_anim/eirika_sword_dodge.png",
+			"width":	48,
+			"height":	49,
+			"frames":	2,
+			"columns":	2,
+			"offsetX":	20,
+			"offsetY":	45,
+			"freeze":	0
+		},
+		{
 			"name":		"ephraim_lance_attack",
 			"path":		"res/battle_anim/ephraim_lance_attack.png",
 			"width":	114,
@@ -4708,6 +4799,47 @@
 		},
 		{
 			"name":		"hit_effect_lightning",
+			"path":		"res/battle_anim/hit_effect_lightning.png",
+			"width":	241,
+			"height":	161,
+			"frames":	32,
+			"columns":	5,
+			"offsetX":	68,
+			"offsetY":	110,
+			"freeze":	-1,
+			"speed":	0.03,
+			"hitframes": [16],
+			"soundMap": [
+				{
+					"frame":16,
+					"sound":"lightning"
+				}
+			]
+		},
+		{
+			"name":		"magic_effect_light brand",
+			"path":		"res/battle_anim/magic_effect_null.png",
+			"width":	8,
+			"height":	8,
+			"frames":	1,
+			"columns":	1,
+			"offsetX":	0,
+			"offsetY":	0,
+			"freeze":	-1
+		},
+		{
+			"name":		"bg_effect_light brand",
+			"path":		"res/battle_anim/bg_effect_lightning.png",
+			"width":	1,
+			"height":	1,
+			"frames":	32,
+			"columns":	16,
+			"offsetX":	0,
+			"offsetY":	0,
+			"freeze":	-1
+		},
+		{
+			"name":		"hit_effect_light-brand",
 			"path":		"res/battle_anim/hit_effect_lightning.png",
 			"width":	241,
 			"height":	161,

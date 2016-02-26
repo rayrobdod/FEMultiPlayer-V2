@@ -122,8 +122,8 @@ public class CombatCalculator {
 		if(a.getHp() <= 0) return false;
 		if(a.getWeapon() == null) return false;
 		if(a.getWeapon().getUses() == 0) return false;
-		if(!a.getWeapon().range.contains(range)) return false;
-		if(a.getWeapon().type == Weapon.Type.STAFF) return false;
+		if(!a.getWeapon().getRange().contains(range)) return false;
+		if(a.getWeapon().distanceType.get(range) == Weapon.Type.STAFF) return false;
 		return true;
 	}
 	
@@ -209,7 +209,7 @@ public class CombatCalculator {
 		
 		if (!((RNG.get()+RNG.get())/2 < hitRate(a, d))) {
 			miss = true;
-			if (a.getWeapon().isMagic())
+			if (a.getWeapon().isMagic(range))
 				use = true;
 		} else {
 			use = true;
@@ -324,15 +324,16 @@ public class CombatCalculator {
 		// Triggers with a guaranteed activation
 		boolean hasLunaPlus = a.getTriggers().contains(new LunaPlus());
 		boolean hasHpToOne = a.getTriggers().contains(new EclipseSix());
+		int range = Grid.getDistance(a, d);
 		
 		int base;
-		if (a.getWeapon().isMagic()) {
+		if (a.getWeapon().isMagic(range)) {
 			base = a.get("Mag")
-					+ (a.getWeapon().mt + a.getWeapon().triMod(d.getWeapon()))
+					+ (a.getWeapon().mt + a.getWeapon().triMod(d.getWeapon(), range))
 					* (effective ? 3: 1) - (hasLunaPlus ? 0 : d.get("Res"));
 		} else {
 			base = a.get("Str")
-					+ (a.getWeapon().mt + a.getWeapon().triMod(d.getWeapon()))
+					+ (a.getWeapon().mt + a.getWeapon().triMod(d.getWeapon(), range))
 					* (effective? 3:1) - (hasLunaPlus ? 0 : d.get("Def"));
 		}
 		
@@ -350,7 +351,8 @@ public class CombatCalculator {
 	 * @return the hit rate
 	 */
 	public static int hitRate(Unit a, Unit d){
-		return a.hit() - d.avoid() + a.getWeapon().triMod(d.getWeapon()) * 15;
+		int range = Grid.getDistance(a, d);
+		return a.hit() - d.avoid() + a.getWeapon().triMod(d.getWeapon(), range) * 15;
 	}
 	
 }

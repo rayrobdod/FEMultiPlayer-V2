@@ -505,8 +505,8 @@ public class Unit extends GriddedEntity implements Serializable, DoNotDestroy{
 			if (!(i instanceof Weapon))
 				continue;
 			Weapon w = (Weapon) i;
-			if (staff == (w.type == Weapon.Type.STAFF) && equippable(w))
-				range.addAll(w.range);
+			if (staff == (w.getPrimaryType() == Weapon.Type.STAFF) && equippable(w))
+				range.addAll(w.getRange());
 		}
 		return range;
 	}
@@ -561,7 +561,7 @@ public class Unit extends GriddedEntity implements Serializable, DoNotDestroy{
 		if(w.pref!= null){
 			return name.equals(w.pref);
 		}
-		return clazz.usableWeapon.contains(w.type);
+		return clazz.usableWeapon.contains(w.getPrimaryType());
 
 	}
 
@@ -576,8 +576,8 @@ public class Unit extends GriddedEntity implements Serializable, DoNotDestroy{
 		for (Item i : inventory) {
 			if (i instanceof Weapon) {
 				Weapon w = (Weapon) i;
-				if (equippable(w) && w.type != Weapon.Type.STAFF
-						&& w.range.contains(range)) {
+				if (equippable(w) && w.distanceType.get(range) != Weapon.Type.STAFF
+						&& w.getRange().contains(range)) {
 					weps.add(w);
 				}
 			}
@@ -596,8 +596,8 @@ public class Unit extends GriddedEntity implements Serializable, DoNotDestroy{
 		for (Item i : inventory) {
 			if (i instanceof Weapon) {
 				Weapon w = (Weapon) i;
-				if (equippable(w) && w.type == Weapon.Type.STAFF
-						&& w.range.contains(range)) {
+				if (equippable(w) && w.getPrimaryType() == Weapon.Type.STAFF
+						&& w.getRange().contains(range)) {
 					weps.add(w);
 				}
 			}
@@ -630,8 +630,8 @@ public class Unit extends GriddedEntity implements Serializable, DoNotDestroy{
 			Item it = inventory.get(i);
 			if (it instanceof Weapon) {
 				Weapon w = (Weapon) it;
-				if (equippable(w) && w.type != Weapon.Type.STAFF
-						&& w.range.contains(range)) {
+				if (equippable(w) && w.getPrimaryType() != Weapon.Type.STAFF
+						&& w.getRange().contains(range)) {
 					equip(w);
 					return i;
 				}

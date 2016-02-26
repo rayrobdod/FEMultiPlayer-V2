@@ -380,7 +380,7 @@ public class FightStage extends Stage {
 					d.sprite.setAnimation("DODGE");
 					d.sprite.setFrame(0);
 					d.sprite.setSpeed(DodgeAnimation.NORMAL_SPEED);
-					if(attacker.getWeapon().isMagic()){
+					if(attacker.getWeapon().isMagic(range)){
 						attacker.use(attacker.getWeapon());
 					}
 				}else{

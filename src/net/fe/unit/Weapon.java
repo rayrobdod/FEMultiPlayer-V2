@@ -10,30 +10,34 @@ import net.fe.fightStage.Nosferatu;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class Weapon.
+ * A class representing a weapon
  */
 public class Weapon extends Item {
 	
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 6496663141806177211L;
 	
-	/** The modifiers. */
+	/** Stat modifiers while the weapon is equipped */
 	public HashMap<String, Integer> modifiers;
 	
-	/** The crit. */
-	public int mt, hit, crit;
+	/** The weapon's might */
+	public int mt;
+	/** The weapon's innate hit rate */
+	public int hit;
+	/** The weapon's innate crit rate */
+	public int crit;
 	
-	/** The range. */
-	public List<Integer> range;
+	/** A Map indicating the weapon's type at any particular range */
+	public Map<Integer, Type> distanceType;
 	
-	/** The type. */
-	public Type type;
-	
-	/** The effective. */
+	/** A list of classes that this is effective against */
 	public ArrayList<String> effective;
 	
-	/** The pref. */
-	public String pref;
+	/**
+	 * The weapon's preference; null if any unit with the correct weapon levels can use
+	 * otherwise the name of the class that is allowed to use it.
+	 */
+	public String pref; 
 
 	
 	/**
@@ -58,7 +62,6 @@ public class Weapon extends Item {
 		mt = 0;
 		hit = 0;
 		crit = 0;
-		type = null;
 		effective = new ArrayList<String>();
 	}
 	
@@ -69,20 +72,20 @@ public class Weapon extends Item {
 		
 		/** The sword. */
 		SWORD, 
- /** The lance. */
- LANCE, 
- /** The axe. */
- AXE, 
- /** The bow. */
- BOW, 
- /** The light. */
- LIGHT, 
- /** The anima. */
- ANIMA, 
- /** The dark. */
- DARK, 
- /** The staff. */
- STAFF;
+		/** The lance. */
+		LANCE, 
+		/** The axe. */
+		AXE, 
+		/** The bow. */
+		BOW, 
+		/** The light. */
+		LIGHT, 
+		/** The anima. */
+		ANIMA, 
+		/** The dark. */
+		DARK, 
+		/** The staff. */
+		STAFF;
 		
 		/**
 		 * Triangle modifier.
@@ -133,21 +136,20 @@ public class Weapon extends Item {
 	}
 	
 	/**
-	 * Tri mod.
-	 *
+	 * Triangle modifier
 	 * @param other the other
-	 * @return the int
+	 * @return the modifier
 	 */
 	//Returns 1 if advantage, -1 if disadvantage
-	public int triMod(Weapon other){ 
+	public int triMod(Weapon other, int distance){ 
 		if(other == null) return 0;
 		if(this.name.contains("reaver") || other.name.contains("reaver")){
 			if(this.name.contains("reaver") && other.name.contains("reaver")){
-				return type.triangleModifier(other.type);
+				return this.distanceType.get(distance).triangleModifier(other.distanceType.get(distance));
 			}
-			return -2*type.triangleModifier(other.type);
+			return -2* this.distanceType.get(distance).triangleModifier(other.distanceType.get(distance));
 		}
-		return type.triangleModifier(other.type);
+		return this.distanceType.get(distance).triangleModifier(other.distanceType.get(distance));
 	}
 	
 	/**
@@ -155,8 +157,8 @@ public class Weapon extends Item {
 	 *
 	 * @return true, if is magic
 	 */
-	public boolean isMagic(){
-		return type.isMagic();
+	public boolean isMagic(int range){
+		return distanceType.get(range).isMagic();
 	}
 	
 	/**
@@ -178,14 +180,24 @@ public class Weapon extends Item {
 		return triggers;
 	}
 	
+	/** Returns the weapon's primary type */
+	public Type getPrimaryType() {
+		return distanceType.get(Collections.min(distanceType.keySet()));
+	}
 	
+	/**
+	 * Returns a list integers, where each integer is a distance that this weapon can reachs
+	 */
+	public List<Integer> getRange() {
+		return new ArrayList(distanceType.keySet());
+	}
+
 	/* (non-Javadoc)
 	 * @see net.fe.unit.Item#getCopy()
 	 */
 	public Weapon getCopy(){
 		Weapon w = new Weapon(name);
-		w.type = type;
-		w.range = new ArrayList<Integer>(range);
+		w.distanceType = new TreeMap<Integer, Type>(distanceType);
 		w.mt = mt;
 		w.hit = hit;
 		w.crit = crit;
@@ -205,7 +217,7 @@ public class Weapon extends Item {
 	@Override
 	public int compareTo(Item that) {
 		if(that instanceof Weapon){
-			int first = this.type.compareTo(((Weapon) that).type);
+			int first = this.getPrimaryType().compareTo(((Weapon) that).getPrimaryType());
 			if(first != 0) return first;
 			int second = this.getCost() - that.getCost();
 			return second;

@@ -190,11 +190,11 @@ public class HitEffect extends Entity {
 	public static List<String> getEffectNames(AnimationArgs animArgs, AttackRecord rec){
 		List<String> effects = new ArrayList<String>();
 		if(animArgs.unit.getWeapon() == null) return effects;
-		if (animArgs.unit.getWeapon().type == Weapon.Type.STAFF) {
+		if (animArgs.unit.getWeapon().getPrimaryType() == Weapon.Type.STAFF) {
 			effects.add("heal");
 		}
 		
-		if (animArgs.unit.getWeapon().isMagic()) {
+		if (animArgs.unit.getWeapon().isMagic(animArgs.range)) {
 			effects.add(animArgs.unit.getWeapon().name.replaceAll(" ", "-").toLowerCase());
 		}
 		

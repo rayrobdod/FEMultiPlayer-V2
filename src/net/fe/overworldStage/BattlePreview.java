@@ -100,7 +100,7 @@ public class BattlePreview extends Entity {
 		Transform flip = new Transform();
 		flip.flipHorizontal();
 		
-		int triMod = attacker.getWeapon().triMod(defender.getWeapon());
+		int triMod = attacker.getWeapon().triMod(defender.getWeapon(), range);
 		boolean aEffective = false;
 		boolean dEffective = false;
 		

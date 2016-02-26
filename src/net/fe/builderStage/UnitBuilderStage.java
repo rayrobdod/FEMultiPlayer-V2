@@ -251,7 +251,7 @@ public class UnitBuilderStage extends Stage {
 			Renderer.drawString("default_med", "Crit " + wep.crit, INFO_X+128, INFO_Y+20, 1);
 			int rngmin = 255;
 			int rngmax = 0;
-			for(int rng: wep.range){
+			for(int rng: wep.getRange()){
 				if(rng < rngmin) rngmin = rng;
 				if(rng > rngmax) rngmax = rng;
 			}
