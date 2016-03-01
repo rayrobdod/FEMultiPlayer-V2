@@ -271,6 +271,9 @@ public class UnitBuilderStage extends Stage {
 			if(wep.name.contains("Kill") || wep.name.equals("Wo Dao")){
 				flavor.add("Has a high critical rate");
 			}
+			if(! wep.isMagic(1) && wep.isMagic(2)) {
+				flavor.add("Inflicts magical damage at range");
+			}
 			if(wep.getCost() == 10000){
 				flavor.add("A legendary weapon");
 			}

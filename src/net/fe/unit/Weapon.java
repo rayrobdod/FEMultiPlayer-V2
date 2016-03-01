@@ -158,7 +158,11 @@ public class Weapon extends Item {
 	 * @return true, if is magic
 	 */
 	public boolean isMagic(int range){
-		return distanceType.get(range).isMagic();
+		if (distanceType.keySet().contains(range)) {
+			return distanceType.get(range).isMagic();
+		} else {
+			return this.getPrimaryType().isMagic();
+		}
 	}
 	
 	/**
@@ -189,7 +193,7 @@ public class Weapon extends Item {
 	 * Returns a list integers, where each integer is a distance that this weapon can reachs
 	 */
 	public List<Integer> getRange() {
-		return new ArrayList(distanceType.keySet());
+		return new ArrayList<Integer>(distanceType.keySet());
 	}
 
 	/* (non-Javadoc)
