@@ -8,14 +8,11 @@ import chu.engine.anim.Tileset;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class Tile.
+ * A tile on a game board
  */
-public class Tile extends GriddedEntity implements DoNotDestroy{
+public final class Tile extends GriddedEntity implements DoNotDestroy{
 	
-	/** The terrain. */
-	private Terrain terrain;
-	
-	/** The id. */
+	/** The identifier of the type of tile */
 	private int id;
 	
 	/** The tileset. */
@@ -71,7 +68,6 @@ public class Tile extends GriddedEntity implements DoNotDestroy{
 		super(x,y);
 		renderDepth = ClientOverworldStage.TILE_DEPTH;
 		this.id = id;
-		setTerrain(getTerrainFromID(id));
 	}
 	
 	/* (non-Javadoc)
@@ -89,7 +85,7 @@ public class Tile extends GriddedEntity implements DoNotDestroy{
 	 * @return the terrain
 	 */
 	public Terrain getTerrain() {
-		return terrain;
+		return Tile.getTerrainFromID(this.id);
 	}
 	
 	/**
@@ -121,14 +117,5 @@ public class Tile extends GriddedEntity implements DoNotDestroy{
 		
 		else t = Terrain.NONE;
 		return t;
-	}
-
-	/**
-	 * Sets the terrain.
-	 *
-	 * @param terrain the new terrain
-	 */
-	public void setTerrain(Terrain terrain) {
-		this.terrain = terrain;
 	}
 }
