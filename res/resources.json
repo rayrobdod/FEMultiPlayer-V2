@@ -367,82 +367,32 @@
 		},
 		{
 			"name":		"eirika_magic_attack",
-			"path":		"res/battle_anim/eirika_sword_attack.png",
-			"width":	114,
-			"height":	67,
-			"frames":	28,
-			"columns":	6,
-			"offsetX":	71,
-			"offsetY":	63,
-			"freeze":	0,
-			"hitframes":[11],
+			"path":		"res/battle_anim/eirika_magicsword_attack.png",
+			"width":	44,
+			"height":	65,
+			"frames":	7,
+			"columns":	3,
+			"offsetX":	23,
+			"offsetY":	62,
+			"freeze":0,
+			"hitframes":[3],
 			"soundMap": [
-				{
-					"frame":	5,
-					"sound":	"sheath"
-				},
-				{
-					"frame":	7,
-					"sound":	"horse_step"
-				},
-				{
-					"frame":	8,
-					"sound":	"horse_step"
-				},
-				{
-					"frame":	10,
-					"sound":	"sword_swipe3"
-				},
-				{
-					"frame":	13,
-					"sound":	"horse_step"
-				},
-				{
-					"frame":	22,
-					"sound":	"horse_step"
-				},
-				{
-					"frame":	23,
-					"sound":	"horse_step"
-				},
 			]
 		},
 		{
 			"name":		"eirika_magic_critical",
-			"path":		"res/battle_anim/eirika_sword_critical.png",
-			"width":	116,
-			"height":	70,
-			"frames":	32,
-			"columns":	6,
-			"offsetX":	71,
-			"offsetY":	66,
-			"freeze":	0,
+			"path":		"res/battle_anim/eirika_magicsword_critical.png",
+			"width":	44,
+			"height":	65,
+			"frames":	19,
+			"columns":	5,
+			"offsetX":	23,
+			"offsetY":	62,
+			"freeze":0,
+			"speed":	0.03,
 			"hitframes":[15],
 			"soundMap": [
-				{
-					"frame":	6,
-					"sound":	"spin_short"
-				},
-				{
-					"frame":	14,
-					"sound":	"sword_swipe3"
-				},
-				{
-					"frame":	16,
-					"sound":	"horse_step"
-				},
-				{
-					"frame":	17,
-					"sound":	"horse_step"
-				},
-				{
-					"frame":	26,
-					"sound":	"horse_step"
-				},
-				{
-					"frame":	27,
-					"sound":	"horse_step"
-				},
+				{	"frame": 5,	"sound": "rune"	}
 			]
 		},
 		{
