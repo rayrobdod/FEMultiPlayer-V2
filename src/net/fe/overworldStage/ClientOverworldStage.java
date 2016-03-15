@@ -542,6 +542,17 @@ public class ClientOverworldStage extends OverworldStage {
 					}
 				};
 			}
+			else if(obj.equals("UNLOCK")) {
+				final int dropX = (Integer) cmds.commands[++i];
+				final int dropY = (Integer) cmds.commands[++i];
+				callback = new Command() {
+					public void execute() {
+						unit.setMoved(true);
+						
+						grid.setTerrain(dropX, dropY, Terrain.FLOOR);
+					}
+				};
+			}
 		}
 		if(execute && unit != null) {
 			AudioPlayer.playAudio("select");

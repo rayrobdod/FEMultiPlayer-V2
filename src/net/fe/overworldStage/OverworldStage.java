@@ -429,6 +429,14 @@ public class OverworldStage extends Stage {
 				unit.use(tomeToUse);
 				checkEndGame();
 			}
+			else if(obj.equals("UNLOCK")) {
+				final int dropX = (Integer) cmds.commands[++i];
+				final int dropY = (Integer) cmds.commands[++i];
+				
+				unit.setMoved(true);
+				grid.setTerrain(dropX, dropY, Terrain.FLOOR);
+				checkEndGame();
+			}
 		}
 		FEServer.getServer().broadcastMessage(message);
 		checkEndGame();

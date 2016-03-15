@@ -30,7 +30,7 @@ public final class Tile extends GriddedEntity implements DoNotDestroy{
 			"PPPPAAAAAAA----SSSS      " +
 			"PPPKKPAAA^^====SSSS      " +
 			"MKKKAAAANNN====SSSS      " +
-			"----AAAANVN==LSSS        " +
+			"----AAAANVN==LSSSdd      " +
 			"NNNNNNNN^N^SLLSSS        " +
 			"NVNNNNVN^V^SLLSSS        " +
 			"KPKKKPPPAAAANNNNNNNNN    " +
@@ -114,6 +114,7 @@ public final class Tile extends GriddedEntity implements DoNotDestroy{
 		else if(ch == 'O') t = Terrain.THRONE;
 		else if(ch == 'H') t = Terrain.HOUSE;
 		else if(ch == '~') t = Terrain.HILL;
+		else if(ch == 'd') t = Terrain.DOOR;
 		
 		else t = Terrain.NONE;
 		return t;

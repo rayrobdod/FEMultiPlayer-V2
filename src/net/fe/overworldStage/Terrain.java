@@ -11,7 +11,7 @@ import chu.engine.Entity;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Enum Terrain.
+ * The set of types of terrain
  */
 public enum Terrain {
 	
@@ -67,10 +67,12 @@ public enum Terrain {
 	HILL(4,2,30,0),
 	
 	/** The house. */
-	HOUSE(127,0,10,0);
-
+	HOUSE(127,0,10,0),
+	
+	DOOR(127,0,0,0);
+	
 	/** The base move cost. */
-	private int baseMoveCost;
+	private final int baseMoveCost;
 	
 	/** The avoid bonus. */
 	private final int avoidBonus;
@@ -116,7 +118,7 @@ public enum Terrain {
 			return baseMoveCost;
 		String name = c.name;
 		if(WeaponFactory.fliers.contains(name)){
-			if(this == WALL)
+			if(this == WALL || this == DOOR || this == NONE)
 				return 127;
 			return 1;
 		}

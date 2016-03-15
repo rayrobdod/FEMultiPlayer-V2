@@ -11,6 +11,7 @@ import net.fe.overworldStage.MenuContext;
 import net.fe.overworldStage.Node;
 import net.fe.overworldStage.OverworldContext;
 import net.fe.overworldStage.ClientOverworldStage;
+import net.fe.overworldStage.Terrain;
 import net.fe.overworldStage.Zone;
 import net.fe.unit.Item;
 import net.fe.unit.RiseTome;
@@ -108,6 +109,8 @@ public class UnitMoved extends MenuContext<String> {
 			new DropTarget(stage, this, zone, unit).startContext();
 		} else if (selectedItem.equals("Summon")){
 			new Summon(stage, this, zone, unit).startContext();
+		} else if (selectedItem.equals("Unlock")){
+			new UnlockTarget(stage, this, zone, unit).startContext();
 		}
 			
 	}
@@ -146,7 +149,7 @@ public class UnitMoved extends MenuContext<String> {
 					new Node(unit.getXCoord(), unit.getYCoord()),
 					unit.getTotalWepRange(true)), Zone.HEAL_DARK);
 			stage.addEntity(zone);
-		} else if (Arrays.asList("Trade", "Give", "Take", "Drop", "Rescue", "Summon")
+		} else if (Arrays.asList("Trade", "Give", "Take", "Drop", "Rescue", "Summon", "Unlock")
 				.contains(menu.getSelection())) {
 			zone = new Zone(grid.getRange(
 					new Node(unit.getXCoord(), unit.getYCoord()), 1),
@@ -199,6 +202,7 @@ public class UnitMoved extends MenuContext<String> {
 		boolean take = false;
 		boolean drop = false;
 		boolean summon = false;
+		boolean unlock = false;
 		range = grid.getRange(new Node(u.getXCoord(), u.getYCoord()), 1);
 		for (Node n : range) {
 			Unit p = grid.getUnit(n.x, n.y);
@@ -224,6 +228,9 @@ public class UnitMoved extends MenuContext<String> {
 						summon = true;
 				}
 			}
+			if(grid.getTerrain(n.x, n.y) == Terrain.DOOR) {
+				unlock = true;
+			}
 			
 		}
 		if (trade && !fromTrade && !fromTake)
@@ -238,6 +245,8 @@ public class UnitMoved extends MenuContext<String> {
 			list.add("Drop");
 		if (summon)
 			list.add("Summon");
+		if (unlock)
+			list.add("Unlock");
 		
 		list.add("Item");
 		list.add("Wait");
