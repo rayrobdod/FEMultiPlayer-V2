@@ -29,7 +29,7 @@ public class Summon extends OverworldContext {
 	protected Unit unit;
 
 	/**
-	 * Instantiates a new summon.
+	 * Instantiates a new summon context
 	 *
 	 * @param stage the stage
 	 * @param context the context

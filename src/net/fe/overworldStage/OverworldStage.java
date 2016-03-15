@@ -56,7 +56,7 @@ public class OverworldStage extends Stage {
 	protected Session session;
 	
 	/** The turn order. */
-	private ArrayList<Player> turnOrder;
+	private final ArrayList<Player> turnOrder;
 	
 	/** The current player. */
 	private int currentPlayer;

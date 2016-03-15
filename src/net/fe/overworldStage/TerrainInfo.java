@@ -12,17 +12,17 @@ import chu.engine.anim.Renderer;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class TerrainInfo.
+ * A visual element that shows information about a Terrain
  */
 public class TerrainInfo extends Entity implements DoNotDestroy{
 	
-	/** The dragons. */
+	/** A texure used for decoration */
 	private static Texture dragons = FEResources.getTexture("dragon_separator");
 
 	/**
 	 * Instantiates a new terrain info.
 	 *
-	 * @param c the c
+	 * @param c unused
 	 */
 	public TerrainInfo(Cursor c) {
 		super(0, Game.getWindowHeight()/net.fe.FEResources.getWindowScale()-80);

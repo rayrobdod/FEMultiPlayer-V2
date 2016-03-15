@@ -17,7 +17,7 @@ import chu.engine.anim.Transform;
 /**
  * The Class Zone.
  */
-public class Zone extends Entity {
+public final class Zone extends Entity {
 	
 	/** The zone. */
 	private Set<Node> zone;
