@@ -7,24 +7,11 @@ import chu.engine.anim.AudioPlayer;
 import net.fe.overworldStage.*;
 import net.fe.unit.Unit;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class DropTarget.
+ * A OverworldContext used to select a space to create a summon in
  */
-public class DropTarget extends OverworldContext {
+public final class DropTarget extends SelectNodeContext {
 	
-	/** The zone. */
-	private Zone zone;
-	
-	/** The targets. */
-	private List<Node> targets;
-	
-	/** The selected. */
-	protected int selected;
-	
-	/** The unit. */
-	protected Unit unit;
-
 	/**
 	 * Instantiates a new drop target.
 	 *
@@ -35,39 +22,18 @@ public class DropTarget extends OverworldContext {
 	 */
 	public DropTarget(ClientOverworldStage stage, OverworldContext context,
 			Zone z, Unit u) {
-		super(stage, context);
-		zone = z;
-		targets = new ArrayList<Node>();
-		this.unit = u;
+		super(stage, context, z, u);
 
 	}
 
-	/* (non-Javadoc)
-	 * @see net.fe.overworldStage.OverworldContext#startContext()
-	 */
-	public void startContext() {
-		super.startContext();
-		findTargets(unit);
-		stage.addEntity(zone);
-		updateCursor();
-	}
-
-	/* (non-Javadoc)
-	 * @see net.fe.overworldStage.OverworldContext#cleanUp()
-	 */
-	public void cleanUp() {
-		super.cleanUp();
-		stage.removeEntity(zone);
-
-	}
 
 	/**
 	 * Find targets.
 	 *
 	 * @param unit the unit
 	 */
-	private void findTargets(Unit unit) {
-		targets.clear();
+	protected List<Node> findTargets(Unit unit, Zone zone) {
+		List<Node> targets = new ArrayList<Node>();
 		for (Node n : zone.getNodes()) {
 			Unit u = grid.getUnit(n.x, n.y);
 			if (u == null
@@ -77,6 +43,7 @@ public class DropTarget extends OverworldContext {
 				targets.add(n);
 			}
 		}
+		return targets;
 	}
 
 	/* (non-Javadoc)
@@ -90,84 +57,6 @@ public class DropTarget extends OverworldContext {
 		cursor.setXCoord(unit.getXCoord());
 		cursor.setYCoord(unit.getYCoord());
 		stage.reset();
-	}
-
-	/* (non-Javadoc)
-	 * @see net.fe.overworldStage.OverworldContext#onUp()
-	 */
-	public void onUp() {
-		prevTarget();
-	}
-
-	/* (non-Javadoc)
-	 * @see net.fe.overworldStage.OverworldContext#onDown()
-	 */
-	public void onDown() {
-		nextTarget();
-	}
-
-	/* (non-Javadoc)
-	 * @see net.fe.overworldStage.OverworldContext#onLeft()
-	 */
-	public void onLeft() {
-		prevTarget();
-	}
-
-	/* (non-Javadoc)
-	 * @see net.fe.overworldStage.OverworldContext#onRight()
-	 */
-	public void onRight() {
-		nextTarget();
-	}
-
-	/**
-	 * Prev target.
-	 */
-	public void prevTarget() {
-		selected--;
-		if (selected < 0) {
-			selected += targets.size();
-		}
-		updateCursor();
-	}
-
-	/**
-	 * Next target.
-	 */
-	public void nextTarget() {
-		selected++;
-		selected %= targets.size();
-		updateCursor();
-	}
-
-	/**
-	 * Gets the current target.
-	 *
-	 * @return the current target
-	 */
-	public Node getCurrentTarget() {
-		return targets.get(selected);
-	}
-
-	/**
-	 * Update cursor.
-	 */
-	public void updateCursor() {
-		AudioPlayer.playAudio("cursor");
-		cursor.setXCoord(targets.get(selected).x);
-		cursor.setYCoord(targets.get(selected).y);
-	}
-
-	/* (non-Javadoc)
-	 * @see net.fe.overworldStage.OverworldContext#onCancel()
-	 */
-	@Override
-	public void onCancel() {
-		super.onCancel();
-		// Reset the position of the cursor on cancels
-
-		cursor.setXCoord(unit.getXCoord());
-		cursor.setYCoord(unit.getYCoord());
 	}
 
 }

@@ -10,24 +10,11 @@ import net.fe.overworldStage.*;
 import net.fe.unit.Unit;
 import net.fe.unit.WeaponFactory;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class Summon.
+ * A OverworldContext used to select a space to create a summon in
  */
-public class Summon extends OverworldContext {
+public final class Summon extends SelectNodeContext {
 	
-	/** The zone. */
-	private Zone zone;
-	
-	/** The targets. */
-	private List<Node> targets;
-	
-	/** The selected. */
-	protected int selected;
-	
-	/** The unit. */
-	protected Unit unit;
-
 	/**
 	 * Instantiates a new summon context
 	 *
@@ -37,28 +24,7 @@ public class Summon extends OverworldContext {
 	 * @param unit the unit
 	 */
 	public Summon(ClientOverworldStage stage, OverworldContext context, Zone z, Unit unit) {
-		super(stage, context);
-		zone = z;
-		targets = new ArrayList<Node>();
-		this.unit = unit;
-	}
-	
-	/* (non-Javadoc)
-	 * @see net.fe.overworldStage.OverworldContext#startContext()
-	 */
-	public void startContext() {
-		super.startContext();
-		findTargets(unit);
-		stage.addEntity(zone);
-		updateCursor();
-	}
-
-	/* (non-Javadoc)
-	 * @see net.fe.overworldStage.OverworldContext#cleanUp()
-	 */
-	public void cleanUp() {
-		super.cleanUp();
-		stage.removeEntity(zone);
+		super(stage, context, z, unit);
 	}
 
 	/**
@@ -66,8 +32,9 @@ public class Summon extends OverworldContext {
 	 *
 	 * @param unit the unit
 	 */
-	private void findTargets(Unit unit) {
-		targets.clear();
+	@Override
+	protected List<Node> findTargets(Unit unit, Zone zone) {
+		ArrayList<Node> targets = new ArrayList<Node>();
 		for (Node n : zone.getNodes()) {
 			Unit u = grid.getUnit(n.x, n.y);
 			if (u == null
@@ -77,6 +44,7 @@ public class Summon extends OverworldContext {
 				targets.add(n);
 			}
 		}
+		return targets;
 	}
 
 	/* (non-Javadoc)
@@ -90,83 +58,6 @@ public class Summon extends OverworldContext {
 		cursor.setXCoord(unit.getXCoord());
 		cursor.setYCoord(unit.getYCoord());
 		stage.reset();
-	}
-
-	/* (non-Javadoc)
-	 * @see net.fe.overworldStage.OverworldContext#onUp()
-	 */
-	public void onUp() {
-		prevTarget();
-	}
-
-	/* (non-Javadoc)
-	 * @see net.fe.overworldStage.OverworldContext#onDown()
-	 */
-	public void onDown() {
-		nextTarget();
-	}
-
-	/* (non-Javadoc)
-	 * @see net.fe.overworldStage.OverworldContext#onLeft()
-	 */
-	public void onLeft() {
-		prevTarget();
-	}
-
-	/* (non-Javadoc)
-	 * @see net.fe.overworldStage.OverworldContext#onRight()
-	 */
-	public void onRight() {
-		nextTarget();
-	}
-
-	/**
-	 * Prev target.
-	 */
-	public void prevTarget() {
-		selected--;
-		if (selected < 0) {
-			selected += targets.size();
-		}
-		updateCursor();
-	}
-
-	/**
-	 * Next target.
-	 */
-	public void nextTarget() {
-		selected++;
-		selected %= targets.size();
-		updateCursor();
-	}
-
-	/**
-	 * Gets the current target.
-	 *
-	 * @return the current target
-	 */
-	public Node getCurrentTarget() {
-		return targets.get(selected);
-	}
-
-	/**
-	 * Update cursor.
-	 */
-	public void updateCursor() {
-		AudioPlayer.playAudio("cursor");
-		cursor.setXCoord(targets.get(selected).x);
-		cursor.setYCoord(targets.get(selected).y);
-	}
-
-	/* (non-Javadoc)
-	 * @see net.fe.overworldStage.OverworldContext#onCancel()
-	 */
-	@Override
-	public void onCancel() {
-		super.onCancel();
-		// Reset the position of the cursor on cancels
-		cursor.setXCoord(unit.getXCoord());
-		cursor.setYCoord(unit.getYCoord());
 	}
 	
 	/** The summon count. */
