@@ -549,7 +549,25 @@ public class ClientOverworldStage extends OverworldStage {
 					public void execute() {
 						unit.setMoved(true);
 						
+						// replace model tile
 						grid.setTerrain(dropX, dropY, Terrain.FLOOR);
+						
+						// replace view tile
+						int replacementId = 32;
+						for (Entity e : ClientOverworldStage.this.getAllEntities()) {
+							if (e instanceof Tile) {
+								Tile t = (Tile) e;
+								if (t.getXCoord() == dropX && t.getYCoord() == dropY) {
+									ClientOverworldStage.this.removeEntity(t);
+								}
+								if (Math.abs(t.getXCoord() - dropX) + Math.abs(t.getYCoord() - dropY) == 1 &&
+										t.getTerrain() == Terrain.FLOOR) {
+									replacementId = t.getId();
+								}
+							}
+						}
+						
+						ClientOverworldStage.this.addEntity(new Tile(dropX, dropY, replacementId));
 					}
 				};
 			}

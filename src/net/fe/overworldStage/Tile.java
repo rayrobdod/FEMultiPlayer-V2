@@ -13,7 +13,7 @@ import chu.engine.anim.Tileset;
 public final class Tile extends GriddedEntity implements DoNotDestroy{
 	
 	/** The identifier of the type of tile */
-	private int id;
+	private final int id;
 	
 	/** The tileset. */
 	private static Tileset tileset;
@@ -25,7 +25,7 @@ public final class Tile extends GriddedEntity implements DoNotDestroy{
 	}
 	
 	/** P - Plain A - pAth M - Mountain ^ - Forest = - Wall S - Sea L - fLoor T - forT K - peaK I - pIllar D - Desert - - fence N - None V - Village O - thrOne (or castle entrance) C - Cliff ~ - Hill H - House. */
-	private static String terrainMap =
+	private final static String terrainMap =
 			"PPPPAAAAAAA----SSSS      " +
 			"PPPPAAAAAAA----SSSS      " +
 			"PPPKKPAAA^^====SSSS      " +
@@ -86,6 +86,13 @@ public final class Tile extends GriddedEntity implements DoNotDestroy{
 	 */
 	public Terrain getTerrain() {
 		return Tile.getTerrainFromID(this.id);
+	}
+	
+	/**
+	 * Returns the index of the image used by this tile
+	 */
+	public int getId() {
+		return this.id;
 	}
 	
 	/**
