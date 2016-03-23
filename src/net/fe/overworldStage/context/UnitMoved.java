@@ -161,11 +161,10 @@ public class UnitMoved extends MenuContext<String> {
 	/**
 	 * Gets the commands.
 	 *
-	 * @param u the u
+	 * @param u the unit
 	 * @return the commands
 	 */
 	public List<String> getCommands(Unit u) {
-		// TODO Rescue
 		List<String> list = new ArrayList<String>();
 		
 		boolean attack = false;
@@ -195,6 +194,16 @@ public class UnitMoved extends MenuContext<String> {
 		if (heal && !fromTake)
 			list.add("Heal");
 
+		boolean isSummoner = false;
+		if (unit.getTheClass().usableWeapon.contains(Weapon.Type.DARK)) {
+			for (Item i : unit.getInventory()) {
+				if (i instanceof RiseTome)
+					isSummoner = true;
+			}
+		}
+		boolean isThief = "Assassin".equals(unit.getTheClass().name);
+		
+		
 		//TODO Give command untested
 		boolean trade = false;
 		boolean rescue = false;
@@ -222,11 +231,10 @@ public class UnitMoved extends MenuContext<String> {
 					.rescuedUnit().get("Mov")){
 				drop = true;
 			}
-			if(p == null && unit.getTheClass().usableWeapon.contains(Weapon.Type.DARK)) {
-				for (Item i : unit.getInventory()) {
-					if (i instanceof RiseTome)
-						summon = true;
-				}
+			if(p == null && grid.getTerrain(n.x, n.y).getMoveCost(
+					net.fe.unit.Class.createClass("Phantom")) <
+					unit.get("Mov")){
+				summon = true;
 			}
 			if(grid.getTerrain(n.x, n.y) == Terrain.DOOR) {
 				unlock = true;
@@ -243,9 +251,9 @@ public class UnitMoved extends MenuContext<String> {
 			list.add("Take");
 		if (drop && !fromTrade)
 			list.add("Drop");
-		if (summon)
+		if (summon && isSummoner && !fromTrade && !fromTake)
 			list.add("Summon");
-		if (unlock)
+		if (unlock && isThief && !fromTrade && !fromTake)
 			list.add("Unlock");
 		
 		list.add("Item");

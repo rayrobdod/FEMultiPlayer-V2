@@ -72,8 +72,8 @@ public final class Summon extends SelectNodeContext {
 	public static Unit generateSummon(Unit summoner) {
 		WeaponFactory.loadWeapons();
 		
-		HashMap<String, Integer> bases = new HashMap();
-		HashMap<String, Integer> growths = new HashMap();
+		HashMap<String, Integer> bases = new HashMap<String, Integer>();
+		HashMap<String, Integer> growths = new HashMap<String, Integer>();
 		bases.put("HP", 1);
 		bases.put("Str", 5);
 		bases.put("Def", 0);
