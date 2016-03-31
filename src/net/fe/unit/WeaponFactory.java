@@ -53,14 +53,16 @@ public class WeaponFactory {
 			if(rangeArgs.length == 1){
 				range.put(Integer.parseInt(rangeArgs[0]), type);
 			} else {
-				int min = Integer.parseInt(rangeArgs[0]);
-				int max = Integer.parseInt(rangeArgs[1]);
-				for(int i = min; i <= max; i++){
-					range.put(i, type);
+				if ("MAG".equals(rangeArgs[0])) {
+					range.put(1, type);
+					range.put(2, Weapon.Type.valueOf(rangeArgs[1].toUpperCase()));
+				} else {
+					int min = Integer.parseInt(rangeArgs[0]);
+					int max = Integer.parseInt(rangeArgs[1]);
+					for(int i = min; i <= max; i++){
+						range.put(i, type);
+					}
 				}
-			}
-			if ("Light Brand".equals(name)) {
-				range.put(2, Weapon.Type.LIGHT);
 			}
 			w.distanceType = range;
 			
