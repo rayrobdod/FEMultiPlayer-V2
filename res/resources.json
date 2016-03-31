@@ -2370,6 +2370,47 @@
 			"offsetY":	37,
 			"freeze":	0
 		},
+		{
+			"name":"marth_magic_attack",
+			"path":"res/battle_anim/marth_magicsword_attack.png",
+			"width":45,
+			"height":55,
+			"frames":15,
+			"columns":4,
+			"offsetX":30,
+			"offsetY":54,
+			"freeze":0,
+			"hitframes":[7],
+			"soundMap": [
+				{ "frame":	5, "sound":	"sheath" }
+			]
+		},
+		{
+			"name":"marth_magic_critical",
+			"path":"res/battle_anim/marth_magicsword_critical.png",
+			"width":45,
+			"height":55,
+			"frames":25,
+			"columns":5,
+			"offsetX":30,
+			"offsetY":54,
+			"freeze":0,
+			"hitframes":[17],
+			"soundMap": [
+				{ "frame":	15, "sound":	"sheath" }
+			]
+		},
+		{
+			"name":		"marth_magic_dodge",
+			"path":		"res/battle_anim/marth_sword_dodge.png",
+			"width":	56,
+			"height":	42,
+			"frames":	2,
+			"columns":	2,
+			"offsetX":	27,
+			"offsetY":	37,
+			"freeze":	0
+		},
 			
 		{
 			"name":		"paladin_lance_attack",
