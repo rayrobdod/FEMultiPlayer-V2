@@ -55,23 +55,29 @@ public class AnimationArgs {
 			wepAnimName = "magic";
 			classification = "magic";
 		} else {
-			wepAnimName = w.distanceType.get(range).toString().toLowerCase();
+			Weapon.Type typ;
+			if (w.distanceType.keySet().contains(range)) {
+				typ = w.distanceType.get(range);
+			} else {
+				typ = w.getPrimaryType();
+			}
+			wepAnimName = typ.toString().toLowerCase();
 			classification = "normal";
 			if(w.getRange().contains(range) && range > 1){
-				if(w.distanceType.get(range) == Weapon.Type.AXE){
+				if(typ == Weapon.Type.AXE){
 					wepAnimName = "handaxe";
 					classification = "ranged";
 				}
-				if (w.distanceType.get(range) == Weapon.Type.LANCE){
+				if (typ == Weapon.Type.LANCE){
 					wepAnimName = "javelin";
 					classification = "ranged";
 				} 
-				if (w.distanceType.get(range) == Weapon.Type.SWORD){
+				if (typ == Weapon.Type.SWORD){
 					wepAnimName = "rangedsword";
 					classification = "ranged";
 				}
 			}
-			if (w.distanceType.get(range) == Weapon.Type.BOW){
+			if (typ == Weapon.Type.BOW){
 				this.classification = "ranged";
 			}
 		}
