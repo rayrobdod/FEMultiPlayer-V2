@@ -1,0 +1,22 @@
+version: 1.{build}
+init:
+- cmd: SET ANT_CMD=="%JAVA_HOME%\bin\java.exe" -jar C:\apache-ant\apache-ant-1.9.7\lib\ant-launcher.jar
+install:
+- ps: |
+    Add-Type -AssemblyName System.IO.Compression.FileSystem
+    if (!(Test-Path -Path "C:\apache-ant" )) {
+      (new-object System.Net.WebClient).DownloadFile(
+        'http://www.us.apache.org/dist/ant/binaries/apache-ant-1.9.7-bin.zip',
+        'C:\apache-ant.zip'
+      )
+      [System.IO.Compression.ZipFile]::ExtractToDirectory("C:\apache-ant.zip", "C:\apache-ant")
+    }
+cache: C:\apache-ant
+build_script:
+- cmd: 'mkdir dist'
+- cmd: '%ANT_CMD% package-all'
+test_script:
+- cmd: '%ANT_CMD% test'
+artifacts:
+- path: dist
+  name: FEMP
