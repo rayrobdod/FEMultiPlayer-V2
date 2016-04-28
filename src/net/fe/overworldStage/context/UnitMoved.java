@@ -110,8 +110,6 @@ public class UnitMoved extends MenuContext<String> {
 			new DropTarget(stage, this, zone, unit).startContext();
 		} else if (selectedItem.equals("Summon")){
 			new Summon(stage, this, zone, unit).startContext();
-		} else if (selectedItem.equals("Unlock")){
-			new UnlockTarget(stage, this, zone, unit).startContext();
 		} else {
 			for (FieldSkill f : unit.getTheClass().fieldSkills) {
 				if (selectedItem.equals(f.getName())) {
@@ -215,7 +213,6 @@ public class UnitMoved extends MenuContext<String> {
 					isSummoner = true;
 			}
 		}
-		boolean isThief = "Assassin".equals(unit.getTheClass().name);
 		
 		
 		//TODO Give command untested
@@ -225,7 +222,6 @@ public class UnitMoved extends MenuContext<String> {
 		boolean take = false;
 		boolean drop = false;
 		boolean summon = false;
-		boolean unlock = false;
 		range = grid.getRange(new Node(u.getXCoord(), u.getYCoord()), 1);
 		for (Node n : range) {
 			Unit p = grid.getUnit(n.x, n.y);
@@ -259,9 +255,6 @@ public class UnitMoved extends MenuContext<String> {
 						summon = true;
 				}
 			}
-			if(grid.getTerrain(n.x, n.y) == Terrain.DOOR) {
-				unlock = true;
-			}
 			
 		}
 		if (trade && !fromTrade && !fromTake)
@@ -276,8 +269,6 @@ public class UnitMoved extends MenuContext<String> {
 			list.add("Drop");
 		if (summon && isSummoner && !fromTrade && !fromTake)
 			list.add("Summon");
-		if (unlock && isThief && !fromTrade && !fromTake)
-			list.add("Unlock");
 		
 		for (FieldSkill f : unit.getTheClass().fieldSkills) {
 			if (f.allowed(unit, this.stage.grid)) {

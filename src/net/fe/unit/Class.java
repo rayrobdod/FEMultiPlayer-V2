@@ -132,7 +132,7 @@ public class Class implements Serializable {
 		if(name.equals("Assassin"))
 			return new Class("Assassin", 
 					"A deadly killer who lives in the shadows.",
-					10, new Lethality(), Arrays.asList(new Shove()),
+					10, new Lethality(), Arrays.asList(new Shove(), new Unlock()),
 					Weapon.Type.SWORD);
 		if(name.equals("Paladin"))
 			return new Class("Paladin", 

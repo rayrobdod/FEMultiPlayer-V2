@@ -174,6 +174,8 @@ public final class UnitMovedTest {
 		HashMap<String, Integer> vals = new HashMap<String, Integer>();
 		vals.put("HP", 20);
 		vals.put("Mov", 5);
+		vals.put("Con", 10);
+		vals.put("Aid", 15);
 		Unit unit1 = new Unit("Roy", Class.createClass("Roy"), '-', vals, vals);
 		Unit unit2 = new Unit("Ike", Class.createClass("Ike"), '-', vals, vals);
 		stage.grid.addUnit(unit1, 0, 1);
@@ -205,6 +207,8 @@ public final class UnitMovedTest {
 		HashMap<String, Integer> vals = new HashMap<String, Integer>();
 		vals.put("HP", 20);
 		vals.put("Mov", 5);
+		vals.put("Con", 10);
+		vals.put("Aid", 15);
 		Unit unit1 = new Unit("Roy", Class.createClass("Roy"), '-', vals, vals);
 		Unit unit2 = new Unit("Ike", Class.createClass("Ike"), '-', vals, vals);
 		stage.grid.addUnit(unit1, 0, 1);
@@ -219,6 +223,6 @@ public final class UnitMovedTest {
 		UnitMoved dut = new UnitMoved(stage, null, unit1, false, false);
 		List<String> res = dut.getCommands(unit1);
 		
-		assertEquals(res, java.util.Arrays.asList("Attack", "Item", "Wait"));
+		assertEquals(res, java.util.Arrays.asList("Attack", "Shove", "Item", "Wait"));
 	}
 }
