@@ -253,21 +253,23 @@ public class ClientOverworldStage extends OverworldStage {
 		MapAnimation.updateAll();
 		if (onControl) {
 			List<KeyboardEvent> keys = Game.getKeys();
+			boolean moveFast = Keyboard.isKeyDown(FEResources.getKeyMapped(Keyboard.KEY_X));
+			float timer = context.getCursorSpeed(moveFast);
 			if (Keyboard.isKeyDown(FEResources.getKeyMapped(Keyboard.KEY_UP)) && repeatTimers[0] == 0) {
 				context.onUp();
-				repeatTimers[0] = 0.12f;
+				repeatTimers[0] = timer;
 			}
 			if (Keyboard.isKeyDown(FEResources.getKeyMapped(Keyboard.KEY_DOWN)) && repeatTimers[1] == 0) {
 				context.onDown();
-				repeatTimers[1] = 0.12f;
+				repeatTimers[1] = timer;
 			}
 			if (Keyboard.isKeyDown(FEResources.getKeyMapped(Keyboard.KEY_LEFT)) && repeatTimers[2] == 0) {
 				context.onLeft();
-				repeatTimers[2] = 0.12f;
+				repeatTimers[2] = timer;
 			}
 			if (Keyboard.isKeyDown(FEResources.getKeyMapped(Keyboard.KEY_RIGHT)) && repeatTimers[3] == 0) {
 				context.onRight();
-				repeatTimers[3] = 0.12f;
+				repeatTimers[3] = timer;
 			}
 			for(KeyboardEvent ke : keys) {
 				if(ke.state) {
@@ -275,6 +277,8 @@ public class ClientOverworldStage extends OverworldStage {
 						context.onSelect();
 					else if (ke.key == FEResources.getKeyMapped(Keyboard.KEY_X))
 						context.onCancel(); 
+					else if (ke.key == FEResources.getKeyMapped(Keyboard.KEY_C))
+						context.onNextUnit();
 				}
 			}
 		}
@@ -493,8 +497,10 @@ public class ClientOverworldStage extends OverworldStage {
 			}
 			else if(obj.equals("TAKE")) {
 				if(execute) {
+					unit.setMoved(true);
 					Unit other = getUnit((UnitIdentifier) cmds.commands[++i]);
 					other.give(unit);
+					checkEndGame();
 				}
 			}
 			else if(obj.equals("DROP")) {
@@ -539,6 +545,54 @@ public class ClientOverworldStage extends OverworldStage {
 						unit.setMoved(true);
 						unit.use(tomeToUse);
 						checkEndGame();
+					}
+				};
+			}
+			else if(obj.equals("SHOVE")) {
+				final Unit shovee = getUnit((UnitIdentifier) cmds.commands[++i]);
+				callback = new Command() {
+					public void execute() {
+						unit.setMoved(true);
+						int deltaX = shovee.getXCoord() - unit.getXCoord();
+						int deltaY = shovee.getYCoord() - unit.getYCoord();
+						int newX = shovee.getXCoord() + deltaX;
+						int newY = shovee.getYCoord() + deltaY;
+						
+						shovee.setOrigX(newX); // Otherwise, shovee will jump back to it's inital space on select 
+						shovee.setOrigY(newY); // Otherwise, shovee will jump back to it's inital space on select
+						Path p = new Path();
+						p.add(new Node(newX, newY));
+						grid.move(shovee, newX, newY, true);
+						shovee.move(p, new Command() {
+							public void execute() {
+								shovee.sprite.setAnimation("IDLE");
+								checkEndGame();
+							}
+						});
+					}
+				};
+			}
+			else if(obj.equals("SMITE")) {
+				final Unit shovee = getUnit((UnitIdentifier) cmds.commands[++i]);
+				callback = new Command() {
+					public void execute() {
+						unit.setMoved(true);
+						int deltaX = shovee.getXCoord() - unit.getXCoord();
+						int deltaY = shovee.getYCoord() - unit.getYCoord();
+						int newX = shovee.getXCoord() + 2 * deltaX;
+						int newY = shovee.getYCoord() + 2 * deltaY;
+						
+						shovee.setOrigX(newX); // Otherwise, shovee will jump back to it's inital space on select
+						shovee.setOrigY(newY); // Otherwise, shovee will jump back to it's inital space on select
+						Path p = new Path();
+						p.add(new Node(newX, newY));
+						grid.move(shovee, newX, newY, true);
+						shovee.move(p, new Command() {
+							public void execute() {
+								shovee.sprite.setAnimation("IDLE");
+								checkEndGame();
+							}
+						});
 					}
 				};
 			}

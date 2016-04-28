@@ -27,9 +27,9 @@ public class SoundTrack {
 	/** Whether or not Audio is enabled */
 	public static boolean enabled = true;
 	
-	private static Map<String, List<String>> songs;
+	private static Map<String, ArrayList<String>> songs;
 	
-	private static List<String> categories;
+	private static ArrayList<String> categories;
 	
 	/**
 	 * Loop.
@@ -40,7 +40,7 @@ public class SoundTrack {
 	 */
 	
 	public static void loop(String name){
-		if(!enabled) return;
+		if(!enabled || !(FEResources.getAudioVolume()>0)) return;
 		if(name.equals(current)) return;
 		current = name;
 		loadAudioNames();
@@ -54,14 +54,15 @@ public class SoundTrack {
 				if(setting.split("_").length<2)
 					setting = name;
 			}
-			b = AudioLoader.getAudio("OGG",
-					ResourceLoader.getResourceAsStream("res/music/"+setting+".ogg"));
+			b = AudioLoader.getAudio("WAV",
+					ResourceLoader.getResourceAsStream("res/music/"+setting+".wav"));
 			b.playAsMusic(1.0f, FEResources.getAudioVolume(), true);
 		} catch (Exception e){
+			e.printStackTrace();
 			System.err.println("Warn: Bad sound configuration: "+name);
 			try{
-				Audio b = AudioLoader.getAudio("OGG",
-						ResourceLoader.getResourceAsStream("res/music/"+name+".ogg"));
+				Audio b = AudioLoader.getAudio("WAV",
+						ResourceLoader.getResourceAsStream("res/music/"+name+".wav"));
 				b.playAsMusic(1.0f, FEResources.getAudioVolume(), true);
 			}catch(Exception f){}
 		}
@@ -69,30 +70,31 @@ public class SoundTrack {
 	
 	private static void loadAudioNames(){
 		try{
-			songs = new HashMap<String, List<String>>();
+			songs = new HashMap<String, ArrayList<String>>();
 			final String musPath = "res/music";
-			final File jarFile = new File(SoundTrack.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+			final File jarFile = new File(SoundTrack.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 			if(jarFile.isFile()) {  // Run with JAR file
 			    final JarFile jar = new JarFile(jarFile);
 			    final Enumeration<JarEntry> entries = jar.entries(); //gives ALL entries in jar
 			    while(entries.hasMoreElements()) {
 			        final String name = entries.nextElement().getName();
-			        if (name.startsWith(musPath + "/")) { //filter according to the path
-			        	String[] sPreName = name.replace(".ogg", "").replace("res/music/preparations", "").split("_",2);
+			        if (name.startsWith(musPath + "/") && name.indexOf(".wav")>0) { //filter according to the path
+			        	String[] sPreName = name.replace(".wav", "").replace("res/music/", "").split("_",2);
 			        	String cat = sPreName[0], sFileName = sPreName.length<2?"":sPreName[1];
 			        	if(!songs.containsKey(cat))
 							songs.put(cat, new ArrayList<String>());
 						songs.get(cat).add(sFileName);
+						songs.get(cat).trimToSize();
 			        }
 			    }
 			    jar.close();
 			    
-			} else { // Run with IDE
+			} else if (new File(musPath).isDirectory()) { // Run with IDE
 				File folder = new File(musPath);
 				File[] listOfFiles = folder.listFiles();
 				for(File s: listOfFiles){
 					//category & filename (if any), saves memory
-					String[] sPreName = s.getName().replace(".ogg", "").split("_",2);
+					String[] sPreName = s.getName().replace(".wav", "").split("_",2);
 					String cat = sPreName[0], sFileName = sPreName.length<2?"":sPreName[1];
 					if(!songs.containsKey(cat))
 						songs.put(cat, new ArrayList<String>());
@@ -100,7 +102,8 @@ public class SoundTrack {
 				}
 			}
 			categories = new ArrayList<String>(songs.keySet());
-		}catch(Exception e){e.printStackTrace();}
+			categories.trimToSize();
+		}catch(Exception e){throw new RuntimeException(e);}
 	}
 	
 	/**
@@ -109,8 +112,8 @@ public class SoundTrack {
 	public static void restart(){
 		if(!enabled) return;
 		try {
-			Audio a = AudioLoader.getStreamingAudio("OGG", 
-					ResourceLoader.getResource("res/music/"+current+".ogg"));
+			Audio a = AudioLoader.getStreamingAudio("WAV", 
+					ResourceLoader.getResource("res/music/"+current+".wav"));
 			a.playAsMusic(1.0f, FEResources.getAudioVolume(), true);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

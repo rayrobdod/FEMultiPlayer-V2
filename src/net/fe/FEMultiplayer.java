@@ -196,8 +196,8 @@ public class FEMultiplayer extends Game{
 		testSession.addPlayer(p2);
 		
 		map = new ClientOverworldStage(testSession);
-		Unit u1 = UnitFactory.getUnit("Canas");
-		u1.getInventory().add(WeaponFactory.getWeapon("Lunase"));
+		Unit u1 = UnitFactory.getUnit("Eirika");
+		u1.getInventory().add(WeaponFactory.getWeapon("Silver Sword"));
 		u1.equip(0);
 		map.addUnit(u1, 0, 0);
 		u1.setLevel(20);
@@ -206,7 +206,7 @@ public class FEMultiplayer extends Game{
 		
 		Unit u2 = UnitFactory.getUnit("Dart");
 		u2.getInventory().add(WeaponFactory.getWeapon("Tomahawk"));
-		map.addUnit(u2, 2, 0);
+		map.addUnit(u2, 1, 0);
 		u2.equip(0);
 		u2.setLevel(20);
 		u2.loadMapSprites();
@@ -215,9 +215,8 @@ public class FEMultiplayer extends Game{
 		map.processAddStack();
 		int u2Uses = u2.getWeapon().getMaxUses();
 
-		
-		//u1.debugStat("Spd");
-		//u1.debugStat("Str",-999);
+		//u1.debugStat("Skl");
+		//u1.debugStat("Str", -999);
 		
 		// ^------- put all pre-calc stuff here
 		
@@ -249,13 +248,13 @@ public class FEMultiplayer extends Game{
 		p2.setTeam(2);
 		localPlayer.setTeam(1);
 		
-		Unit u1 = UnitFactory.getUnit("Canas");
-		u1.addToInventory(new RiseTome());
+		Unit u1 = UnitFactory.getUnit("Eirika");
+		u1.addToInventory(WeaponFactory.getWeapon("Silver Sword"));
 		u1.setHp(1);
 		localPlayer.getParty().addUnit(u1);
 		
-		Unit u3 = UnitFactory.getUnit("Joshua");
-		u3.addToInventory(WeaponFactory.getWeapon("Wo Dao"));
+		Unit u3 = UnitFactory.getUnit("Oswin");
+		u3.addToInventory(WeaponFactory.getWeapon("Silver Axe"));
 		u3.equip(0);
 		u3.setHp(1);
 		p2.getParty().addUnit(u3);
@@ -266,6 +265,14 @@ public class FEMultiplayer extends Game{
 		
 		currentStage = new ClientOverworldStage(testSession);
 
+		this.client = new Client("nope", 12345) {
+			@Override
+			public void sendMessage(Message message) {
+				if (message instanceof CommandMessage) {
+					((ClientOverworldStage) currentStage).processCommands((CommandMessage) message);
+				}
+			}
+		};
 	}
 	
 	/**

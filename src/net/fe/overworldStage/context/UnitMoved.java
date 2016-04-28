@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import chu.engine.anim.AudioPlayer;
+import net.fe.overworldStage.FieldSkill;
 import net.fe.overworldStage.Menu;
 import net.fe.overworldStage.MenuContext;
 import net.fe.overworldStage.Node;
@@ -111,6 +112,12 @@ public class UnitMoved extends MenuContext<String> {
 			new Summon(stage, this, zone, unit).startContext();
 		} else if (selectedItem.equals("Unlock")){
 			new UnlockTarget(stage, this, zone, unit).startContext();
+		} else {
+			for (FieldSkill f : unit.getTheClass().fieldSkills) {
+				if (selectedItem.equals(f.getName())) {
+					f.onSelect(stage, this, zone, unit).startContext();
+				}
+			}
 		}
 			
 	}
@@ -155,6 +162,13 @@ public class UnitMoved extends MenuContext<String> {
 					new Node(unit.getXCoord(), unit.getYCoord()), 1),
 					Zone.MOVE_DARK);
 			stage.addEntity(zone);
+		} else {
+			for (FieldSkill f : unit.getTheClass().fieldSkills) {
+				if (menu.getSelection().equals(f.getName())) {
+					zone = f.getZone(unit, grid);
+					stage.addEntity(zone);
+				}
+			}
 		}
 	}
 
@@ -217,11 +231,13 @@ public class UnitMoved extends MenuContext<String> {
 			Unit p = grid.getUnit(n.x, n.y);
 			if (p != null && stage.getCurrentPlayer().getParty().isAlly(p.getParty())) {
 				trade = true;
-				if(p.rescuedUnit() == null && unit.rescuedUnit() == null){
+				if(p.rescuedUnit() == null && unit.rescuedUnit() == null && unit.canRescue(p)){
 					rescue = true;
-				} else if (p.rescuedUnit() == null && unit.rescuedUnit() != null){
+				} else if (p.rescuedUnit() == null && unit.rescuedUnit() != null && 
+						p.canRescue(unit.rescuedUnit())){
 					give = true;
-				} else if (p.rescuedUnit() != null && unit.rescuedUnit() == null){
+				} else if (p.rescuedUnit() != null && unit.rescuedUnit() == null &&
+						unit.canRescue(p.rescuedUnit())){
 					take = true;
 				}
 			}
@@ -231,10 +247,17 @@ public class UnitMoved extends MenuContext<String> {
 					.rescuedUnit().get("Mov")){
 				drop = true;
 			}
-			if(p == null && grid.getTerrain(n.x, n.y).getMoveCost(
-					net.fe.unit.Class.createClass("Phantom")) <
-					unit.get("Mov")){
-				summon = true;
+			
+			//summon
+			if (p == null
+					&& grid.getTerrain(n.x, n.y).getMoveCost(
+							net.fe.unit.Class.createClass("Phantom")) <
+							unit.get("Mov") && 
+							unit.getTheClass().usableWeapon.contains(Weapon.Type.DARK)) {
+				for (Item i : unit.getInventory()) {
+					if (i instanceof RiseTome)
+						summon = true;
+				}
 			}
 			if(grid.getTerrain(n.x, n.y) == Terrain.DOOR) {
 				unlock = true;
@@ -255,6 +278,12 @@ public class UnitMoved extends MenuContext<String> {
 			list.add("Summon");
 		if (unlock && isThief && !fromTrade && !fromTake)
 			list.add("Unlock");
+		
+		for (FieldSkill f : unit.getTheClass().fieldSkills) {
+			if (f.allowed(unit, this.stage.grid)) {
+				list.add(f.getName());
+			}
+		}
 		
 		list.add("Item");
 		list.add("Wait");
