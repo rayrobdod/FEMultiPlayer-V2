@@ -23,9 +23,9 @@ public class Lethality extends CombatTrigger {
 	 * @see net.fe.fightStage.CombatTrigger#attempt(net.fe.unit.Unit, int)
 	 */
 	@Override
-	public boolean attempt(Unit user, int range) {
-//		return true;
-		return RNG.get() < user.get("Skl") / 3;
+	public boolean attempt(Unit user, int range, Unit opponent) {
+		return (!opponent.getTheClass().name.equals("Lord")) &&
+				RNG.get() < user.get("Skl") / 3;
 	}
 
 	/* (non-Javadoc)
@@ -33,10 +33,8 @@ public class Lethality extends CombatTrigger {
 	 */
 	@Override
 	public boolean runPreAttack(CombatCalculator stage, Unit a, Unit d) {
-		if(!d.getTheClass().name.equals("Lord")){
-			a.setTempMod("Str", 9000);
-			a.setTempMod("Hit", 9000);
-		}
+		a.setTempMod("Str", 9000);
+		a.setTempMod("Hit", 9000);
 		return true;
 	}
 	
