@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- WARNING: Eclipse auto-generated file.
-              Any modifications will be overwritten.
-              To include a user specific buildfile here, simply create one in the same
-              directory with the processing instruction <?eclipse.ant.import?>
-              as the first entry and export the buildfile again. -->
 <project basedir="." default="package-all" name="FEMultiplayer">
 	<property environment="env"/>
 	<property name="junit.output.dir" value="junit"/>
@@ -17,14 +12,24 @@
 		<pathelement location="json-simple/json-simple-1.1.1.jar"/>
 		<pathelement location="lwjgl-2.9.0/jar/jogg-0.0.7.jar"/>
 		<pathelement location="lwjgl-2.9.0/jar/jorbis-0.0.15.jar"/>
+		<pathelement location="junit/lib/junit.jar"/>
+		<pathelement location="junit/lib/hamcrest.jar"/>
 	</path>
+	
+	
+	
 	<target name="init">
 		<mkdir dir="bin"/>
+		<mkdir dir="dist"/>
+		<mkdir dir="junit/lib" />
+		<mkdir dir="junit/bin" />
+		<mkdir dir="junit/report" />
 	</target>
 	<target name="clean">
 		<delete dir="bin"/>
+		<delete dir="junit"/>
 	</target>
-	<target depends="clean" name="cleanall"/>
+	
 	<target depends="build-subprojects,build-project" name="build"/>
 	<target name="build-subprojects"/>
 	<target depends="init" name="build-project">
@@ -41,7 +46,39 @@
 			<classpath refid="FEMultiplayer.classpath"/>
 		</javac>
 	</target>
-	<target name="test" depends="build-project" description="" />
+	<target name="test" depends="build-project" description="" >
+		<get src="http://repo1.maven.org/maven2/junit/junit/4.12/junit-4.12.jar" dest="junit/lib/junit.jar"  usetimestamp="true"/>
+		<get src="http://repo1.maven.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar" dest="junit/lib/hamcrest.jar"  usetimestamp="true"/>
+		<copy includeemptydirs="false" todir="junit/lwjgl-native">
+			<fileset dir="lwjgl-2.9.0/native/macosx/"/>
+			<fileset dir="lwjgl-2.9.0/native/windows/"/>
+			<fileset dir="lwjgl-2.9.0/native/linux/"/>
+		</copy>
+		<javac debug="true" debuglevel="${debuglevel}" destdir="junit/bin" includeantruntime="false" source="${source}" target="${target}">
+			<src path="bin"/>
+			<src path="test"/>
+			<classpath refid="FEMultiplayer.classpath"/>
+		</javac>
+		
+		<junit dir="." haltonfailure="yes">
+			<formatter usefile="false" type="plain" />
+			<jvmarg value="-Djava.library.path=junit/lwjgl-native"/>
+			<classpath>
+				<path refid="FEMultiplayer.classpath" />
+				<pathelement location="."/>
+				<pathelement location="junit/bin"/>
+			</classpath>
+			<!-- test name="net.fe.unit.UnitTest" / -->
+			<batchtest fork="true" todir="junit/report">
+				<fileset dir="junit/bin">
+					<include name="**/*Test*.class"/>
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+	
+	
+	
 	<target name="package-client" depends="build-project" description="Creates the client jar">
 		<jar destfile="dist/Fire Emblem Multiplayer.jar" filesetmanifest="mergewithoutmain">
 			<manifest>

@@ -6,6 +6,7 @@ bin/**/*
 /teams
 error_*
 /logs
+/junit
 Thumbs.db
 /doc
 .settings\*
