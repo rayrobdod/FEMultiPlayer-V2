@@ -4,6 +4,8 @@ import java.util.*;
 
 import net.fe.fightStage.Brave;
 import net.fe.fightStage.CombatTrigger;
+import net.fe.fightStage.EclipseSix;
+import net.fe.fightStage.LunaPlus;
 import net.fe.fightStage.Nosferatu;
 
 // TODO: Auto-generated Javadoc
@@ -52,7 +54,10 @@ public class Weapon extends Item {
 		modifiers.put("Res", 0);
 		modifiers.put("Spd", 0);
 		modifiers.put("Lvl", 0);
+		modifiers.put("Con", 0);
 		modifiers.put("Mov", 0);
+		modifiers.put("Con", 0);
+		modifiers.put("Aid", 0);
 		mt = 0;
 		hit = 0;
 		crit = 0;
@@ -168,6 +173,10 @@ public class Weapon extends Item {
 			triggers.add(new Brave());
 		} else if (name.equals("Nosferatu")){
 			triggers.add(new Nosferatu());
+		} else if (name.equals("Lunase")){
+			triggers.add(new LunaPlus());
+		} else if (name.equals("Eclipse")){
+			triggers.add(new EclipseSix());
 		}
 		return triggers;
 	}

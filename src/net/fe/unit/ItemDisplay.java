@@ -69,8 +69,8 @@ public class ItemDisplay extends Entity{
 			args = new ShaderArgs();
 		}
 		Renderer.render(weaponIcon, 
-				col/8.0f, row/9.0f, (col+1)/8.0f, (row+1)/9.0f,
-				x-1, y, x+16, y+17, renderDepth, t, args);
+				col/8.0f, row/10.0f, (col+1)/8.0f, (row+1)/10.0f,
+				x-1, y, x+16, y+17, renderDepth, t, args, chu.engine.anim.BlendModeArgs.ALPHA_BLEND);
 		FEResources.getBitmapFont("default_med").render(item.name, x+16, y+3, renderDepth, t);
 		if(equip){
 			Renderer.render(e, 

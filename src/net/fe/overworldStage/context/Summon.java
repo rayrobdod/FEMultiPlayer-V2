@@ -5,8 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import chu.engine.anim.AudioPlayer;
+import net.fe.FEResources;
 import net.fe.overworldStage.*;
 import net.fe.unit.Unit;
+import net.fe.unit.WeaponFactory;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -177,7 +179,7 @@ public class Summon extends OverworldContext {
 	 * @return the unit
 	 */
 	public static Unit generateSummon(Unit summoner) {
-		net.fe.unit.WeaponFactory.loadWeapons();
+		WeaponFactory.loadWeapons();
 		
 		HashMap<String, Integer> bases = new HashMap<String, Integer>();
 		HashMap<String, Integer> growths = new HashMap<String, Integer>();
@@ -189,7 +191,9 @@ public class Summon extends OverworldContext {
 		bases.put("Lck", 0);
 		bases.put("Skl", 2);
 		bases.put("Spd", 4);
+		bases.put("Con", 11);
 		bases.put("Mov", 5);
+		bases.put("Aid", 10);
 		growths.put("HP", 0);
 		growths.put("Str", 55);
 		growths.put("Def", 15);
@@ -200,7 +204,7 @@ public class Summon extends OverworldContext {
 		growths.put("Spd", 45);
 		growths.put("Mov", 0);
 		summonCount = summonCount + 1;
-		final Unit summon = new Unit("Phantom " + summonCount, net.fe.unit.Class.createClass("Berserker"), '-', bases, growths);
+		final Unit summon = new Unit("Phantom " + summonCount, net.fe.unit.Class.createClass("Phantom"), '-', bases, growths);
 		summon.addToInventory(net.fe.unit.Item.getItem("Iron Axe"));
 		summon.initializeEquipment();
 		summon.setLevel(summoner.get("Lvl"));

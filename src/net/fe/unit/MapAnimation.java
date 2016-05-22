@@ -28,7 +28,7 @@ public class MapAnimation extends Animation {
 	public MapAnimation(String name, boolean walking){
 		super(FEResources.getTexture(name.toLowerCase()), 48, 
 				name.matches("swordmaster.*selected")?60:48,
-						4, 4, 17, name.matches("swordmaster.*selected")?29:17, 0);
+						4, 4, 17, name.matches("swordmaster.*selected")?29:17, 0, chu.engine.anim.BlendModeArgs.ALPHA_BLEND);
 		synchro = !walking;
 		speed = 0.15f;
 	}

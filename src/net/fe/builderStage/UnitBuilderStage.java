@@ -15,6 +15,7 @@ import net.fe.overworldStage.UnitInfo;
 import net.fe.unit.HealingItem;
 import net.fe.unit.Item;
 import net.fe.unit.MapAnimation;
+import net.fe.unit.RiseTome;
 import net.fe.unit.Unit;
 import net.fe.unit.Weapon;
 
@@ -240,6 +241,9 @@ public class UnitBuilderStage extends Stage {
 		if(i instanceof HealingItem){
 			HealingItem potion = (HealingItem) i;
 			Renderer.drawString("default_med", "Heals " + potion.amount + " HP", INFO_X+8, INFO_Y+28, 1);
+		} else if (i instanceof RiseTome){
+			RiseTome rise = (RiseTome) i;
+			Renderer.drawString("default_med", "Summons a phantom warrior", INFO_X+8, INFO_Y+28, 1);
 		} else if (i instanceof Weapon){
 			Weapon wep = (Weapon) i;
 			Renderer.drawString("default_med", "Mt " + wep.mt, INFO_X+8, INFO_Y+20, 1);
@@ -287,8 +291,7 @@ public class UnitBuilderStage extends Stage {
 				if(wep.effective.contains("Valkyrie")){
 					eff.add("mounted");
 				}
-				if(wep.effective.contains("Falconknight") && 
-						!wep.effective.contains("Valkyrie")){
+				if(wep.effective.contains("Falconknight")){
 					eff.add("flying");
 				}
 				String effText = "";

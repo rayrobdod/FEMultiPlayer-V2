@@ -64,6 +64,8 @@ public class FEResources {
 	 * @return the texture
 	 */
 	public static Texture getTexture(String string) {
+		if(string.contains("phantom") && string.contains("mugshot"))
+			return getTextureData("phantom_mugshot").getTexture();
 		return getTextureData(string).getTexture();
 	}
 	
@@ -164,6 +166,7 @@ public class FEResources {
 			JSONArray hitArray = (JSONArray) texture.get("hitframes");
 			JSONArray audioArray = (JSONArray) texture.get("soundMap");
 			HashMap<Integer, String> audioMap = new HashMap<Integer, String>();
+			String blendModeName = (String)texture.get("blend");
 			
 			int[] hitframes;
 			if(hitArray != null) {
@@ -205,6 +208,7 @@ public class FEResources {
 				data.shakeIntensity = shakeIntensity.intValue();
 			if(stop != null)
 				data.stop = stop.booleanValue();
+			data.blendModeName = blendModeName;
 			textures.put(name, data);
 			if((System.nanoTime() - startTime)/1000000.0f > 100){
 				LoadStage.update(textures.size());
@@ -334,6 +338,14 @@ public class FEResources {
 					prop.setProperty("DOWN", "DOWN");
 					prop.setProperty("VOLUME","1.0");
 					prop.setProperty("SCALE","1.0");
+					prop.setProperty("CURING","curing");
+					prop.setProperty("DEFENSE","defense");
+					prop.setProperty("END","end");
+					prop.setProperty("ENEMY","enemy");
+					prop.setProperty("FIGHT","fight");
+					prop.setProperty("MAIN","main");
+					prop.setProperty("OVERWORLD","overworld");
+					prop.setProperty("PREPARATIONS","preparations");
 					
 					FileOutputStream out = new FileOutputStream(path);
 					prop.store(out, "---Initial Configuration---");
@@ -359,6 +371,16 @@ public class FEResources {
 		String volumeStr = getProperties().getProperty("VOLUME"); 
 		float volume = Float.parseFloat(volumeStr);
 		return volume;
+	}
+	
+	public static String getAudioSetting(String setting) throws Exception{
+		String audioName = "";
+		try{
+			audioName = getProperties().getProperty(setting);
+		}catch(Exception e){
+			throw e;
+		}
+		return audioName;
 	}
 	
 	/**

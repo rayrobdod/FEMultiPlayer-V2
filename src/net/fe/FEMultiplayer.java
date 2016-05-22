@@ -18,6 +18,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.time.*;
 
 import net.fe.builderStage.TeamDraftStage;
 import net.fe.fightStage.AttackRecord;
@@ -33,6 +34,7 @@ import net.fe.overworldStage.Grid;
 import net.fe.overworldStage.Terrain;
 import net.fe.overworldStage.objective.Seize;
 import net.fe.transition.OverworldFightTransition;
+import net.fe.unit.RiseTome;
 import net.fe.unit.Unit;
 import net.fe.unit.UnitFactory;
 import net.fe.unit.UnitIdentifier;
@@ -102,7 +104,7 @@ public class FEMultiplayer extends Game{
 			System.err.println("Exception occurred, writing to logs...");
 			e.printStackTrace();
 			try{
-				File errLog = new File("error_log_client" + System.currentTimeMillis()%100000000 + ".log");
+				File errLog = new File("error_log_client" + LocalDateTime.now().toString().replace("T", "@").replace(":", "-") + ".log");
 				PrintWriter pw = new PrintWriter(errLog);
 				e.printStackTrace(pw);
 				pw.close();
@@ -144,7 +146,7 @@ public class FEMultiplayer extends Game{
 		connect = new ConnectStage();
 		setCurrentStage(new TitleStage());
 		messages = new CopyOnWriteArrayList<Message>();
-		SoundTrack.loop("main_theme");
+		SoundTrack.loop("main");
 		
 	}
 	
@@ -195,29 +197,27 @@ public class FEMultiplayer extends Game{
 		testSession.addPlayer(p2);
 		
 		map = new ClientOverworldStage(testSession);
-		Unit u1 = UnitFactory.getUnit("Ike");
-		u1.getInventory().add(WeaponFactory.getWeapon("Ragnell"));
+		Unit u1 = UnitFactory.getUnit("Eirika");
+		u1.getInventory().add(WeaponFactory.getWeapon("Silver Sword"));
 		u1.equip(0);
 		map.addUnit(u1, 0, 0);
-		u1.equip(1);
 		u1.setLevel(20);
 		u1.loadMapSprites();
 		p1.getParty().addUnit(u1);
 		
 		Unit u2 = UnitFactory.getUnit("Dart");
 		u2.getInventory().add(WeaponFactory.getWeapon("Tomahawk"));
-		map.addUnit(u2, 2, 0);
+		map.addUnit(u2, 1, 0);
 		u2.equip(0);
-		u2.setLevel(15);
+		u2.setLevel(1);
 		u2.loadMapSprites();
 		p2.getParty().addUnit(u2);
 		
 		map.processAddStack();
 		int u2Uses = u2.getWeapon().getMaxUses();
 
-		
-		u1.debugStat("Skl");
-		u1.debugStat("Str", -9999);
+		//u1.debugStat("Skl");
+		u1.debugStat("Str");
 		
 		// ^------- put all pre-calc stuff here
 		
@@ -245,25 +245,42 @@ public class FEMultiplayer extends Game{
 		Player p2 = new Player("P2", (byte)1);
 		p2.getParty().setColor(Party.TEAM_RED);
 		testSession.addPlayer(p2);
+		localPlayer.getParty().setColor(Party.TEAM_BLUE);
+		p2.setTeam(2);
+		localPlayer.setTeam(1);
 		
-		Unit u1 = UnitFactory.getUnit("Gilliam");
-		u1.addToInventory(WeaponFactory.getWeapon("Gradivus"));
-		u1.equip(0);
+		Unit u1 = UnitFactory.getUnit("Natasha");
+		u1.addToInventory(WeaponFactory.getWeapon("Physic"));
 		u1.setHp(1);
 		localPlayer.getParty().addUnit(u1);
 		
-		Unit u3 = UnitFactory.getUnit("Joshua");
-		u3.addToInventory(WeaponFactory.getWeapon("Wo Dao"));
+		Unit u3 = UnitFactory.getUnit("Oswin");
+		u3.addToInventory(WeaponFactory.getWeapon("Silver Axe"));
 		u3.equip(0);
 		u3.setHp(1);
 		p2.getParty().addUnit(u3);
 		
+		Unit u4 = UnitFactory.getUnit("Eirika");
+		u4.addToInventory(WeaponFactory.getWeapon("Silver Sword"));
+		u4.equip(0);
+		u4.setHp(1);
+		p2.getParty().addUnit(u4);
+		
 		Unit u2 = UnitFactory.getUnit("Lute");
 		u2.addToInventory(WeaponFactory.getWeapon("Physic"));
+		u2.setHp(1);
 		localPlayer.getParty().addUnit(u2);
 		
 		currentStage = new ClientOverworldStage(testSession);
 
+		this.client = new Client("nope", 12345) {
+			@Override
+			public void sendMessage(Message message) {
+				if (message instanceof CommandMessage) {
+					((ClientOverworldStage) currentStage).processCommands((CommandMessage) message);
+				}
+			}
+		};
 	}
 	
 	/**
