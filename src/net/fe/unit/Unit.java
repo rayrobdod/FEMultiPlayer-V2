@@ -711,18 +711,7 @@ public class Unit extends GriddedEntity implements Serializable, DoNotDestroy{
 	 * @return the int
 	 */
 	public int use(int index) {
-		return use(inventory.get(index), true);
-	}
-	
-	/**
-	 * Use.
-	 *
-	 * @param index the index
-	 * @param destroy the destroy
-	 * @return the int
-	 */
-	public int use(int index, boolean destroy){
-		return use(inventory.get(index), destroy);
+		return use(inventory.get(index));
 	}
 	
 	/**
@@ -732,19 +721,8 @@ public class Unit extends GriddedEntity implements Serializable, DoNotDestroy{
 	 * @return the int
 	 */
 	public int use(Item i){
-		return use(i, true);
-	}
-
-	/**
-	 * Use.
-	 *
-	 * @param i the i
-	 * @param destroy the destroy
-	 * @return the int
-	 */
-	public int use(Item i, boolean destroy) {
 		int ans = i.use(this);
-		if(i.getUses() <= 0 && destroy){
+		if(i.getUses() <= 0){
 			inventory.remove(i);
 			reEquip();
 		}

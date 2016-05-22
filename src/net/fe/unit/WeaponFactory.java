@@ -12,11 +12,11 @@ import org.newdawn.slick.util.ResourceLoader;
 /**
  * A factory for creating Weapon objects.
  */
-public class WeaponFactory {
+public final class WeaponFactory {
 	
 	/** The Constant mounted. */
 	private static final List<String> mounted = 
-			Arrays.asList("Paladin", "Valkyrie", /*"Falconknight",*/ 
+			Arrays.asList("Paladin", "Valkyrie",
 					"Ephraim", "Eirika", "Eliwood");
 	
 	/** The Constant armored. */
