@@ -3,12 +3,15 @@ package net.fe.overworldStage.context;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Stream;
 
 import chu.engine.anim.AudioPlayer;
 import net.fe.FEResources;
 import net.fe.overworldStage.*;
+import net.fe.modifier.Modifier;
 import net.fe.unit.Statistics;
 import net.fe.unit.Unit;
+import net.fe.unit.Item;
 import net.fe.unit.WeaponFactory;
 import net.fe.network.command.SummonCommand;
 
@@ -182,7 +185,7 @@ public class Summon extends OverworldContext {
 	 * @param summoner the summoner
 	 * @return the unit
 	 */
-	public static Unit generateSummon(Unit summoner) {
+	public static Unit generateSummon(Unit summoner, Modifier mod) {
 		WeaponFactory.loadWeapons();
 		
 		Statistics bases = new Statistics(
@@ -212,8 +215,12 @@ public class Summon extends OverworldContext {
 			/* aid = */ 0
 		);
 		summonCount = summonCount + 1;
-		final Unit summon = new Unit("Phantom " + summonCount, net.fe.unit.Class.createClass("Phantom"), '-', bases, growths);
-		summon.addToInventory(net.fe.unit.Item.getItem("Iron Axe"));
+		final Unit summonPre = new Unit("Phantom " + summonCount, net.fe.unit.Class.createClass("Phantom"), '-', bases, growths);
+		final Unit summon = mod.modifyUnits(Stream.of(summonPre)).findFirst().orElse(summonPre);
+		final Item weaponPre = net.fe.unit.Item.getItem("Iron Axe");
+		final Item weapon = mod.modifyShop(Stream.of(weaponPre)).findFirst().orElse(weaponPre);
+		
+		summon.addToInventory(weapon);
 		summon.initializeEquipment();
 		summon.setLevel(summoner.getLevel());
 		summon.fillHp();

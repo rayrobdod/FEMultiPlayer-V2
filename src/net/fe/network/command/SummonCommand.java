@@ -29,7 +29,7 @@ public final class SummonCommand extends Command {
 	@Override
 	public ArrayList<AttackRecord> applyServer(OverworldStage stage, Unit unit) {
 		
-		final Unit summon = net.fe.overworldStage.context.Summon.generateSummon(unit);
+		final Unit summon = net.fe.overworldStage.context.Summon.generateSummon(unit, stage.getSessionCombinedModifier());
 		int tomeToUse = -1;
 		List<Item> items = unit.getInventory();
 		for(int z = 0; z < items.size(); z++){
@@ -55,7 +55,7 @@ public final class SummonCommand extends Command {
 		
 		return new Runnable() {
 			public void run() {
-				final Unit summon = net.fe.overworldStage.context.Summon.generateSummon(unit);
+				final Unit summon = net.fe.overworldStage.context.Summon.generateSummon(unit, stage.getSessionCombinedModifier());
 				
 				int tomeToUse = 0;
 				List<Item> items = unit.getInventory();

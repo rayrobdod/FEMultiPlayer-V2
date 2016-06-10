@@ -11,6 +11,7 @@ import static org.junit.Assert.fail;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import net.fe.builderStage.ShopMenu;
 import net.fe.builderStage.TeamBuilderResources;
@@ -64,7 +65,7 @@ public final class MadeInChinaTest {
 		);
 		expected.addToInventory(expectedWeapon);
 		
-		Unit result = dut.modifyUnits( java.util.Collections.singleton(input).stream() ).findAny().get();
+		Unit result = dut.modifyUnits( Stream.of(input) ).findAny().get();
 		
 		assertEquals(expected.bases, result.bases);
 		assertEquals(expected.getInventory(), result.getInventory());
@@ -83,7 +84,7 @@ public final class MadeInChinaTest {
 			new Statistics(), new java.util.ArrayList<>(), null
 		);
 		
-		Item result = dut.modifyShop( java.util.Collections.singleton(input).stream() ).findAny().get();
+		Item result = dut.modifyShop( Stream.of(input) ).findAny().get();
 		
 		assertEquals(expected, result);
 	}
@@ -93,7 +94,7 @@ public final class MadeInChinaTest {
 		MadeInChina dut = new MadeInChina();
 		
 		Item expected = new HealingItem("Liquid Gold", 15, 2, 2000);
-		Item result = dut.modifyShop( java.util.Collections.singleton(expected).stream() ).findAny().get();
+		Item result = dut.modifyShop( Stream.of(expected) ).findAny().get();
 		
 		assertEquals(expected, result);
 	}

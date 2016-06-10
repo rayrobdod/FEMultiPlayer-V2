@@ -485,5 +485,9 @@ public class OverworldStage extends Stage {
 		}
 		return t;
 	}
+	
+	public final Modifier getSessionCombinedModifier() {
+		return this.session.getMergedModifier();
+	}
 
 }
