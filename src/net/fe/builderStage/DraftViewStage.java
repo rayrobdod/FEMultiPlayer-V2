@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.newdawn.slick.Color;
 
@@ -22,6 +23,7 @@ import net.fe.Party;
 import net.fe.Player;
 import net.fe.RunesBg;
 import net.fe.Session;
+import net.fe.modifier.Modifier;
 import net.fe.network.Message;
 import net.fe.network.message.DraftMessage;
 import net.fe.network.message.QuitMessage;
@@ -145,8 +147,9 @@ public class DraftViewStage extends Stage {
 		hasControl = true;
 		
 		addEntity(new RunesBg(new Color(0xd2b48c)));
-		List<Unit> vassals = UnitFactory.getVassals();
-		List<Unit> lords = UnitFactory.getLords();
+		Modifier mods = this.session.getMergedModifier();
+		List<Unit> vassals = mods.modifyUnits(UnitFactory.getVassals().stream()).collect(Collectors.toList());
+		List<Unit> lords = mods.modifyUnits(UnitFactory.getLords().stream()).collect(Collectors.toList());
 		
 		lordList = new UnitList(LORD_LIST_X, LORD_LIST_Y, 2, 4);
 		lordList.addUnits(lords);

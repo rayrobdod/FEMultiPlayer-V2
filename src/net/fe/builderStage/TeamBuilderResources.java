@@ -37,4 +37,16 @@ public final class TeamBuilderResources {
 	public TeamBuilderResources copyWithNewExp(IntUnaryOperator newExp) {
 		return new TeamBuilderResources(this.funds, newExp.applyAsInt(this.exp));
 	}
+	
+	@Override
+	public boolean equals(Object rhs) {
+		return rhs instanceof TeamBuilderResources &&
+			((TeamBuilderResources) rhs).funds == this.funds &&
+			((TeamBuilderResources) rhs).exp == this.exp;
+	}
+	
+	@Override
+	public int hashCode() {
+		return this.funds ^ this.exp;
+	}
 }

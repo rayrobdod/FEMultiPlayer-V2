@@ -108,7 +108,7 @@ public abstract class Item implements Serializable, Comparable<Item>{
 		return WeaponFactory.getWeapon(name);
 	}
 	
-	public static Iterable<Item> getAllItems() {
+	public static java.util.Collection<Item> getAllItems() {
 		final java.util.ArrayList<Item> retVal = new java.util.ArrayList<>();
 		WeaponFactory.getAllWeapons().forEach(retVal::add);
 		retVal.add(HealingItem.VULNERARY.getCopy());

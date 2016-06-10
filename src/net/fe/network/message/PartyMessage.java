@@ -1,9 +1,12 @@
 package net.fe.network.message;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Collection;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Optional;
+import java.util.stream.Stream;
 import java.util.function.Function;
 
 import net.fe.builderStage.TeamBuilderResources;
@@ -59,15 +62,16 @@ public final class PartyMessage extends Message {
 	 * 
 	 * @return None if the team is acceptable; a Some with a message otherwise
 	 */
-	public Optional<String> validateTeam(Function<String,Unit> realUnits, Iterable<Item> realItems, Iterable<Modifier> mods) {
+	public Optional<String> validateTeam(Stream<Unit> realUnits, Stream<Item> realItems, Iterable<Modifier> mods) {
 		
 		TeamBuilderResources usableRes = new TeamBuilderResources(TeamBuilderStage.FUNDS, TeamBuilderStage.EXP);
-		for (Modifier m : mods ) {
+		for (Modifier m : mods) {
 			usableRes = m.modifyTeamResources(usableRes);
 			realItems = m.modifyShop(realItems);
+			realUnits = m.modifyUnits(realUnits);
 		}
-		ArrayList<Item> realItems2 = new ArrayList<Item>();
-		realItems.forEach(realItems2::add);
+		List<Item> realItems2 = realItems.collect(java.util.stream.Collectors.toList());
+		Map<String, Unit> realUnits2 = realUnits.collect(java.util.stream.Collectors.toMap(u -> u.name, java.util.function.Function.identity()));
 		
 		
 		TeamBuilderResources usedRes = new TeamBuilderResources(0, 0);
@@ -78,7 +82,7 @@ public final class PartyMessage extends Message {
 				usedRes = usedRes.copyWithNewExp((i) -> i + u2.squeezeExp());
 			}
 			{
-				Unit u3 = realUnits.apply(u.name);
+				Unit u3 = realUnits2.get(u.name);
 				u3.setLevel(u.getLevel());
 				if (! u.getBase().equals(u3.getBase())) {
 					return Optional.of("unit's stats don't match expected: " +

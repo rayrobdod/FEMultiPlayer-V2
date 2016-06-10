@@ -1,9 +1,13 @@
 package net.fe.modifier;
 
+import java.util.stream.Stream;
+
 import net.fe.builderStage.ShopMenu;
 import net.fe.builderStage.TeamBuilderResources;
 import net.fe.builderStage.TeamSelectionStage;
 import net.fe.overworldStage.OverworldStage;
+import net.fe.unit.Statistics;
+import net.fe.unit.HealingItem;
 import net.fe.unit.Unit;
 import net.fe.unit.Item;
 
@@ -25,12 +29,17 @@ public class SuddenDeath implements Modifier{
 	public TeamBuilderResources modifyTeamResources(TeamBuilderResources limits) {
 		return limits;
 	}
+	
+	@Override
+	public Stream<Unit> modifyUnits(Stream<Unit> units) {
+		return units.map(SuddenDeath::getCopyOfUnitWithOneHitpoint);
+	}
 
 	/* (non-Javadoc)
 	 * @see net.fe.modifier.Modifier#modifyShop(net.fe.builderStage.ShopMenu)
 	 */
 	@Override
-	public Iterable<Item> modifyShop(Iterable<Item> shop) {
+	public Stream<Item> modifyShop(Stream<Item> shop) {
 		return shop;
 	}
 
@@ -39,9 +48,6 @@ public class SuddenDeath implements Modifier{
 	 */
 	@Override
 	public void initOverworldUnits(Iterable<Unit> units) {
-		for(Unit u : units) {
-			u.setHp(1);
-		}
 	}
 
 	/* (non-Javadoc)
@@ -59,5 +65,10 @@ public class SuddenDeath implements Modifier{
 	public String toString() {
 		return "Sudden Death";
 	}
-
+	
+	private static Unit getCopyOfUnitWithOneHitpoint(Unit u) {
+		Statistics newBases = u.bases.copy("HP", 1);
+		Statistics newGrowths = u.growths.copy("HP", 0);
+		return u.getCopyWithNewStats(newBases, newGrowths);
+	}
 }

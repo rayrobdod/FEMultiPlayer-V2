@@ -1,5 +1,7 @@
 package net.fe.modifier;
 
+import java.util.stream.Stream;
+
 import net.fe.modifier.Pavise;
 import net.fe.builderStage.ShopMenu;
 import net.fe.builderStage.TeamBuilderResources;
@@ -14,18 +16,19 @@ public class ProTactics implements Modifier {
 	public TeamBuilderResources modifyTeamResources(TeamBuilderResources limits) {
 		return limits;
 	}
+	
+	@Override
+	public Stream<Unit> modifyUnits(Stream<Unit> units) {
+		return units.peek(u -> u.addSkill(new Pavise()));
+	}
 
 	@Override
-	public Iterable<Item> modifyShop(Iterable<Item> shop) {
+	public Stream<Item> modifyShop(Stream<Item> shop) {
 		return shop;
 	}
 
 	@Override
 	public void initOverworldUnits(Iterable<Unit> units) {
-		for(Unit u : units) {
-			u.addSkill(new Pavise());
-		}
-
 	}
 
 	@Override

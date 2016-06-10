@@ -204,6 +204,14 @@ public final class Session implements Serializable {
 	}
 	
 	/**
+	 * Returns one modifier which has the effects of all Modifiers contained in getModifiers
+	 * @see #getModifiers
+	 */
+	public Modifier getMergedModifier() {
+		return modifiers.stream().reduce(Modifier.identity(), Modifier::combine);
+	}
+	
+	/**
 	 * Gets the pick mode.
 	 *
 	 * @return the pick mode

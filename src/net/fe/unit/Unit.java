@@ -389,6 +389,20 @@ public final class Unit extends GriddedEntity implements Serializable, DoNotDest
 		return copy;
 	}
 
+	/**
+	 * Creates a clone of this unit. Transient characteristics might not be
+	 * carried over to the new object. Other mutable characteristics are deep-cloned.
+	 */
+	public Unit getCopyWithNewStats(Statistics newBases, Statistics newGrowths) {
+		Unit copy = new Unit(this.name, this.clazz, this.gender, newBases, newGrowths);
+		copy.setLevel(this.level);
+		for (Item i : inventory) {
+			copy.addToInventory(i.getCopy());
+		}
+		this.skills.forEach((s) -> copy.addSkill(s.getCopy()));
+		return copy;
+	}
+
 	/* (non-Javadoc)
 	 * @see chu.engine.Entity#render()
 	 */

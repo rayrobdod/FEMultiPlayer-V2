@@ -1,5 +1,7 @@
 package net.fe.modifier;
 
+import java.util.stream.Stream;
+
 import net.fe.builderStage.ShopMenu;
 import net.fe.builderStage.TeamBuilderResources;
 import net.fe.unit.Item;
@@ -21,12 +23,17 @@ public final class Vegas implements Modifier {
 	public TeamBuilderResources modifyTeamResources(TeamBuilderResources limits) {
 		return limits;
 	}
+	
+	@Override
+	public Stream<Unit> modifyUnits(Stream<Unit> units) {
+		return units.peek(u -> u.addSkill(new Gamble()));
+	}
 
 	/* (non-Javadoc)
 	 * @see net.fe.modifier.Modifier#modifyShop(net.fe.builderStage.ShopMenu)
 	 */
 	@Override
-	public Iterable<Item> modifyShop(Iterable<Item> shop) {
+	public Stream<Item> modifyShop(Stream<Item> shop) {
 		return shop;
 	}
 
@@ -35,9 +42,6 @@ public final class Vegas implements Modifier {
 	 */
 	@Override
 	public void initOverworldUnits(Iterable<Unit> units) {
-		for(Unit u : units) {
-			u.addSkill(new Gamble());
-		}
 	}
 
 	/* (non-Javadoc)

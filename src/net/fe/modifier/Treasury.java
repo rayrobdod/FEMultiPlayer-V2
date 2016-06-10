@@ -1,5 +1,7 @@
 package net.fe.modifier;
 
+import java.util.stream.Stream;
+
 import net.fe.builderStage.ShopMenu;
 import net.fe.builderStage.TeamBuilderResources;
 import net.fe.unit.Item;
@@ -21,12 +23,17 @@ public final class Treasury implements Modifier {
 	public TeamBuilderResources modifyTeamResources(TeamBuilderResources limits) {
 		return limits.copyWithNewFunds(99999900);
 	}
+	
+	@Override
+	public Stream<Unit> modifyUnits(Stream<Unit> units) {
+		return units;
+	}
 
 	/* (non-Javadoc)
 	 * @see net.fe.modifier.Modifier#modifyShop(net.fe.builderStage.ShopMenu)
 	 */
 	@Override
-	public Iterable<Item> modifyShop(Iterable<Item> shop) {
+	public Stream<Item> modifyShop(Stream<Item> shop) {
 		return shop;
 	}
 

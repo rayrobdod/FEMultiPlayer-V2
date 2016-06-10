@@ -64,8 +64,8 @@ public final class WaitStage extends Stage {
 			if(message instanceof PartyMessage) {
 				PartyMessage pm = (PartyMessage)message;
 				java.util.Optional<String> validationResult = pm.validateTeam(
-					net.fe.unit.UnitFactory::getUnit,
-					net.fe.unit.Item.getAllItems(),
+					net.fe.unit.UnitFactory.getAllUnits().stream(),
+					net.fe.unit.Item.getAllItems().stream(),
 					session.getModifiers()
 				);
 				validationResult.ifPresent(new Consumer<String>() {

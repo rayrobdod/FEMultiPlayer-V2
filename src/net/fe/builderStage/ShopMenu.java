@@ -1,6 +1,8 @@
 package net.fe.builderStage;
 
 import java.util.Set;
+import java.util.stream.Stream;
+
 import net.fe.FEResources;
 import net.fe.Session;
 import net.fe.modifier.Modifier;
@@ -65,10 +67,10 @@ public class ShopMenu extends Entity {
 			shopIcons[i] = FEResources.getTexture("shop" + i);
 		}
 		
-		Iterable<Item> items = Item.getAllItems();
+		Stream<Item> items = Item.getAllItems().stream();
 		for (Modifier m : ms) { items = m.modifyShop(items); }
 		
-		for (Item i : items) {
+		for (Item i : items.collect(java.util.stream.Collectors.toList())) {
 			ItemDisplay display = new ItemDisplay(0, 0, i.getCopy(), false);
 			
 			if (i instanceof Weapon) {

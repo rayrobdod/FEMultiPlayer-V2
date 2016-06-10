@@ -1,5 +1,7 @@
 package net.fe.modifier;
 
+import java.util.stream.Stream;
+
 import net.fe.builderStage.ShopMenu;
 import net.fe.builderStage.TeamBuilderResources;
 import net.fe.builderStage.TeamSelectionStage;
@@ -28,12 +30,17 @@ public class MadeInChina implements Modifier {
 		return limits.copyWithNewFunds((i) -> i * 2);
 	}
 	
+	@Override
+	public Stream<Unit> modifyUnits(Stream<Unit> units) {
+		return units.peek(MadeInChina::decreaseInventoryWeaponUses);
+	}
+	
 	/** Modifies each weapon in `shop` to have a maximum of two uses
 	 * @see net.fe.modifier.Modifier#modifyShop(net.fe.builderStage.ShopMenu)
 	 */
 	@Override
-	public Iterable<Item> modifyShop(Iterable<Item> shop) {
-		return shop;
+	public Stream<Item> modifyShop(Stream<Item> shop) {
+		return shop.map(MadeInChina::decreaseUsesIfWeapon);
 	}
 
 	/* (non-Javadoc)
@@ -41,13 +48,6 @@ public class MadeInChina implements Modifier {
 	 */
 	@Override
 	public void initOverworldUnits(Iterable<Unit> units) {
-		for (Unit u : units) {
-			for(Item item : u.getInventory()) {
-				if(item instanceof Weapon) {
-					item.setUsesDEBUGGING(2);
-				}
-			}
-		}
 	}
 
 	/* (non-Javadoc)
@@ -65,5 +65,24 @@ public class MadeInChina implements Modifier {
 	public String getDescription() {
 		return "All weapons have greatly reduced durability. Start with extra gold.";
 	}
-
+	
+	private static Item decreaseUsesIfWeapon(Item i) {
+		if (i instanceof Weapon) {
+			Weapon w = (Weapon) i;
+			return new Weapon(w.name, 2, w.id, w.getCost(),
+				w.type, w.mt, w.hit, w.crit, w.range,
+				w.modifiers, w.effective, w.pref);
+		} else {
+			return i;
+		}
+	}
+	
+	private static void decreaseInventoryWeaponUses(Unit u) {
+		// new list to prevent concurrent modification
+		final java.util.List<Item> items = new java.util.ArrayList<>(u.getInventory());
+		for (Item i : items) {
+			u.removeFromInventory(i);
+			u.addToInventory(decreaseUsesIfWeapon(i));
+		}
+	}
 }
