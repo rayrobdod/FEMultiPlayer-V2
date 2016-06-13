@@ -69,7 +69,7 @@
 				<pathelement location="junit/bin"/>
 			</classpath>
 			<!-- test name="net.fe.unit.UnitTest" / -->
-			<batchtest fork="true" todir="junit/report">
+			<batchtest fork="true" todir="junit/report" skipNonTests="true">
 				<fileset dir="junit/bin">
 					<include name="**/*Test*.class"/>
 				</fileset>
