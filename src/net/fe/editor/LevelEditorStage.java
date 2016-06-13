@@ -166,9 +166,11 @@ public class LevelEditorStage extends Stage {
 					} else if (ke.key == Keyboard.KEY_F1) { 
 						Level level = new Level(tiles[0].length, tiles.length, tiles, spawns);
 						File file = new File("levels/"+levelName+".lvl");
+						File dir = file.getParentFile();
 		                FileOutputStream fo;
 		                ObjectOutputStream oos;
 		                try {
+		                        dir.mkdirs();
 		                        fo = new FileOutputStream(file);
 		                        oos = new ObjectOutputStream(fo);
 		                        oos.writeObject(level);
