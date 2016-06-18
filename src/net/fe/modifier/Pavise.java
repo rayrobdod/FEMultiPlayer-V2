@@ -16,7 +16,7 @@ public class Pavise extends CombatTrigger {
 	 * Instantiates a new gamble.
 	 */
 	public Pavise(){
-		super(APPEND_NAME_AFTER_MOD, ENEMY_TURN_MOD);
+		super(APPEND_NAME_AFTER_MOD, ENEMY_TURN_MOD | SHOW_IN_PREVIEW);
 	}
 	
 	public int runDamageMod(Unit a, Unit d, int damage) {
@@ -27,7 +27,7 @@ public class Pavise extends CombatTrigger {
 	 * @see net.fe.fightStage.CombatTrigger#attempt(net.fe.unit.Unit, int)
 	 */
 	@Override
-	public boolean attempt(Unit user, int range) {
+	public boolean attempt(Unit user, int range, Unit opponent) {
 		return true;
 	}
 	

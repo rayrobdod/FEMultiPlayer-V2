@@ -6,6 +6,7 @@ import java.util.List;
 import chu.engine.anim.AudioPlayer;
 import net.fe.overworldStage.*;
 import net.fe.unit.Unit;
+import net.fe.network.command.DropCommand;
 
 /**
  * A OverworldContext used to select a space to create a summon in
@@ -39,7 +40,7 @@ public final class DropTarget extends SelectNodeContext {
 			if (u == null
 					&& grid.getTerrain(n.x, n.y).getMoveCost(
 							unit.rescuedUnit().getTheClass()) < unit
-							.rescuedUnit().get("Mov")) {
+							.rescuedUnit().getStats().mov) {
 				targets.add(n);
 			}
 		}
@@ -52,11 +53,16 @@ public final class DropTarget extends SelectNodeContext {
 	@Override
 	public void onSelect() {
 		AudioPlayer.playAudio("select");
-		stage.addCmd("DROP", getCurrentTarget().x, getCurrentTarget().y);
+		DropCommand c = new DropCommand(getCurrentTarget().x, getCurrentTarget().y);
+		c.applyClient(stage, unit, null, new EmptyRunnable()).run();
+		stage.addCmd(c);
 		stage.send();
 		cursor.setXCoord(unit.getXCoord());
 		cursor.setYCoord(unit.getYCoord());
 		stage.reset();
 	}
 
+	private static final class EmptyRunnable implements Runnable {
+		@Override public void run() {}
+	}
 }

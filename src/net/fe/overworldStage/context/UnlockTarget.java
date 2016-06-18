@@ -5,6 +5,7 @@ import java.util.List;
 
 import chu.engine.anim.AudioPlayer;
 import net.fe.overworldStage.*;
+import net.fe.network.command.UnlockCommand;
 import net.fe.unit.Unit;
 
 /**
@@ -50,11 +51,16 @@ public final class UnlockTarget extends SelectNodeContext {
 	@Override
 	public void onSelect() {
 		AudioPlayer.playAudio("select");
-		stage.addCmd("UNLOCK", getCurrentTarget().x, getCurrentTarget().y);
+		UnlockCommand cmd = new UnlockCommand(getCurrentTarget().x, getCurrentTarget().y);
+		stage.addCmd(cmd);
+		cmd.applyClient(stage, unit, null, new EmptyRunnable()).run();
 		stage.send();
 		cursor.setXCoord(unit.getXCoord());
 		cursor.setYCoord(unit.getYCoord());
 		stage.reset();
 	}
 
+	private static final class EmptyRunnable implements Runnable {
+		@Override public void run() {}
+	}
 }
