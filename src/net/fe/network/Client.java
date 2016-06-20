@@ -29,7 +29,7 @@ import chu.engine.menu.Notification;
 public class Client {
 	
 	/** a logger */
-	private static final Logger logger = Logger.getLogger("net.fe.network.Client");
+	public static final Logger logger = Logger.getLogger("net.fe.network.Client");
 	static {
 		logger.setLevel(java.util.logging.Level.FINER);
 		try {

@@ -32,9 +32,6 @@ import net.fe.network.message.ReadyMessage;
  */
 public final class ServerListener extends Thread {
 	
-	/** a logger (theoretically initialized in Server) */
-	private static final Logger logger = Logger.getLogger("net.fe.network.Server");
-	
 	/** The socket. */
 	private final Socket socket;
 	
@@ -68,10 +65,10 @@ public final class ServerListener extends Thread {
 			out = new ObjectOutputStream(socket.getOutputStream());
 			out.flush();
 			in = new ObjectInputStream(socket.getInputStream());
-			logger.fine("LISTENER: I/O streams initialized");
+			Server.logger.fine("LISTENER: I/O streams initialized");
 			sendMessage(new ClientInit((byte) 0, clientId, main.getSession()));
 		} catch (IOException e) {
-			logger.throwing("ServerListener", "<init>", e);
+			Server.logger.throwing("ServerListener", "<init>", e);
 		}
 	}
 	
@@ -80,30 +77,21 @@ public final class ServerListener extends Thread {
 	 */
 	public void run() {
 		try {
-			logger.fine("LISTENER: Start");
+			Server.logger.fine("LISTENER: Start");
 			Message message;
 			clientQuit = false;
 			while(!clientQuit) {
 				message = (Message) in.readObject();
-				logger.fine("[RECV]" + message);
+				Server.logger.fine("[RECV]" + message);
 				processInput(message);
 			}
-			logger.fine("LISTENER: Exit");
+			Server.logger.fine("LISTENER: Exit");
 			main.clients.remove(this);
 			in.close();
 			out.close();
 			socket.close();
 		} catch (Exception e) {
-			System.err.println("Exception occurred, writing to logs...");
-			e.printStackTrace();
-			try{
-				File errLog = new File("error_log_server_listener" + System.currentTimeMillis()%100000000 + ".log");
-				PrintWriter pw = new PrintWriter(errLog);
-				e.printStackTrace(pw);
-				pw.close();
-			}catch (IOException e2){
-				e2.printStackTrace();
-			}
+			Server.logger.throwing("ServerListener", "run", e);
 		} finally {
 			main.clients.remove(this);
 		}
@@ -135,13 +123,13 @@ public final class ServerListener extends Thread {
 		try {
 			out.writeObject(message);
 			out.flush();
-			logger.fine("SERVER sent message: [" + message.toString() + "]");
+			Server.logger.fine("SERVER sent message: [" + message.toString() + "]");
 			if (message instanceof KickMessage && ((KickMessage) message).player == clientId) {
 				clientQuit = true;
 			}
 		} catch (IOException e) {
-			logger.severe("SERVER Unable to send message!");
-			logger.throwing("ServerListener", "sendMessage", e);
+			Server.logger.severe("SERVER Unable to send message!");
+			Server.logger.throwing("ServerListener", "sendMessage", e);
 		}
 	}
 

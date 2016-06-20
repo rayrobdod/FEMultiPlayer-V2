@@ -96,16 +96,7 @@ public class FEMultiplayer extends Game{
 //			game.testDraftStage();
 			game.loop();
 		} catch (Exception e){
-			System.err.println("Exception occurred, writing to logs...");
-			e.printStackTrace();
-			try{
-				File errLog = new File("error_log_client" + LocalDateTime.now().toString().replace("T", "@").replace(":", "-") + ".log");
-				PrintWriter pw = new PrintWriter(errLog);
-				e.printStackTrace(pw);
-				pw.close();
-			}catch (IOException e2){
-				e2.printStackTrace();
-			}
+			Client.logger.throwing("ServerListener", "main", e);
 			System.exit(0);
 		}
 	}

@@ -18,7 +18,7 @@ import net.fe.overworldStage.objective.Seize;
 public final class Server {
 	
 	/** a logger */
-	private static final Logger logger = Logger.getLogger("net.fe.network.Server");
+	public static final Logger logger = Logger.getLogger("net.fe.network.Server");
 	static {
 		logger.setLevel(java.util.logging.Level.FINER);
 		logger.addHandler(new java.util.logging.ConsoleHandler());

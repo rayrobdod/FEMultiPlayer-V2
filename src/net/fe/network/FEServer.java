@@ -271,16 +271,7 @@ public class FEServer extends Game {
 							feserver.init();
 							feserver.loop();
 						} catch (Exception e){
-							System.err.println("Exception occurred, writing to logs...");
-							e.printStackTrace();
-							try{
-								File errLog = new File("error_log_server" + System.currentTimeMillis()%100000000 + ".log");
-								PrintWriter pw = new PrintWriter(errLog);
-								e.printStackTrace(pw);
-								pw.close();
-							}catch (IOException e2){
-								e2.printStackTrace();
-							}
+							Server.logger.throwing("FEServer$Thread", "run", e);
 							System.exit(0);
 						}
 					}
