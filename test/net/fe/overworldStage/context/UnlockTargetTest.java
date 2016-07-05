@@ -18,6 +18,7 @@ import net.fe.overworldStage.Grid;
 import net.fe.overworldStage.Node;
 import net.fe.overworldStage.Terrain;
 import net.fe.overworldStage.Zone;
+import net.fe.unit.Statistics;
 import net.fe.unit.Class;
 import net.fe.unit.Unit;
 
@@ -50,16 +51,13 @@ public class UnlockTargetTest {
 	public void testTargetsWhenAllDoorsThenFourTargets() {
 		// things that have nothing to do with the test but need to be set up anyway
 		Session session = new Session();
-		session.setMap("test"); // Must be a valid name, despite the bypass `stage.grid = ` later
 		session.addPlayer(FEMultiplayer.getLocalPlayer());
 		ClientOverworldStage stage = new ClientOverworldStage(session);
 		stage.cursor.stage = stage; // this just looks wrong
 		stage.grid = new Grid(3,3, Terrain.DOOR);
 		
 		Zone zone = new Zone(stage.grid.getRange(new Node(1,1), 1), null);
-		HashMap<String, Integer> vals = new HashMap<String, Integer>();
-		vals.put("HP", 20);
-		vals.put("Mov", 5);
+		Statistics vals = new Statistics(20, 0, 0, 0, 0, 0, 0, 0, 5, 2, 0);
 		Unit unit = new Unit("test", Class.createClass("Sorcerer"), '-', vals, vals);
 		
 		// the actual tests
@@ -81,7 +79,6 @@ public class UnlockTargetTest {
 	public void testTargetsWhenNotDoorThenNotATargets() {
 		// things that have nothing to do with the test but need to be set up anyway
 		Session session = new Session();
-		session.setMap("test"); // Must be a valid name, despite the bypass `stage.grid = ` later
 		session.addPlayer(FEMultiplayer.getLocalPlayer());
 		ClientOverworldStage stage = new ClientOverworldStage(session);
 		stage.cursor.stage = stage; // this just looks wrong
@@ -89,9 +86,7 @@ public class UnlockTargetTest {
 		stage.grid.setTerrain(1,2, Terrain.PLAIN);
 		
 		Zone zone = new Zone(stage.grid.getRange(new Node(1,1), 1), null);
-		HashMap<String, Integer> vals = new HashMap<String, Integer>();
-		vals.put("HP", 20);
-		vals.put("Mov", 5);
+		Statistics vals = new Statistics(20, 0, 0, 0, 0, 0, 0, 0, 5, 2, 0);
 		Unit unit = new Unit("test", Class.createClass("Sorcerer"), '-', vals, vals);
 		
 		// the actual tests
@@ -111,16 +106,13 @@ public class UnlockTargetTest {
 	public void testTargetsWhenCornerThenTargetsStillInBounds() {
 		// things that have nothing to do with the test but need to be set up anyway
 		Session session = new Session();
-		session.setMap("test"); // Must be a valid name, despite the bypass `stage.grid = ` later
 		session.addPlayer(FEMultiplayer.getLocalPlayer());
 		ClientOverworldStage stage = new ClientOverworldStage(session);
 		stage.cursor.stage = stage; // this just looks wrong
 		stage.grid = new Grid(3,3, Terrain.DOOR);
 		
 		Zone zone = new Zone(stage.grid.getRange(new Node(0,0), 1), null);
-		HashMap<String, Integer> vals = new HashMap<String, Integer>();
-		vals.put("HP", 20);
-		vals.put("Mov", 5);
+		Statistics vals = new Statistics(20, 0, 0, 0, 0, 0, 0, 0, 5, 2, 0);
 		Unit unit = new Unit("test", Class.createClass("Sorcerer"), '-', vals, vals);
 		
 		// the actual tests

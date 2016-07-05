@@ -20,6 +20,7 @@ import net.fe.overworldStage.Terrain;
 import net.fe.overworldStage.Zone;
 import net.fe.unit.Class;
 import net.fe.unit.Unit;
+import net.fe.unit.Statistics;
 
 public class SummonTest {
 	
@@ -50,16 +51,13 @@ public class SummonTest {
 	public void testTargetsWhenAllPlainsThenFourTargets() {
 		// things that have nothing to do with the test but need to be set up anyway
 		Session session = new Session();
-		session.setMap("test"); // Must be a valid name, despite the bypass `stage.grid = ` later
 		session.addPlayer(FEMultiplayer.getLocalPlayer());
 		ClientOverworldStage stage = new ClientOverworldStage(session);
 		stage.cursor.stage = stage; // this just looks wrong
 		stage.grid = new Grid(3,3, Terrain.PLAIN);
 		
 		Zone zone = new Zone(stage.grid.getRange(new Node(1,1), 1), null);
-		HashMap<String, Integer> vals = new HashMap<String, Integer>();
-		vals.put("HP", 20);
-		vals.put("Mov", 5);
+		Statistics vals = new Statistics(20, 0, 0, 0, 0, 0, 0, 0, 5, 2, 0);
 		Unit unit = new Unit("test", Class.createClass("Sorcerer"), '-', vals, vals);
 		
 		// the actual tests
@@ -81,7 +79,6 @@ public class SummonTest {
 	public void testTargetsWhenMountainThenNotATargets() {
 		// things that have nothing to do with the test but need to be set up anyway
 		Session session = new Session();
-		session.setMap("test"); // Must be a valid name, despite the bypass `stage.grid = ` later
 		session.addPlayer(FEMultiplayer.getLocalPlayer());
 		ClientOverworldStage stage = new ClientOverworldStage(session);
 		stage.cursor.stage = stage; // this just looks wrong
@@ -89,9 +86,7 @@ public class SummonTest {
 		stage.grid.setTerrain(1,2, Terrain.WALL);
 		
 		Zone zone = new Zone(stage.grid.getRange(new Node(1,1), 1), null);
-		HashMap<String, Integer> vals = new HashMap<String, Integer>();
-		vals.put("HP", 20);
-		vals.put("Mov", 5);
+		Statistics vals = new Statistics(20, 0, 0, 0, 0, 0, 0, 0, 5, 2, 0);
 		Unit unit = new Unit("test", Class.createClass("Sorcerer"), '-', vals, vals);
 		
 		// the actual tests
@@ -111,16 +106,13 @@ public class SummonTest {
 	public void testTargetsWhenCornerThenTargetsStillInBounds() {
 		// things that have nothing to do with the test but need to be set up anyway
 		Session session = new Session();
-		session.setMap("test"); // Must be a valid name, despite the bypass `stage.grid = ` later
 		session.addPlayer(FEMultiplayer.getLocalPlayer());
 		ClientOverworldStage stage = new ClientOverworldStage(session);
 		stage.cursor.stage = stage; // this just looks wrong
 		stage.grid = new Grid(3,3, Terrain.PLAIN);
 		
 		Zone zone = new Zone(stage.grid.getRange(new Node(0,0), 1), null);
-		HashMap<String, Integer> vals = new HashMap<String, Integer>();
-		vals.put("HP", 20);
-		vals.put("Mov", 5);
+		Statistics vals = new Statistics(20, 0, 0, 0, 0, 0, 0, 0, 5, 2, 0);
 		Unit unit = new Unit("test", Class.createClass("Sorcerer"), '-', vals, vals);
 		
 		// the actual tests
@@ -138,16 +130,13 @@ public class SummonTest {
 	public void testTargetsWhenTwoRange() {
 		// things that have nothing to do with the test but need to be set up anyway
 		Session session = new Session();
-		session.setMap("test"); // Must be a valid name, despite the bypass `stage.grid = ` later
 		session.addPlayer(FEMultiplayer.getLocalPlayer());
 		ClientOverworldStage stage = new ClientOverworldStage(session);
 		stage.cursor.stage = stage; // this just looks wrong
 		stage.grid = new Grid(5,5, Terrain.PLAIN);
 		
 		Zone zone = new Zone(stage.grid.getRange(new Node(2,2), 2), null);
-		HashMap<String, Integer> vals = new HashMap<String, Integer>();
-		vals.put("HP", 20);
-		vals.put("Mov", 5);
+		Statistics vals = new Statistics(20, 0, 0, 0, 0, 0, 0, 0, 5, 2, 0);
 		Unit unit = new Unit("test", Class.createClass("Sorcerer"), '-', vals, vals);
 		
 		// the actual tests
@@ -177,23 +166,20 @@ public class SummonTest {
 	@Test
 	public void TestGenerateThenSummonLevelMatchesSummonerLevel() {
 		for (int i = 1; i <= 20; i++) {
-			HashMap<String, Integer> vals = new HashMap<String, Integer>();
-			vals.put("HP", 20);
-			vals.put("Lvl", i);
+			Statistics vals = new Statistics(20, 0, 0, 0, 0, 0, 0, 0, 5, 2, 0);
 			Unit summoner = new Unit("test", Class.createClass("Sorcerer"), '-', vals, vals);
+			summoner.setLevel(i);
 			summoner.setParty(new net.fe.Party());
 			
 			Unit result = Summon.generateSummon(summoner);
 			
-			assertEquals(i, result.get("Lvl"));
+			assertEquals(i, result.getLevel());
 		}
 	}
 	
 	@Test
 	public void TestGenerateThenIsMoved() {
-		HashMap<String, Integer> vals = new HashMap<String, Integer>();
-		vals.put("HP", 20);
-		vals.put("Lvl", 10);
+		Statistics vals = new Statistics(20, 0, 0, 0, 0, 0, 0, 0, 5, 2, 0);
 		Unit summoner = new Unit("test", Class.createClass("Sorcerer"), '-', vals, vals);
 		summoner.setParty(new net.fe.Party());
 		
