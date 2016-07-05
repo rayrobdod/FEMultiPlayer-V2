@@ -135,6 +135,30 @@ public class ShopMenu extends Entity {
 		}
 		Renderer.removeClip();
 		
+		{
+			float textY = y + HEIGHT;
+			final Item selectedItem = this.getSelectedShop().getSelection().getItem();
+			{
+				final String itemName = selectedItem.name;
+				final int limit = shopInventory.getWeaponCount(itemName);
+				if (limit != -1) {
+					textY += 16;
+					final String text = itemName + ": " + limit;
+					final float textX = this.getSelectedShop().x + this.getSelectedShop().getWidth() - FEResources.getBitmapFont("default_med").getStringWidth(text);
+					Renderer.drawString("default_med", text, textX, textY, 0);
+				}
+			}
+			{
+				final String categoryName = selectedItem.getItemClass();
+				final int limit = shopInventory.getCategoryCount(categoryName);
+				if (categoryName != "" && limit != -1) {
+					textY += 16;
+					final String text = categoryName + ": " + limit;
+					final float textX = this.getSelectedShop().x + this.getSelectedShop().getWidth() - FEResources.getBitmapFont("default_med").getStringWidth(text);
+					Renderer.drawString("default_med", text, textX, textY, 0);
+				}
+			}
+		}
 	}
 	
 	/**

@@ -10,7 +10,6 @@ import net.fe.unit.Unit;
 import net.fe.unit.Weapon;
 
 public class ShopInventory {
-	private static ShopInventory obj;
 
 	private Map<String, Integer> inventory;
 	private Map<String, Integer> classInventory;
@@ -126,29 +125,18 @@ public class ShopInventory {
 	}
 
 	/**
-	 * Takes in an item and returns the number currently available.  Returns -1 if there are infinitely many left.
-	 * 
-	 * @param itemName
-	 * @return
+	 * Returns the current stock of a particular weapon. Ignores category limitations
+	 * @return the number of items with name "name" left in stock; -1 if there is no limit
 	 */
-	public int countOf(Item item){
-		//If it has a class, check it.  Otherwise, return the individual value.
-		if(classInventory.get(item.getItemClass()) != null){
+	public int getWeaponCount(String name) {
+		return inventory.getOrDefault(name, -1);
+	}
 
-			//If both are infinite, it's infinite
-			if(inventory.get(item.name) <= -1 && classInventory.get(item.getItemClass()) <= -1){
-				return -1;
-			}
-			//If one is -1, the other (higher) value should be returned.
-			if(inventory.get(item.name) <= -1 || classInventory.get(item.getItemClass()) <= -1){
-				return Math.max(inventory.get(item.name), classInventory.get(item.getItemClass()));
-			}
-			else{
-				return Math.min(inventory.get(item.name), classInventory.get(item.getItemClass()));
-			}
-		}
-		else{
-			return inventory.get(item.name);
-		}
+	/**
+	 * Returns the current stock of a category of weapon
+	 * @return the number of items with category "name" left in stock; -1 if there is no limit
+	 */
+	public int getCategoryCount(String name) {
+		return classInventory.getOrDefault(name, -1);
 	}
 }
