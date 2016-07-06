@@ -1,6 +1,9 @@
 package net.fe.builderStage;
 
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.function.IntSupplier;
+
 import net.fe.FEResources;
 import net.fe.Session;
 import net.fe.modifier.Modifier;
@@ -55,9 +58,11 @@ public class ShopMenu extends Entity {
 	 *
 	 * @param x the x
 	 * @param y the y
-	 * @param s the s
+	 * @param ms the modifiers 
+	 * @param si the shop inventory limitations. 
+	 * @param currentFunds the team's current funds. 
 	 */
-	public ShopMenu(float x, float y, Set<Modifier> ms, ShopInventory si) {
+	public ShopMenu(float x, float y, Set<Modifier> ms, ShopInventory si, IntSupplier currentFunds) {
 		super(x, y);
 		System.out.println("new shop");
 		shops = new ItemMenu[9];
@@ -66,6 +71,7 @@ public class ShopMenu extends Entity {
 		for(int i = 0; i < shops.length; i++){
 			shops[i] = new ItemMenu(x + 140*i,y){{
 				drawCost = true;
+				drawAsDisabled = itemIsAvaliable(si, currentFunds).negate();
 				setWidth(135);
 			}};
 			shopIcons[i] = FEResources.getTexture("shop" + i);
@@ -279,6 +285,13 @@ public class ShopMenu extends Entity {
 	 */
 	public ItemMenu[] getShops() {
 		return shops;
+	}
+	
+	/**
+	 * Returns a Predicate that returns true if the item is able to be purchased
+	 */
+	private static Predicate<Item> itemIsAvaliable(ShopInventory si, IntSupplier currentFunds) {
+		return ((Item i) -> si.itemInStock(i) && i.getCost() <= currentFunds.getAsInt());
 	}
 
 }

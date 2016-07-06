@@ -2,10 +2,12 @@ package net.fe.overworldStage;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.function.Predicate;
 
 import chu.engine.anim.Renderer;
 import net.fe.FEResources;
 import net.fe.unit.ItemDisplay;
+import net.fe.unit.Item;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -13,11 +15,14 @@ import net.fe.unit.ItemDisplay;
  */
 public class ItemMenu extends Menu<ItemDisplay> {
 	
-	/** The draw uses. */
+	/** True iff this should draw the number of uses */
 	protected boolean drawUses;
 	
-	/** The draw cost. */
+	/** True if this should draw the cost of the item */
 	protected boolean drawCost;
+	
+	/** A Predicate that determines whether each item should be drawn as disabled */
+	protected Predicate<Item> drawAsDisabled;
 	
 	/**
 	 * Instantiates a new item menu.
@@ -30,6 +35,8 @@ public class ItemMenu extends Menu<ItemDisplay> {
 		setWidth(98);
 		height = 17;
 		drawUses = true;
+		drawCost = false;
+		drawAsDisabled = ((Item i) -> false);
 	}
 	
 	/* (non-Javadoc)
@@ -40,10 +47,9 @@ public class ItemMenu extends Menu<ItemDisplay> {
 		w.x = this.x;
 		w.y = this.y + offsetY;
 		w.renderDepth = renderDepth;
-		w.render();
+		w.render(drawAsDisabled.test(w.getItem()));
 		int uses = w.getItem().getUses();
-		int offX = uses<10? 7: 0;
-		offX+=80;
+		int offX = uses<10 ? 87: 80;
 		if(drawUses){
 			Renderer.drawString("default_med", 
 				uses + "",

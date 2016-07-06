@@ -99,7 +99,7 @@ public class UnitBuilderStage extends Stage {
 		ui.setUnit(u);
 		addEntity(ui);
 
-		shop = new ShopMenu(SHOP_X, SHOP_Y, (session != null ? session.getModifiers() : java.util.Collections.emptySet()),si);
+		shop = new ShopMenu(SHOP_X, SHOP_Y, (session != null ? session.getModifiers() : java.util.Collections.emptySet()), si, s::getFunds);
 		shop.clearSelection();
 
 		addEntity(shop);
@@ -286,10 +286,10 @@ public class UnitBuilderStage extends Stage {
 			if(wep.getTriggers().contains(new Nosferatu())) {
 				flavor.add("Restores user HP by half of damage dealt");	
 			}
-			if(wep.getCost() == 10000){
+			if("Legend".equals(wep.getItemClass()) && !wep.type.isMagic()){
 				flavor.add("A legendary weapon");
 			}
-			if(wep.getCost() == 15000){
+			if("Legend".equals(wep.getItemClass()) && wep.type.isMagic()){
 				flavor.add("Ultimate magic");
 			}
 			if(wep.pref != null) flavor.add(wep.pref + " only");

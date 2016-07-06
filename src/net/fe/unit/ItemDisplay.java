@@ -14,27 +14,27 @@ import chu.engine.anim.Transform;
 /**
  * The Class ItemDisplay.
  */
-public class ItemDisplay extends Entity{
+public final class ItemDisplay extends Entity{
 	
-	/** The item. */
-	private Item item;
+	/** The item to display */
+	private final Item item;
 	
-	/** The equip. */
-	private boolean equip;
+	/** whether to display item as equipped */
+	private final boolean equip;
 	
-	/** The weapon icon. */
-	private static Texture weaponIcon = FEResources.getTexture("gui_weaponIcon");
+	/** The weapon icons */
+	private static final Texture weaponIcon = FEResources.getTexture("gui_weaponIcon");
 	
-	/** The e. */
-	private static Texture e = FEResources.getTexture("e");
+	/** The "equipped" texture */
+	private static final Texture e = FEResources.getTexture("e");
 	
 	/**
 	 * Instantiates a new item display.
 	 *
-	 * @param f the f
-	 * @param g the g
-	 * @param i the i
-	 * @param equip the equip
+	 * @param f the x-coordinate
+	 * @param g the y-coordinate
+	 * @param i the item
+	 * @param equip whether to display item as equipped
 	 */
 	public ItemDisplay(float f, float g, Item i, boolean equip){
 		super(f,g);
@@ -43,21 +43,42 @@ public class ItemDisplay extends Entity{
 		this.equip = equip;
 	}
 	
-	/* (non-Javadoc)
-	 * @see chu.engine.Entity#render()
+	/**
+	 * Render.
 	 */
 	public void render(){
-		render(null, false, 0);
+		render(null, false, 0, false);
 	}
 	
 	/**
 	 * Render.
 	 *
-	 * @param t the t
-	 * @param effective the effective
-	 * @param timer the timer
+	 * @param disabled whether to display as disabled
+	 */
+	public void render(boolean disabled){
+		render(null, false, 0, disabled);
+	}
+	
+	/**
+	 * Render.
+	 *
+	 * @param t a transform to apply
+	 * @param effective whether to display as effective
+	 * @param timer a timer value
 	 */
 	public void render(Transform t, boolean effective, float timer) {
+		render(t, effective, timer, false);
+	}
+	
+	/**
+	 * Render.
+	 *
+	 * @param t a transform to apply
+	 * @param effective whether to display as effective
+	 * @param disabled whether to display as disabled
+	 * @param timer a timer value
+	 */
+	public void render(Transform t, boolean effective, float timer, boolean disabled) {
 		if(item == null) return;
 		int row = item.id/8;
 		int col = item.id%8;
@@ -65,6 +86,8 @@ public class ItemDisplay extends Entity{
 		if(effective) {
 			float exp = (float) (Math.sin(timer)/2 + .5f);
 			args = new ShaderArgs("lighten", exp);
+		} else if(disabled) {
+			args = new ShaderArgs("greyscale");
 		} else {
 			args = new ShaderArgs();
 		}
