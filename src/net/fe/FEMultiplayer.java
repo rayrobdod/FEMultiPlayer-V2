@@ -35,7 +35,6 @@ import net.fe.overworldStage.Grid;
 import net.fe.overworldStage.Terrain;
 import net.fe.overworldStage.objective.Seize;
 import net.fe.transition.OverworldFightTransition;
-import net.fe.unit.RiseTome;
 import net.fe.unit.Unit;
 import net.fe.unit.UnitFactory;
 import net.fe.unit.UnitIdentifier;

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 import net.fe.unit.Unit;
+import net.fe.unit.Weapon;
 import net.fe.overworldStage.FieldSkill;
 import net.fe.overworldStage.Node;
 import net.fe.overworldStage.OverworldContext;
@@ -16,7 +17,7 @@ import net.fe.overworldStage.Path;
 /**
  * A skill in which a unit can turn a door into a floor
  */
-public final class Unlock extends FieldSkill {
+public final class Summon extends FieldSkill {
 	
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 6468268282716381357L;
@@ -24,7 +25,7 @@ public final class Unlock extends FieldSkill {
 	/**
 	 * A skill that can be used in the overworld
 	 */
-	public Unlock() {
+	public Summon() {
 	}
 	
 	/**
@@ -34,10 +35,18 @@ public final class Unlock extends FieldSkill {
 	 */
 	@Override
 	public boolean allowed(Unit unit, Grid grid) {
-		Set<Node> range = grid.getRange(new Node(unit.getXCoord(), unit.getYCoord()), 1);
-		for (Node n : range) {
-			if (grid.getTerrain(n.x, n.y) == Terrain.DOOR) {
-				return true;
+		if (unit.getTheClass().usableWeapon.contains(Weapon.Type.DARK)) {
+			Set<Node> range = grid.getRange(new Node(unit.getXCoord(), unit.getYCoord()), 1);
+			for (Node n : range) {
+				Unit p = grid.getUnit(n.x, n.y);
+				
+				if (p == null
+						&& grid.getTerrain(n.x, n.y).getMoveCost(
+								net.fe.unit.Class.createClass("Phantom")) <
+								unit.getStats().mov && 
+								unit.getTheClass().usableWeapon.contains(Weapon.Type.DARK)) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -48,7 +57,7 @@ public final class Unlock extends FieldSkill {
 	 */
 	@Override
 	public OverworldContext onSelect(ClientOverworldStage stage, OverworldContext context, Zone z, Unit unit) {
-		return new net.fe.overworldStage.context.UnlockTarget(stage, context, z, unit);
+		return new net.fe.overworldStage.context.Summon(stage, context, z, unit);
 	}
 	
 	@Override
@@ -61,5 +70,5 @@ public final class Unlock extends FieldSkill {
 	@Override
 	public int hashCode() { return (int) serialVersionUID; }
 	@Override
-	public boolean equals(Object other) { return other instanceof Unlock; }
+	public boolean equals(Object other) { return other instanceof Summon; }
 }

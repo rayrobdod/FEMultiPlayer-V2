@@ -35,7 +35,6 @@ import net.fe.transition.OverworldFightTransition;
 import net.fe.transition.OverworldEndTransition;
 import net.fe.unit.Item;
 import net.fe.unit.MapAnimation;
-import net.fe.unit.RiseTome;
 import net.fe.unit.Unit;
 import net.fe.unit.UnitIdentifier;
 

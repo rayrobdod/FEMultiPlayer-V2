@@ -20,7 +20,7 @@ import net.fe.network.Message;
 import net.fe.unit.HealingItem;
 import net.fe.unit.Item;
 import net.fe.unit.MapAnimation;
-import net.fe.unit.RiseTome;
+import net.fe.unit.FieldSkillItem;
 import net.fe.unit.Unit;
 import net.fe.unit.Weapon;
 
@@ -247,9 +247,10 @@ public class UnitBuilderStage extends Stage {
 		if(i instanceof HealingItem){
 			HealingItem potion = (HealingItem) i;
 			Renderer.drawString("default_med", "Heals " + potion.amount + " HP", INFO_X+8, INFO_Y+28, 1);
-		} else if (i instanceof RiseTome){
-			RiseTome rise = (RiseTome) i;
+		} else if (FieldSkillItem.RISE_TOME.equals(i)){
 			Renderer.drawString("default_med", "Summons a phantom warrior", INFO_X+8, INFO_Y+28, 1);
+		} else if (FieldSkillItem.DOOR_KEY.equals(i)){
+			Renderer.drawString("default_med", "Opens doors", INFO_X+8, INFO_Y+28, 1);
 		} else if (i instanceof Weapon){
 			Weapon wep = (Weapon) i;
 			{	// When might is irrelevant, show "-" instead

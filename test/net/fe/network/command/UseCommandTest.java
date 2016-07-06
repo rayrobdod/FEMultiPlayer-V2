@@ -23,7 +23,7 @@ import net.fe.overworldStage.Zone;
 import net.fe.unit.Class;
 import net.fe.unit.Unit;
 import net.fe.unit.HealingItem;
-import net.fe.unit.RiseTome;
+import net.fe.unit.FieldSkillItem;
 import net.fe.unit.Weapon;
 import net.fe.unit.Statistics;
 
@@ -107,7 +107,7 @@ public final class UseCommandTest {
 		vals = vals.copy("Mov", 5);
 		vals = vals.copy("Con", 8);
 		Unit unit = new Unit("test", Class.createClass("Ike"), '-', vals, vals);
-		unit.addToInventory(new RiseTome());
+		unit.addToInventory(FieldSkillItem.RISE_TOME);
 		unit.setHp(3);
 		
 		try {

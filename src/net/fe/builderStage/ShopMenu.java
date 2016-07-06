@@ -8,7 +8,7 @@ import net.fe.overworldStage.ItemMenu;
 import net.fe.unit.HealingItem;
 import net.fe.unit.Item;
 import net.fe.unit.ItemDisplay;
-import net.fe.unit.RiseTome;
+import net.fe.unit.FieldSkillItem;
 import net.fe.unit.Weapon;
 import net.fe.unit.WeaponFactory;
 
@@ -85,7 +85,7 @@ public class ShopMenu extends Entity {
 					case DARK: shops[6].addItem(display); break;
 					case STAFF: shops[7].addItem(display); break;
 				}
-			} else if (i instanceof RiseTome) {
+			} else if (FieldSkillItem.RISE_TOME.equals(i)) {
 				shops[6].addItem(display);
 			} else { // including HealingItems
 				shops[8].addItem(display);

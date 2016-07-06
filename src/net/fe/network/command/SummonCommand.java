@@ -6,12 +6,13 @@ import java.util.ArrayList;
 import net.fe.fightStage.AttackRecord;
 import net.fe.overworldStage.OverworldStage;
 import net.fe.overworldStage.ClientOverworldStage;
+import net.fe.overworldStage.fieldskill.Summon;
 import net.fe.overworldStage.Path;
 import net.fe.overworldStage.Node;
 import net.fe.unit.UnitIdentifier;
 import net.fe.unit.Unit;
 import net.fe.unit.Item;
-import net.fe.unit.RiseTome;
+import net.fe.unit.FieldSkillItem;
 import java.util.Optional;
 
 public final class SummonCommand extends Command {
@@ -33,7 +34,13 @@ public final class SummonCommand extends Command {
 		int tomeToUse = -1;
 		List<Item> items = unit.getInventory();
 		for(int z = 0; z < items.size(); z++){
-			if (items.get(z) instanceof RiseTome){
+			if (items.get(z) instanceof FieldSkillItem) {
+				if (new Summon().equals(((FieldSkillItem) items.get(z)).skill)) {
+					tomeToUse = z;
+				}
+				
+			}
+			if (FieldSkillItem.RISE_TOME.equals(items.get(z))){
 				tomeToUse = z;
 			}
 		}
@@ -60,7 +67,7 @@ public final class SummonCommand extends Command {
 				int tomeToUse = 0;
 				List<Item> items = unit.getInventory();
 				for(int i = 0; i < items.size(); i++){
-					if (items.get(i) instanceof RiseTome){
+					if (FieldSkillItem.RISE_TOME.equals(items.get(i))){
 						tomeToUse = i;
 					}
 				}

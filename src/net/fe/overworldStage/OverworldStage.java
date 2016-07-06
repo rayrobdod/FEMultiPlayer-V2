@@ -33,7 +33,6 @@ import net.fe.network.message.QuitMessage;
 import net.fe.overworldStage.context.TradeContext;
 import net.fe.overworldStage.objective.Objective;
 import net.fe.unit.Item;
-import net.fe.unit.RiseTome;
 import net.fe.unit.Unit;
 import net.fe.unit.UnitIdentifier;
 

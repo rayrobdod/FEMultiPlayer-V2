@@ -22,7 +22,7 @@ import net.fe.overworldStage.Zone;
 import net.fe.unit.Class;
 import net.fe.unit.Item;
 import net.fe.unit.Statistics;
-import net.fe.unit.RiseTome;
+import net.fe.unit.FieldSkillItem;
 import net.fe.unit.Unit;
 
 public final class UnitMovedTest {
@@ -80,7 +80,7 @@ public final class UnitMovedTest {
 		
 		Statistics vals = new Statistics(20, 0, 0, 0, 0, 0, 0, 0, 5, 2, 0);
 		Unit unit = new Unit("test", Class.createClass("Sorcerer"), '-', vals, vals);
-		unit.addToInventory(new RiseTome());
+		unit.addToInventory(FieldSkillItem.RISE_TOME.getCopy());
 		
 		// the actual tests
 		UnitMoved dut = new UnitMoved(stage, null, unit, false, false);
@@ -100,7 +100,7 @@ public final class UnitMovedTest {
 		
 		Statistics vals = new Statistics(20, 0, 0, 0, 0, 0, 0, 0, 5, 2, 0);
 		Unit unit = new Unit("test", Class.createClass("Roy"), '-', vals, vals);
-		unit.addToInventory(new RiseTome());
+		unit.addToInventory(FieldSkillItem.RISE_TOME.getCopy());
 		
 		// the actual tests
 		UnitMoved dut = new UnitMoved(stage, null, unit, false, false);

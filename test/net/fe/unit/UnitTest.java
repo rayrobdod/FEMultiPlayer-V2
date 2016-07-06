@@ -25,7 +25,7 @@ public final class UnitTest {
 		Statistics vals = new Statistics(20, 0, 0, 0, 0, 0, 0, 0, 5, 8, 0);
 		Unit dut = new Unit("ADFASDF", Class.createClass("Phantom"), '-', vals, vals);
 		
-		dut.addToInventory(new RiseTome());
+		dut.addToInventory(FieldSkillItem.RISE_TOME.getCopy());
 		
 		assertEquals(null, dut.getWeapon());
 		assertEquals(1, dut.getInventory().size());
