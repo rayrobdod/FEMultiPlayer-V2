@@ -36,7 +36,7 @@ public final class UseCommandTest {
 		vals = vals.copy("Mov", 5);
 		vals = vals.copy("Con", 8);
 		Unit unit = new Unit("test", Class.createClass("Ike"), '-', vals, vals);
-		unit.addToInventory(new HealingItem("Blarg", 5, 0, 1));
+		unit.addToInventory(new HealingItem("Blarg", 5, 0, 1, ""));
 		unit.setHp(3);
 		
 		Object result = new UseCommand(0).applyServer(null, unit);
@@ -53,7 +53,7 @@ public final class UseCommandTest {
 		vals = vals.copy("Mov", 5);
 		vals = vals.copy("Con", 8);
 		Unit unit = new Unit("test", Class.createClass("Ike"), '-', vals, vals);
-		unit.addToInventory(new HealingItem("Blarg", 15, 0, 1));
+		unit.addToInventory(new HealingItem("Blarg", 15, 0, 1, ""));
 		unit.setHp(15);
 		
 		Object result = new UseCommand(0).applyServer(null, unit);
@@ -70,7 +70,7 @@ public final class UseCommandTest {
 		vals = vals.copy("Mov", 5);
 		vals = vals.copy("Con", 8);
 		Unit unit = new Unit("test", Class.createClass("Ike"), '-', vals, vals);
-		unit.addToInventory(new HealingItem("Blarg", 15, 0, 1));
+		unit.addToInventory(new HealingItem("Blarg", 15, 0, 1, ""));
 		unit.setHp(15);
 		unit.getInventory().get(0).setUsesDEBUGGING(1);
 		
@@ -88,7 +88,7 @@ public final class UseCommandTest {
 		vals = vals.copy("Mov", 5);
 		vals = vals.copy("Con", 8);
 		Unit unit = new Unit("test", Class.createClass("Ike"), '-', vals, vals);
-		unit.addToInventory(new HealingItem("Blarg", 15, 0, 1));
+		unit.addToInventory(new HealingItem("Blarg", 15, 0, 1, ""));
 		unit.setHp(15);
 		unit.getInventory().get(0).setUsesDEBUGGING(1);
 		unit.addToInventory(createAxe(1));
@@ -124,7 +124,7 @@ public final class UseCommandTest {
 		Weapon retVal = new Weapon(
 			"baton" + i, 1, 0, 0,
 			Weapon.Type.AXE, 0, 0, 0, (s) -> java.util.Arrays.asList(1),
-			new Statistics(), new java.util.ArrayList<>(), null
+			new Statistics(), new java.util.ArrayList<>(), null, ""
 		);
 		return retVal;
 	}

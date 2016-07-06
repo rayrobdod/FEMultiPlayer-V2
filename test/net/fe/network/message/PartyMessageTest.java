@@ -80,7 +80,7 @@ public final class PartyMessageTest {
 		ArrayList<Unit> units = new ArrayList<>(2);
 		{
 			Unit u = UnitFactory.getUnit("Lute");
-			u.addToInventory(new HealingItem("Gaius Confect", 5, 0, 100));
+			u.addToInventory(new HealingItem("Gaius Confect", 5, 0, 100, ""));
 			units.add(u);
 		}
 		new PartyMessage(units).validateTeam(UnitFactory::getUnit, Item.getAllItems(), new ArrayList<>());
@@ -91,7 +91,7 @@ public final class PartyMessageTest {
 		ArrayList<Unit> units = new ArrayList<>(2);
 		{
 			Unit u = UnitFactory.getUnit("Lute");
-			u.addToInventory(new HealingItem("Iron Sword", -5, 0, 100));
+			u.addToInventory(new HealingItem("Iron Sword", -5, 0, 100, ""));
 			units.add(u);
 		}
 		new PartyMessage(units).validateTeam(UnitFactory::getUnit, Item.getAllItems(), new ArrayList<>());
@@ -145,7 +145,7 @@ public final class PartyMessageTest {
 	
 	@Test(expected=IllegalStateException.class)
 	public void test_validateTeam_RejectsTooMuchSpent() {
-		Item liquidGold = new HealingItem("Liquid Gold", 1, 0, net.fe.builderStage.TeamBuilderStage.FUNDS + 1);
+		Item liquidGold = new HealingItem("Liquid Gold", 1, 0, net.fe.builderStage.TeamBuilderStage.FUNDS + 1, "");
 		ArrayList<Unit> units = new ArrayList<>(2);
 		{
 			Unit u = UnitFactory.getUnit("Lute");
@@ -159,7 +159,7 @@ public final class PartyMessageTest {
 	public void test_validateTeam_AcceptsTreasury() {
 		ArrayList<Modifier> mods = new ArrayList<>(1);
 		mods.add(new Treasury());
-		Item liquidGold = new HealingItem("Liquid Gold", 1, 0, net.fe.builderStage.TeamBuilderStage.FUNDS + 1);
+		Item liquidGold = new HealingItem("Liquid Gold", 1, 0, net.fe.builderStage.TeamBuilderStage.FUNDS + 1, "");
 		ArrayList<Unit> units = new ArrayList<>(2);
 		{
 			Unit u = UnitFactory.getUnit("Lute");
