@@ -298,7 +298,7 @@ public final class Unit extends GriddedEntity implements Serializable, DoNotDest
 	public void give(Unit u){
 		if(rescuedUnit == null) throw new IllegalStateException("rescuedUnit == null");
 		if(u.rescuedUnit() != null) throw new IllegalStateException(u.name + ".rescuedUnit() != null");
-		u.setRescuedUnit(rescuedUnit);
+		u.rescuedUnit = rescuedUnit;
 		rescuedUnit = null;
 	}
 	
@@ -913,6 +913,17 @@ public final class Unit extends GriddedEntity implements Serializable, DoNotDest
 			}
 		}
 	}
+	
+	/**
+	 * Sets the unit's max HP (used for Sudden Death)
+	 * 
+	 */
+	public void setMaxHp(int mhp){
+		this.stats = this.stats.copy("HP", mhp);
+		if(this.getHp() > this.stats.maxHp){
+			this.setHp(mhp);
+		}
+	}
 
 	/** Returns the unit's current level */
 	public int getLevel() {
@@ -1162,12 +1173,10 @@ public final class Unit extends GriddedEntity implements Serializable, DoNotDest
 	}
 
 	/**
-	 * Sets the rescued unit.
-	 *
-	 * @param unit the new rescued unit
+	 * Returns true if this unit has been rescued by another unit
 	 */
-	public void setRescuedUnit(Unit unit) {
-		rescuedUnit = unit;
+	public boolean isRescued() {
+		return this.rescued;
 	}
 	
 	@Override public int hashCode() {
