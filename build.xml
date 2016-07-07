@@ -68,12 +68,13 @@
 				<pathelement location="."/>
 				<pathelement location="junit/bin"/>
 			</classpath>
-			<!-- test name="net.fe.unit.UnitTest" / -->
 			<batchtest fork="true" todir="junit/report"> <!-- travis's ant doesn't know what a "skipNonTests" is -->
 				<fileset dir="junit/bin">
 					<include name="**/*Test.class"/>
+					<exclude name="**/overworldStage/context/ShoveTargetTest.class" />
 				</fileset>
 			</batchtest>
+			<test fork="true" todir="junit/report" name="net.fe.overworldStage.context.ShoveTargetTest" unless="NoDisplay" />
 		</junit>
 	</target>
 	

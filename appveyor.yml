@@ -16,7 +16,7 @@ build_script:
 - cmd: 'mkdir dist'
 - cmd: '%ANT_CMD% package-all'
 test_script:
-- cmd: '%ANT_CMD% test'
+- cmd: '%ANT_CMD% -DNoDisplay=true test'
 artifacts:
 - path: dist
   name: FEMP
