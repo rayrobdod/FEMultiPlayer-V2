@@ -2,6 +2,7 @@ package net.fe.unit;
 
 
 import org.newdawn.slick.opengl.Texture;
+import org.newdawn.slick.Color;
 
 import net.fe.FEResources;
 import chu.engine.Entity;
@@ -80,8 +81,8 @@ public final class ItemDisplay extends Entity{
 	 */
 	public void render(Transform t, boolean effective, float timer, boolean disabled) {
 		if(item == null) return;
-		int row = item.id/8;
-		int col = item.id%8;
+		final int row = item.id/8;
+		final int col = item.id%8;
 		ShaderArgs args;
 		if(effective) {
 			float exp = (float) (Math.sin(timer)/2 + .5f);
@@ -91,10 +92,16 @@ public final class ItemDisplay extends Entity{
 		} else {
 			args = new ShaderArgs();
 		}
+		t = (t == null ? new Transform() : t);
+		final Color initialTransformColor = t.color;
+		if(disabled) {
+			t.setColor(new Color(160,160,160));
+		}
 		Renderer.render(weaponIcon, 
 				col/8.0f, row/10.0f, (col+1)/8.0f, (row+1)/10.0f,
 				x-1, y, x+16, y+17, renderDepth, t, args, chu.engine.anim.BlendModeArgs.ALPHA_BLEND);
 		FEResources.getBitmapFont("default_med").render(item.name, x+16, y+3, renderDepth, t);
+		t.setColor(initialTransformColor);
 		if(equip){
 			Renderer.render(e, 
 					0, 0, 1, 1,
