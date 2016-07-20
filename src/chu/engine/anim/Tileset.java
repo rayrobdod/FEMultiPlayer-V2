@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
-import org.newdawn.slick.util.ResourceLoader;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -53,7 +52,7 @@ public final class Tileset {
 	public Tileset(String path, int tileWidth, int tileHeight) {
 		try {
 			tileset = TextureLoader.getTexture("PNG",
-					ResourceLoader.getResourceAsStream(path));
+					this.getClass().getClassLoader().getResourceAsStream(path));
 			System.out.println("Loaded: "+path);
 		} catch (IOException e) {
 			e.printStackTrace();

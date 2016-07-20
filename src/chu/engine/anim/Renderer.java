@@ -42,7 +42,6 @@ import org.lwjgl.opengl.GL20;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
-import org.newdawn.slick.util.ResourceLoader;
 
 import chu.engine.Game;
 
@@ -584,7 +583,7 @@ public class Renderer {
      */
     private static String readFileAsString(String filename) throws Exception {
         StringBuilder source = new StringBuilder();
-        InputStream in = ResourceLoader.getResourceAsStream(filename);
+        InputStream in = Renderer.class.getClassLoader().getResourceAsStream(filename);
         Exception exception = null;
         BufferedReader reader;
         try{

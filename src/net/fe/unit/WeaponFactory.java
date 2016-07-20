@@ -8,8 +8,6 @@ import java.util.Scanner;
 import java.util.function.Function;
 import java.io.Serializable;
 
-import org.newdawn.slick.util.ResourceLoader;
-
 // TODO: Auto-generated Javadoc
 /**
  * A factory for creating Weapon objects.
@@ -44,7 +42,7 @@ public class WeaponFactory {
 	 * Load weapons.
 	 */
 	public static void loadWeapons() {
-		Scanner in = new Scanner(ResourceLoader.getResourceAsStream("res/weapons.txt"));
+		Scanner in = new Scanner(WeaponFactory.class.getClassLoader().getResourceAsStream("res/weapons.txt"));
 		int id = 4;
 		while(in.hasNextLine()){
 			String line = in.nextLine();

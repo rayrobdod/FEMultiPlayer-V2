@@ -41,7 +41,6 @@ import net.fe.unit.UnitIdentifier;
 
 import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.util.ResourceLoader;
 
 import chu.engine.Entity;
 import chu.engine.Game;
@@ -575,7 +574,7 @@ public class ClientOverworldStage extends OverworldStage {
 	@Override
 	public void loadLevel(String levelName) {
         try {
-            InputStream in = ResourceLoader.getResourceAsStream("levels/"+levelName+".lvl");
+            InputStream in = this.getClass().getClassLoader().getResourceAsStream("levels/"+levelName+".lvl");
             ObjectInputStream ois = new ObjectInputStream(in);
             Level level = (Level) ois.readObject();
             grid = new Grid(level.width, level.height, Terrain.NONE);

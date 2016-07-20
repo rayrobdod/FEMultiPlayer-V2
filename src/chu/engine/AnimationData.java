@@ -7,7 +7,6 @@ import java.util.HashMap;
 
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
-import org.newdawn.slick.util.ResourceLoader;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -110,7 +109,7 @@ class AnimationData {
 	 */
 	public Texture getTexture() {
 		try {
-			Texture t = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(path));
+			Texture t = TextureLoader.getTexture("PNG", this.getClass().getClassLoader().getResourceAsStream(path));
 			System.out.println("Loaded "+path);
 			return t;
 		} catch (IOException e) {

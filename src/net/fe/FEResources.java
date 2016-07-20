@@ -18,7 +18,6 @@ import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.openal.Audio;
 import org.newdawn.slick.openal.AudioLoader;
 import org.newdawn.slick.opengl.Texture;
-import org.newdawn.slick.util.ResourceLoader;
 
 import chu.engine.AnimationData;
 import chu.engine.anim.BitmapFont;
@@ -93,7 +92,7 @@ public class FEResources {
 			loadTextures();	
 			//load audio
 			audio.put("miss", AudioLoader.getAudio("WAV",
-					ResourceLoader.getResourceAsStream("res/sfx/miss.wav")));
+					FEResources.class.getClassLoader().getResourceAsStream("res/sfx/miss.wav")));
 			
 		} catch (IOException e) {
 			int max = GL11.glGetInteger(GL11.GL_MAX_TEXTURE_SIZE);
@@ -132,7 +131,7 @@ public class FEResources {
 	private static void loadTextures() {
 		long startTime = System.nanoTime();
 		// TODO Load textures from JSON
-		InputStream file = ResourceLoader.getResourceAsStream("res/resources.json");
+		InputStream file = FEResources.class.getClassLoader().getResourceAsStream("res/resources.json");
 		Scanner in = new Scanner(file);
 		StringBuilder sb = new StringBuilder();
 		while(in.hasNextLine()) {
@@ -233,7 +232,7 @@ public class FEResources {
 	 * Load bitmap fonts.
 	 */
 	public static void loadBitmapFonts() {
-		Scanner in = new Scanner(ResourceLoader.getResourceAsStream("res/fonts/fonts.txt"));
+		Scanner in = new Scanner(FEResources.class.getClassLoader().getResourceAsStream("res/fonts/fonts.txt"));
 		while(in.hasNextLine()) {
 			String line = in.nextLine();
 			if(line.startsWith("#"))
@@ -276,7 +275,7 @@ public class FEResources {
 			//try to get it, in case we forgot
 			System.err.println("Warn: " + string + " not explicitly defined");
 			for(String loc: searchFolders){
-				if(ResourceLoader.resourceExists("res/" + loc + "/" + string + ".png")){
+				if(null == FEResources.class.getClassLoader().getResource("res/" + loc + "/" + string + ".png")){
 					AnimationData txt = new AnimationData("res/" + loc + "/" + string + ".png");
 					textures.put(string, txt);
 					return txt;
@@ -299,7 +298,7 @@ public class FEResources {
 //			System.err.println("Warn: " + name + " not explicitly defined");
 			try{
 				Audio b = AudioLoader.getAudio("WAV",
-						ResourceLoader.getResourceAsStream("res/sfx/"+name+".wav"));
+						FEResources.class.getClassLoader().getResourceAsStream("res/sfx/"+name+".wav"));
 				audio.put(name, b);
 				return b;
 			} catch (Exception e){

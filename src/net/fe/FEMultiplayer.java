@@ -47,7 +47,6 @@ import org.lwjgl.opengl.Display;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.openal.SoundStore;
 import org.newdawn.slick.opengl.TextureLoader;
-import org.newdawn.slick.util.ResourceLoader;
 
 import chu.engine.Game;
 import chu.engine.Stage;
@@ -122,8 +121,8 @@ public class FEMultiplayer extends Game{
 		ByteBuffer icon16, icon32;
 		icon16 = icon32 = null;
 		try {
-			icon16 = ByteBuffer.wrap(TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/gui/icon16.png")).getTextureData());
-			icon32 = ByteBuffer.wrap(TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/gui/icon32.png")).getTextureData());
+			icon16 = ByteBuffer.wrap(TextureLoader.getTexture("PNG", this.getClass().getClassLoader().getResourceAsStream("res/gui/icon16.png")).getTextureData());
+			icon32 = ByteBuffer.wrap(TextureLoader.getTexture("PNG", this.getClass().getClassLoader().getResourceAsStream("res/gui/icon32.png")).getTextureData());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

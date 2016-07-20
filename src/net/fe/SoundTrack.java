@@ -13,7 +13,6 @@ import java.util.Enumeration;
 
 import org.newdawn.slick.openal.Audio;
 import org.newdawn.slick.openal.AudioLoader;
-import org.newdawn.slick.util.ResourceLoader;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -55,14 +54,14 @@ public class SoundTrack {
 					setting = name;
 			}
 			b = AudioLoader.getAudio("WAV",
-					ResourceLoader.getResourceAsStream("res/music/"+setting+".wav"));
+					SoundTrack.class.getClassLoader().getResourceAsStream("res/music/"+setting+".wav"));
 			b.playAsMusic(1.0f, FEResources.getAudioVolume(), true);
 		} catch (Exception e){
 			e.printStackTrace();
 			System.err.println("Warn: Bad sound configuration: "+name);
 			try{
 				Audio b = AudioLoader.getAudio("WAV",
-						ResourceLoader.getResourceAsStream("res/music/"+name+".wav"));
+						SoundTrack.class.getClassLoader().getResourceAsStream("res/music/"+name+".wav"));
 				b.playAsMusic(1.0f, FEResources.getAudioVolume(), true);
 			}catch(Exception f){}
 		}
@@ -113,7 +112,7 @@ public class SoundTrack {
 		if(!enabled) return;
 		try {
 			Audio a = AudioLoader.getStreamingAudio("WAV", 
-					ResourceLoader.getResource("res/music/"+current+".wav"));
+					SoundTrack.class.getClassLoader().getResource("res/music/"+current+".wav"));
 			a.playAsMusic(1.0f, FEResources.getAudioVolume(), true);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

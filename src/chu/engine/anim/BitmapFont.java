@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
-import org.newdawn.slick.util.ResourceLoader;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -33,7 +32,7 @@ public class BitmapFont {
 	public BitmapFont(String texName) {
 		try {
 			texture = TextureLoader.getTexture("PNG", 
-					ResourceLoader.getResourceAsStream("res/fonts/"+texName+".png"));
+					this.getClass().getClassLoader().getResourceAsStream("res/fonts/"+texName+".png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

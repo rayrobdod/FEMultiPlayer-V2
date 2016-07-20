@@ -19,7 +19,6 @@ import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
-import org.newdawn.slick.util.ResourceLoader;
 
 import chu.engine.Game;
 import chu.engine.KeyboardEvent;
@@ -56,7 +55,7 @@ public class LevelEditorStage extends Stage {
 	static {
 		try {
 			palette = TextureLoader
-					.getTexture("PNG", ResourceLoader
+					.getTexture("PNG", LevelEditorStage.class
 							.getResourceAsStream("res/terrain_tiles.png"));
 			tileset = new Tileset(palette, 16, 16);
 		} catch (IOException e) {

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-import org.newdawn.slick.util.ResourceLoader;
-
 // TODO: Auto-generated Javadoc
 /**
  * A factory for creating Unit objects.
@@ -20,7 +18,7 @@ public class UnitFactory {
 	 * Fails if [[WeaponFactory#loadWeapons]] has not been called yet.
 	 */
 	public static void loadUnits() {
-		Scanner in = new Scanner(ResourceLoader.getResourceAsStream("res/stats.txt"));
+		Scanner in = new Scanner(UnitFactory.class.getClassLoader().getResourceAsStream("res/stats.txt"));
 		while(in.hasNextLine()){
 			String line = in.nextLine();
 			if(line.equals("") || line.startsWith("#")) continue;

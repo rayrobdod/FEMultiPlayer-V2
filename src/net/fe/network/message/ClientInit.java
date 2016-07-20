@@ -2,7 +2,6 @@ package net.fe.network.message;
 
 import net.fe.Session;
 import net.fe.network.Message;
-import org.newdawn.slick.util.ResourceLoader;
 
 /**
  * The first message sent to a client by the server. Contains information that
@@ -68,7 +67,7 @@ public final class ClientInit extends Message {
 		public static Hashes pullFromStatics(String levelName) {
 			int mapHash = 0;
 			try (
-				java.io.InputStream in = ResourceLoader.getResourceAsStream("levels/"+levelName+".lvl");
+				java.io.InputStream in = ClientInit.class.getClassLoader().getResourceAsStream("levels/"+levelName+".lvl");
 				java.io.ObjectInputStream ois = new java.io.ObjectInputStream(in)
 			) {
 				mapHash = java.util.Objects.hashCode(ois.readObject());

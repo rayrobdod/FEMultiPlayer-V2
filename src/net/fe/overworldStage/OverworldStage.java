@@ -38,7 +38,6 @@ import net.fe.unit.Unit;
 import net.fe.unit.UnitIdentifier;
 
 import org.newdawn.slick.Color;
-import org.newdawn.slick.util.ResourceLoader;
 
 import chu.engine.Game;
 import chu.engine.Stage;
@@ -198,7 +197,7 @@ public class OverworldStage extends Stage {
 	 */
 	public void loadLevel(String levelName) {
         try {
-        	InputStream in = ResourceLoader.getResourceAsStream("levels/"+levelName+".lvl");
+        	InputStream in = this.getClass().getClassLoader().getResourceAsStream("levels/"+levelName+".lvl");
             ObjectInputStream ois = new ObjectInputStream(in);
             Level level = (Level) ois.readObject();
             Set<SpawnPoint> spawns = new HashSet<>(level.spawns);
