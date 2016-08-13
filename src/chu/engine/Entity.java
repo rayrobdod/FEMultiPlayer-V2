@@ -38,9 +38,6 @@ public abstract class Entity {
 	/** The will be removed. */
 	public boolean willBeRemoved;
 	
-	/** The solid. */
-	public boolean solid;
-	
 
 	public boolean hasRun = false;
 	
@@ -57,7 +54,6 @@ public abstract class Entity {
 		this.prevY = y;
 		sprite = new Sprite();
 		willBeRemoved = false;
-		solid = false;
 		width = 0;
 		height = 0;
 	}
