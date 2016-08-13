@@ -14,12 +14,6 @@ public abstract class Entity {
 	/** The y. */
 	public float y;
 	
-	/** The width. */
-	public float width;
-	
-	/** The height. */
-	public float height;
-	
 	/** The prev x. */
 	public float prevX;
 	
@@ -38,7 +32,7 @@ public abstract class Entity {
 	/** The will be removed. */
 	public boolean willBeRemoved;
 	
-
+	
 	public boolean hasRun = false;
 	
 	/**
@@ -54,8 +48,6 @@ public abstract class Entity {
 		this.prevY = y;
 		sprite = new Sprite();
 		willBeRemoved = false;
-		width = 0;
-		height = 0;
 	}
 	
 	
