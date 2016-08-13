@@ -32,9 +32,6 @@ public abstract class Entity {
 	/** The sprite. */
 	public final Sprite sprite;
 	
-	/** The hitbox. */
-	public Hitbox hitbox;
-	
 	/** The stage. */
 	public Stage stage;
 	
