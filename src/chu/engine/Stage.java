@@ -97,43 +97,6 @@ public abstract class Stage {
 		}
 	}
 	
-	/**
-	 * Instance at.
-	 *
-	 * @param x the x
-	 * @param y the y
-	 * @return the entity
-	 */
-	public final Entity instanceAt(int x, int y) {
-		for(Entity e : entities) {
-			if(e.x == x && e.y == y && !e.willBeRemoved()) return e;
-		}
-		return null;
-	}
-	
-	/**
-	 * All instances at.
-	 *
-	 * @param x the x
-	 * @param y the y
-	 * @return the entity[]
-	 */
-	public final Entity[] allInstancesAt(int x, int y) {
-		ArrayList<Entity> ans = new ArrayList<Entity>();
-		for(Entity e : entities) {
-			if(e.x == x && e.y == y && !e.willBeRemoved()) ans.add(e);
-		}
-		
-		for(Entity e : addStack) {
-			if(e.x == x && e.y == y && !e.willBeRemoved()) ans.add(e);
-		}
-		
-		Entity[] ret = new Entity[ans.size()];
-		for(int i=0; i<ret.length; i++) {
-			ret[i] = ans.get(i);
-		}
-		return ret;
-	}
 	
 	/**
 	 * Process add stack.
