@@ -114,11 +114,9 @@ public class TitleStage extends Stage{
 		Transform t = new Transform();
 		for(Entity e : entities) {
 			e.render();
-			if(e.hasRun)
-				hasRun = true;
 		}
 		
-		if(!hasRun)
+		if(! titleAnim.hasRun)
 			Renderer.render(title, 0, 0, 1, 1, 0, 0, 480, 320, 1);
 		else
 			Renderer.render(titleTwo, 0, 0, 1, 1, 0, 0, 480, 320, 1);

@@ -17,6 +17,8 @@ public class TitleAnimation extends Entity{
 	
 	private Sprite titleAnim;
 	
+	public boolean hasRun;
+	
 	
 	/**
 	 * Instantiates a new title animation.
@@ -31,6 +33,7 @@ public class TitleAnimation extends Entity{
 				FEResources.getTexture("title_slide"), 480, 320, 21, 3, 0.1f);
 		titleAnim.setSpeed(.07f);
 		sprites.add(titleAnim);
+		this.hasRun = false;
 	}
 	
 	/* (non-Javadoc)

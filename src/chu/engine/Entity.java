@@ -33,8 +33,6 @@ public abstract class Entity {
 	public boolean willBeRemoved;
 	
 	
-	public boolean hasRun = false;
-	
 	/**
 	 * Instantiates a new entity.
 	 *
