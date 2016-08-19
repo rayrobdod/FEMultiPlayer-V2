@@ -3,6 +3,7 @@ package net.fe;
 import java.util.List;
 
 import net.fe.builderStage.TeamBuilderStage;
+import net.fe.network.Message;
 
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
@@ -24,7 +25,7 @@ import chu.engine.menu.TextInputBox;
  *
  * @author Shawn
  */
-public class ConnectStage extends Stage {
+public final class ConnectStage extends Stage {
 	
 	/** The Constant UNFOCUSED. */
 	private static final Color UNFOCUSED = new Color(0x58543c);
@@ -36,10 +37,10 @@ public class ConnectStage extends Stage {
 	private static final Color CURSOR = new Color(0xeeeeee);
 	
 	/** The name. */
-	private ConnectInputBox name;
+	private final ConnectInputBox name;
 	
 	/** The ip. */
-	private ConnectInputBox ip;
+	private final ConnectInputBox ip;
 	
 	/**
 	 * Instantiates a new connect stage.
@@ -76,7 +77,7 @@ public class ConnectStage extends Stage {
 	 * @see chu.engine.Stage#beginStep()
 	 */
 	@Override
-	public void beginStep() {
+	public void beginStep(List<Message> messages) {
 		for(Entity e : entities) {
 			e.beginStep();
 		}
