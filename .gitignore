@@ -1,6 +1,8 @@
 $ cat .gitignore
+/.gradle
 bin/**/*
 /bin
+/build
 /dist
 /temp.json
 /teams

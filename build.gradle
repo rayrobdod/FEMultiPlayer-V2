@@ -1,0 +1,134 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+[compileJava, compileTestJava]*.options*.deprecation = true
+[compileJava, compileTestJava]*.options*.compilerArgs = ["-Xlint:unchecked"]
+
+sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets.main.resources.srcDirs = [ "." ]
+sourceSets.main.resources.filter.include "levels/"
+sourceSets.main.resources.filter.include "shaders/"
+sourceSets.main.resources.filter.include "res/"
+sourceSets.test.java.srcDirs = [ "test/" ]
+
+// name = 'FEMP'
+version = 'SNAPSHOT'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile files("json-simple/json-simple-1.1.1.jar")
+	compile files("lwjgl-2.9.0/jar/lwjgl.jar")
+	compile files("lwjgl-2.9.0/jar/slick-util.jar")
+	compile files("lwjgl-2.9.0/jar/jogg-0.0.7.jar")
+	compile files("lwjgl-2.9.0/jar/jorbis-0.0.15.jar")
+	compile files("lwjgl-2.9.0/jar/jarsplice-0.40.jar")
+	testCompile("org.junit.jupiter:junit-jupiter-api:5.0.2")
+	testCompile("junit:junit:4.12")
+	testRuntime("org.junit.vintage:junit-vintage-engine:4.12.2")
+}
+
+
+/**
+ * Create a new FileCollection that is similar to the input, but replaces any
+ * non-directories (assumed to be zip files) with it's contents
+ */
+def expandZips(FileCollection inputs) {
+	FileCollection retval = files()
+	inputs.forEach{f ->
+		if (f.isDirectory()) {
+			retval = retval + files(f)
+		} else {
+			retval = retval + zipTree(f)
+		}
+	}
+	return retval;
+}
+
+
+task fatjarMain(dependsOn: classes, type: Jar) {
+	from(expandZips(sourceSets.main.runtimeClasspath))
+	from("lwjgl-2.9.0/native/linux")
+	from("lwjgl-2.9.0/native/macosx")
+	from("lwjgl-2.9.0/native/windows")
+	baseName = "Fire Emblem Multiplayer"
+//	entryCompression = org.gradle.api.tasks.bundling.ZipEntryCompression.STORED
+	manifest.attributes (
+		  'Launcher-Main-Class' : 'net.fe.FEMultiplayer'
+		, 'Launcher-VM-Args': ''
+		, 'Main-Class': 'org.ninjacave.jarsplice.JarSpliceLauncher'
+		, 'Class-Path' : '.'
+	)
+}
+
+task fatjarLevels(dependsOn: classes, type: Jar) {
+	from(expandZips(sourceSets.main.runtimeClasspath))
+	from("lwjgl-2.9.0/native/linux")
+	from("lwjgl-2.9.0/native/macosx")
+	from("lwjgl-2.9.0/native/windows")
+	baseName = "Fire Emblem Multiplayer"
+	appendix = "levelEditor"
+	manifest.attributes (
+		  'Launcher-Main-Class' : 'net.fe.editor.LevelEditor'
+		, 'Launcher-VM-Args': ''
+		, 'Main-Class': 'org.ninjacave.jarsplice.JarSpliceLauncher'
+		, 'Class-Path' : '.'
+	)
+}
+
+task fatjarServer(dependsOn: classes, type: Jar) {
+	from(expandZips(sourceSets.main.runtimeClasspath)) {
+		exclude "shaders/**"
+		exclude "res/**/*.png"
+		exclude "res/**/*.wav"
+	}
+	baseName = "Fire Emblem Multiplayer"
+	appendix = "server"
+	manifest.attributes (
+		  'Launcher-Main-Class' : 'net.fe.network.FEServer'
+		, 'Launcher-VM-Args': ''
+		, 'Main-Class': 'org.ninjacave.jarsplice.JarSpliceLauncher'
+		, 'Class-Path' : '.'
+	)
+}
+
+assemble.dependsOn(fatjarMain)
+assemble.dependsOn(fatjarLevels)
+assemble.dependsOn(fatjarServer)
+
+
+task runMain(dependsOn: classes, type: JavaExec) {
+	main = "net.fe.FEMultiplayer"
+	classpath = sourceSets.main.runtimeClasspath
+	ignoreExitValue = true
+	systemProperties = [
+		"java.library.path" : ("lwjgl-2.9.0/native/" + System.getProperty("os.name").split(" ")[0]),
+	]
+}
+
+task runStats(dependsOn: classes, type: JavaExec) {
+	main = "net.fe.balance.StatBalancer"
+	classpath = sourceSets.main.runtimeClasspath
+	ignoreExitValue = true
+	systemProperties = [
+		"java.library.path" : ("lwjgl-2.9.0/native/" + System.getProperty("os.name").split(" ")[0]),
+	]
+}
+
+task runLevels(dependsOn: classes, type: JavaExec) {
+	main = "net.fe.editor.LevelEditor"
+	classpath = sourceSets.main.runtimeClasspath
+	ignoreExitValue = true
+	systemProperties = [
+		"java.library.path" : ("lwjgl-2.9.0/native/" + System.getProperty("os.name").split(" ")[0]),
+	]
+}
+
+task runServer(dependsOn: classes, type: JavaExec) {
+	main = "net.fe.network.FEServer"
+	classpath = sourceSets.main.runtimeClasspath
+	ignoreExitValue = true
+}
