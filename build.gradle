@@ -50,7 +50,8 @@ def expandZips(FileCollection inputs) {
 
 
 task fatjarMain(dependsOn: classes, type: Jar) {
-	from(expandZips(sourceSets.main.runtimeClasspath))
+	// delay execution of expandZips unitil after the classpath is created
+	from({ -> expandZips(sourceSets.main.runtimeClasspath)})
 	from("lwjgl-2.9.0/native/linux")
 	from("lwjgl-2.9.0/native/macosx")
 	from("lwjgl-2.9.0/native/windows")
@@ -65,7 +66,7 @@ task fatjarMain(dependsOn: classes, type: Jar) {
 }
 
 task fatjarLevels(dependsOn: classes, type: Jar) {
-	from(expandZips(sourceSets.main.runtimeClasspath))
+	from({ -> expandZips(sourceSets.main.runtimeClasspath)})
 	from("lwjgl-2.9.0/native/linux")
 	from("lwjgl-2.9.0/native/macosx")
 	from("lwjgl-2.9.0/native/windows")
@@ -80,7 +81,7 @@ task fatjarLevels(dependsOn: classes, type: Jar) {
 }
 
 task fatjarServer(dependsOn: classes, type: Jar) {
-	from(expandZips(sourceSets.main.runtimeClasspath)) {
+	from({ -> expandZips(sourceSets.main.runtimeClasspath)}) {
 		exclude "shaders/**"
 		exclude "res/**/*.png"
 		exclude "res/**/*.wav"
