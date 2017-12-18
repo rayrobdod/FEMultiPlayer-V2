@@ -31,6 +31,9 @@ dependencies {
 	testRuntime("org.junit.vintage:junit-vintage-engine:4.12.2")
 }
 
+// there are tests that do require lwjgl to run
+test.systemProperties = ["java.library.path" : ("lwjgl-2.9.0/native/" + System.getProperty("os.name").split(" ")[0])]
+
 
 /**
  * Create a new FileCollection that is similar to the input, but replaces any
