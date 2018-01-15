@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeNoException;
 
 import org.lwjgl.opengl.Display;
 
@@ -30,7 +31,7 @@ public class ShoveTargetTest {
 			Display.setDisplayMode(new org.lwjgl.opengl.DisplayMode(5, 5));
 			Display.create();
 		} catch (org.lwjgl.LWJGLException e) {
-			
+			// apparently, junit ignores assumptions in `@Before` methods
 		}
 	}
 	
@@ -50,11 +51,24 @@ public class ShoveTargetTest {
 	@Test
 	public void testTargetsWhenAllShoveesThenFourTargets() {
 		// things that have nothing to do with the test but need to be set up anyway
-		Session session = new Session();
-		session.addPlayer(FEMultiplayer.getLocalPlayer());
-		ClientOverworldStage stage = new ClientOverworldStage(session);
-		stage.cursor.stage = stage; // this just looks wrong
-		stage.grid = new Grid(6,6, Terrain.FLOOR);
+		Session session;
+		ClientOverworldStage stage;
+		try {
+			session = new Session();
+			session.addPlayer(FEMultiplayer.getLocalPlayer());
+			stage = new ClientOverworldStage(session);
+			stage.cursor.stage = stage; // this just looks wrong
+			stage.grid = new Grid(6,6, Terrain.FLOOR);
+		} catch (java.lang.RuntimeException e) {
+			// Not only does Junit not say "A test was ignored due to a failed assumption",
+			// It also swallows anything printed to `System.out` and `System.err`, meaning
+			// I can't say "A test was ignored due to a failed assumption" myself!
+			assumeNoException(e);
+			// dead code, but compiler doesn't seem to be
+			// aware that `assumeNoException` always throws
+			session = null;
+			stage = null;
+		}
 		
 		Statistics shoveeVals = new Statistics(20, 0, 0, 0, 0, 0, 0, 0, 5, 2, 0);
 		Unit shovee1 = new Unit("shovee", Class.createClass("Sorcerer"), '-', shoveeVals, shoveeVals);
