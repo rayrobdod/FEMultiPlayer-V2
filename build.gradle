@@ -69,7 +69,12 @@ task fatjarMain(dependsOn: classes, type: Jar) {
 }
 
 task fatjarLevels(dependsOn: classes, type: Jar) {
-	from({ -> expandZips(sourceSets.main.runtimeClasspath)})
+	from({ -> expandZips(sourceSets.main.runtimeClasspath)}) {
+		exclude "res/**/*.wav"
+		exclude "res/battle_anim/**/*.png"
+		exclude "res/gui/**/*.png"
+		exclude "res/map_mugshots/**/*.png"
+	}
 	from("lwjgl-2.9.0/native/linux")
 	from("lwjgl-2.9.0/native/macosx")
 	from("lwjgl-2.9.0/native/windows")
