@@ -1,4 +1,14 @@
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.2'
+	}
+}
+
 apply plugin: 'java'
+apply plugin: 'org.junit.platform.gradle.plugin'
 
 sourceCompatibility = 1.8
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
@@ -29,11 +39,23 @@ dependencies {
 	testCompile("org.junit.jupiter:junit-jupiter-api:5.0.2")
 	testCompile("junit:junit:4.12")
 	testRuntime("org.junit.vintage:junit-vintage-engine:4.12.2")
+	testRuntime("org.junit.jupiter:junit-jupiter-engine:5.0.2")
 }
 
 // there are tests that do require lwjgl to run
 test.systemProperties = ["java.library.path" : ("lwjgl-2.9.0/native/" + System.getProperty("os.name").split(" ")[0])]
+junitPlatformTest.systemProperties = test.systemProperties
 
+junitPlatform.filters.tags {
+	// the `display` tag refers to tests that need to create a opengl display to run
+	
+	// Tests with these tags will not run in a headless environment
+	if (project.hasProperty("enableAllJunitTags")) {
+		// do nothing
+	} else {
+		exclude 'display'
+	}
+}
 
 /**
  * Create a new FileCollection that is similar to the input, but replaces any

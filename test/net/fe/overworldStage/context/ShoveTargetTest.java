@@ -2,12 +2,12 @@ package net.fe.overworldStage.context;
 
 import java.util.HashMap;
 
-import org.junit.Test;
-import org.junit.Before;
-import org.junit.After;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assume.assumeNoException;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Tag;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.lwjgl.opengl.Display;
 
@@ -23,9 +23,10 @@ import net.fe.unit.Class;
 import net.fe.unit.Unit;
 import net.fe.unit.Statistics;
 
+@Tag("display")
 public class ShoveTargetTest {
 	
-	@Before
+	@BeforeEach
 	public void globalDisplayBefore() {
 		try {
 			Display.setDisplayMode(new org.lwjgl.opengl.DisplayMode(5, 5));
@@ -35,7 +36,7 @@ public class ShoveTargetTest {
 		}
 	}
 	
-	@Before
+	@BeforeEach
 	public void globalPlayerBefore() {
 		Player p = new Player("null pointers", (byte) 0);
 		p.setTeam(Player.TEAM_BLUE);
@@ -43,7 +44,7 @@ public class ShoveTargetTest {
 		FEMultiplayer.setLocalPlayer(p);
 	}
 	
-	@After
+	@AfterEach
 	public void globalDisplayAfter() {
 		Display.destroy();
 	}
@@ -53,22 +54,11 @@ public class ShoveTargetTest {
 		// things that have nothing to do with the test but need to be set up anyway
 		Session session;
 		ClientOverworldStage stage;
-		try {
-			session = new Session();
-			session.addPlayer(FEMultiplayer.getLocalPlayer());
-			stage = new ClientOverworldStage(session);
-			stage.cursor.stage = stage; // this just looks wrong
-			stage.grid = new Grid(6,6, Terrain.FLOOR);
-		} catch (java.lang.RuntimeException e) {
-			// Not only does Junit not say "A test was ignored due to a failed assumption",
-			// It also swallows anything printed to `System.out` and `System.err`, meaning
-			// I can't say "A test was ignored due to a failed assumption" myself!
-			assumeNoException(e);
-			// dead code, but compiler doesn't seem to be
-			// aware that `assumeNoException` always throws
-			session = null;
-			stage = null;
-		}
+		session = new Session();
+		session.addPlayer(FEMultiplayer.getLocalPlayer());
+		stage = new ClientOverworldStage(session);
+		stage.cursor.stage = stage; // this just looks wrong
+		stage.grid = new Grid(6,6, Terrain.FLOOR);
 		
 		Statistics shoveeVals = new Statistics(20, 0, 0, 0, 0, 0, 0, 0, 5, 2, 0);
 		Unit shovee1 = new Unit("shovee", Class.createClass("Sorcerer"), '-', shoveeVals, shoveeVals);
