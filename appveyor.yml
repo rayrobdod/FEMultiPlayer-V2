@@ -2,14 +2,12 @@ version: yml.{build}
 clone_depth: 5
 cache: C:\Users\appveyor\.gradle\
 build_script:
-- cmd: gradlew --no-daemon assemble
+- cmd: .\gradlew --no-daemon assemble
 test_script:
 - cmd: .\gradlew --no-daemon check
 artifacts:
-- path: build\libs
-  name: FEMP
-- path: build\libs\Fire Emblem Multiplayer-SNAPSHOT.jar
-  name: Client
+- path: .\build\distributions\*.jar
+  name: FEMP_Distributables
 on_failure:
 - ps: 7z a ..\test_report.zip .\build\reports\tests\test\*
 - ps: Push-AppveyorArtifact ..\test_report.zip

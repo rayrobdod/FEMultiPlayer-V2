@@ -80,6 +80,7 @@ task fatjarMain(dependsOn: classes, type: Jar) {
 	from("lwjgl-2.9.0/native/linux")
 	from("lwjgl-2.9.0/native/macosx")
 	from("lwjgl-2.9.0/native/windows")
+	destinationDir(project.distsDir)
 	baseName = "Fire Emblem Multiplayer"
 //	entryCompression = org.gradle.api.tasks.bundling.ZipEntryCompression.STORED
 	manifest.attributes (
@@ -95,6 +96,7 @@ task fatjarLevels(dependsOn: classes, type: Jar) {
 	from("lwjgl-2.9.0/native/linux")
 	from("lwjgl-2.9.0/native/macosx")
 	from("lwjgl-2.9.0/native/windows")
+	destinationDir(project.distsDir)
 	baseName = "Fire Emblem Multiplayer"
 	appendix = "levelEditor"
 	manifest.attributes (
@@ -111,6 +113,7 @@ task fatjarServer(dependsOn: classes, type: Jar) {
 		exclude "res/**/*.png"
 		exclude "res/**/*.wav"
 	}
+	destinationDir(project.distsDir)
 	baseName = "Fire Emblem Multiplayer"
 	appendix = "server"
 	manifest.attributes (
