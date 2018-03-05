@@ -75,6 +75,8 @@ def expandZips(FileCollection inputs) {
 
 
 task fatjarMain(dependsOn: classes, type: Jar) {
+	description 'Creates a Jar that contains a FEMP Client instance'
+	
 	// delay execution of expandZips unitil after the classpath is created
 	from({ -> expandZips(sourceSets.main.runtimeClasspath)})
 	from("lwjgl-2.9.0/native/linux")
@@ -92,6 +94,8 @@ task fatjarMain(dependsOn: classes, type: Jar) {
 }
 
 task fatjarLevels(dependsOn: classes, type: Jar) {
+	description 'Creates a Jar that contains a level editor'
+	
 	from({ -> expandZips(sourceSets.main.runtimeClasspath)}) {
 		exclude "res/**/*.wav"
 		exclude "res/battle_anim/**/*.png"
@@ -113,6 +117,8 @@ task fatjarLevels(dependsOn: classes, type: Jar) {
 }
 
 task fatjarServer(dependsOn: classes, type: Jar) {
+	description 'Creates a Jar that contains a FEMP Server instance'
+	
 	from({ -> expandZips(sourceSets.main.runtimeClasspath)}) {
 		exclude "shaders/**"
 		exclude "res/**/*.png"
@@ -135,6 +141,9 @@ assemble.dependsOn(fatjarServer)
 
 
 task runMain(dependsOn: classes, type: JavaExec) {
+	group 'Runner'
+	description 'Run a FEMP client instance'
+	
 	main = "net.fe.FEMultiplayer"
 	classpath = sourceSets.main.runtimeClasspath
 	ignoreExitValue = true
@@ -144,6 +153,9 @@ task runMain(dependsOn: classes, type: JavaExec) {
 }
 
 task runStats(dependsOn: classes, type: JavaExec) {
+	group 'Runner'
+	description 'Runs the stat balancer'
+	
 	main = "net.fe.balance.StatBalancer"
 	classpath = sourceSets.main.runtimeClasspath
 	ignoreExitValue = true
@@ -153,6 +165,9 @@ task runStats(dependsOn: classes, type: JavaExec) {
 }
 
 task runLevels(dependsOn: classes, type: JavaExec) {
+	group 'Runner'
+	description 'Runs the level editor'
+	
 	main = "net.fe.editor.LevelEditor"
 	classpath = sourceSets.main.runtimeClasspath
 	ignoreExitValue = true
@@ -162,6 +177,9 @@ task runLevels(dependsOn: classes, type: JavaExec) {
 }
 
 task runServer(dependsOn: classes, type: JavaExec) {
+	group 'Runner'
+	description 'Run a FEMP server instance'
+	
 	main = "net.fe.network.FEServer"
 	classpath = sourceSets.main.runtimeClasspath
 	ignoreExitValue = true
