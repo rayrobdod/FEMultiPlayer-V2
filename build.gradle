@@ -98,9 +98,12 @@ task fatjarLevels(dependsOn: classes, type: Jar) {
 	
 	from({ -> expandZips(sourceSets.main.runtimeClasspath)}) {
 		exclude "res/**/*.wav"
-		exclude "res/battle_anim/**/*.png"
-		exclude "res/gui/**/*.png"
-		exclude "res/map_mugshots/**/*.png"
+		exclude "res/battle_anim/"
+		exclude "res/gui/"
+		exclude "res/map_mugshots/"
+		exclude "res/map_anim/"
+		exclude "res/palette/"
+		exclude "levels/"
 	}
 	from("lwjgl-2.9.0/native/linux")
 	from("lwjgl-2.9.0/native/macosx")
@@ -128,10 +131,7 @@ task fatjarServer(dependsOn: classes, type: Jar) {
 	baseName = "Fire Emblem Multiplayer"
 	appendix = "server"
 	manifest.attributes (
-		  'Launcher-Main-Class' : 'net.fe.network.FEServer'
-		, 'Launcher-VM-Args': ''
-		, 'Main-Class': 'org.ninjacave.jarsplice.JarSpliceLauncher'
-		, 'Class-Path' : '.'
+		  'Main-Class' : 'net.fe.network.FEServer'
 	)
 }
 
