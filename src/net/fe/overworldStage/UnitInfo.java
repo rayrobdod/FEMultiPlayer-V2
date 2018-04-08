@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import net.fe.FEMultiplayer;
 import net.fe.FEResources;
 import net.fe.unit.Item;
 import net.fe.unit.ItemDisplay;
@@ -59,20 +60,12 @@ public class UnitInfo extends Entity implements DoNotDestroy{
 	}
 	
 	/**
-	 * Gets the unit.
-	 *
-	 * @return the unit
-	 */
-	public Unit getUnit(){
-		return unit;
-	}
-	
-	/**
 	 * Sets the unit.
 	 *
 	 * @param u the new unit
 	 */
-	public void setUnit(Unit u){
+	public void setUnit(Unit u) {
+		//&& u.isVisible((ClientOverworldStage)FEMultiplayer.getCurrentStage())
 		if(u != null && unit != u) {
 			mugshot = FEResources.getTexture(u.name.toLowerCase()+"_mugshot");
 			Iterator<Item> inv = u.getInventory().iterator();
@@ -152,7 +145,7 @@ public class UnitInfo extends Entity implements DoNotDestroy{
 				items[i].render();
 				String uses = items[i].getItem().getUses() + "";
 				width = FEResources.getBitmapFont("default_med").getStringWidth(uses);
-				Renderer.drawString("default_med", uses, x+314-width, y+y0, renderDepth);
+				Renderer.drawString("default_med", uses, x+314-width, y+y0, items[i].renderDepth);
 			}
 			y0+=14;
 		}

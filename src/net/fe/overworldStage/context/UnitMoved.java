@@ -14,6 +14,7 @@ import net.fe.overworldStage.Node;
 import net.fe.overworldStage.OverworldContext;
 import net.fe.overworldStage.ClientOverworldStage;
 import net.fe.overworldStage.Zone;
+import net.fe.overworldStage.Zone.ZoneType;
 import net.fe.unit.Item;
 import net.fe.unit.RiseTome;
 import net.fe.unit.Unit;
@@ -67,9 +68,8 @@ public class UnitMoved extends MenuContext<String> {
 		updateZones();
 		cursor.setXCoord(unit.getXCoord());
 		cursor.setYCoord(unit.getYCoord());
+		stage.setUnitInfoUnit(unit);
 		
-		stage.setMovX(unit.getXCoord() - unit.getOrigX());
-		stage.setMovY(unit.getYCoord() - unit.getOrigY());
 	}
 	
 	/* (non-Javadoc)
@@ -87,37 +87,40 @@ public class UnitMoved extends MenuContext<String> {
 	public void onSelect(String selectedItem) {
 		// TODO Finish this
 		AudioPlayer.playAudio("select");
-		if (selectedItem.equals("Wait")) {
+		performAction(selectedItem);
+	}
+	
+	public void performAction(String action) {
+		if (action.equals("Wait")) {
 			stage.addCmd(new WaitCommand());
 			stage.send();
 			unit.setMoved(true);
 			stage.reset();	
-		} else if (selectedItem.equals("Attack")) {
+		} else if (action.equals("Attack")) {
 			new AttackTarget(stage, this, zone, unit).startContext();
-		} else if (selectedItem.equals("Heal")){
+		} else if (action.equals("Heal")){
 			new HealTarget(stage, this, zone, unit).startContext();
-		} else if (selectedItem.equals("Item")){	
+		} else if (action.equals("Item")){	
 			new ItemCmd(stage, this, unit).startContext();
-		} else if (selectedItem.equals("Trade")){
+		} else if (action.equals("Trade")){
 			new TradeTarget(stage, this, zone, unit).startContext();
-		} else if (selectedItem.equals("Rescue")){
+		} else if (action.equals("Rescue")){
 			new RescueTarget(stage, this, zone, unit).startContext();
-		} else if (selectedItem.equals("Give")){
+		} else if (action.equals("Give")){
 			new GiveTarget(stage, this, zone, unit).startContext();
-		} else if (selectedItem.equals("Take")){
+		} else if (action.equals("Take")){
 			new TakeTarget(stage, this, zone, unit).startContext();
-		} else if (selectedItem.equals("Drop")){
+		} else if (action.equals("Drop")){
 			new DropTarget(stage, this, zone, unit).startContext();
-		} else if (selectedItem.equals("Summon")){
+		} else if (action.equals("Summon")){
 			new Summon(stage, this, zone, unit).startContext();
 		} else {
 			for (FieldSkill f : unit.getTheClass().fieldSkills) {
-				if (selectedItem.equals(f.getName())) {
+				if (action.equals(f.getName())) {
 					f.onSelect(stage, this, zone, unit).startContext();
 				}
 			}
 		}
-			
 	}
 
 	/* (non-Javadoc)
@@ -147,18 +150,18 @@ public class UnitMoved extends MenuContext<String> {
 		if (menu.getSelection().equals("Attack")) {
 			zone = new Zone(grid.getRange(
 					new Node(unit.getXCoord(), unit.getYCoord()),
-					unit.getTotalWepRange(false)), Zone.ATTACK_DARK);
+					unit.getTotalWepRange(false)), ZoneType.ATTACK_DARK);
 			stage.addEntity(zone);
 		} else if (menu.getSelection().equals("Heal")) {
 			zone = new Zone(grid.getRange(
 					new Node(unit.getXCoord(), unit.getYCoord()),
-					unit.getTotalWepRange(true)), Zone.HEAL_DARK);
+					unit.getTotalWepRange(true)), ZoneType.HEAL_DARK);
 			stage.addEntity(zone);
 		} else if (Arrays.asList("Trade", "Give", "Take", "Drop", "Rescue", "Summon")
 				.contains(menu.getSelection())) {
 			zone = new Zone(grid.getRange(
 					new Node(unit.getXCoord(), unit.getYCoord()), 1),
-					Zone.MOVE_DARK);
+					ZoneType.MOVE_DARK);
 			stage.addEntity(zone);
 		} else {
 			for (FieldSkill f : unit.getTheClass().fieldSkills) {
@@ -184,7 +187,7 @@ public class UnitMoved extends MenuContext<String> {
 		Set<Node> range = grid.getRange(new Node(u.getXCoord(), u.getYCoord()),
 				unit.getTotalWepRange(false));
 		for (Node n : range) {
-			Unit p = grid.getUnit(n.x, n.y);
+			Unit p = grid.getVisibleUnit(n.x, n.y);
 			if (p != null && !stage.getCurrentPlayer().getParty().isAlly(p.getParty())) {
 				attack = true;
 				break;
@@ -197,7 +200,7 @@ public class UnitMoved extends MenuContext<String> {
 		range = grid.getRange(new Node(u.getXCoord(), u.getYCoord()),
 				unit.getTotalWepRange(true));
 		for (Node n : range) {
-			Unit p = grid.getUnit(n.x, n.y);
+			Unit p = grid.getVisibleUnit(n.x, n.y);
 			if (p != null && stage.getCurrentPlayer().getParty().isAlly(p.getParty())
 					&& p.getHp() != p.getStats().maxHp) {
 				heal = true;
@@ -216,7 +219,7 @@ public class UnitMoved extends MenuContext<String> {
 		boolean summon = false;
 		range = grid.getRange(new Node(u.getXCoord(), u.getYCoord()), 1);
 		for (Node n : range) {
-			Unit p = grid.getUnit(n.x, n.y);
+			Unit p = grid.getVisibleUnit(n.x, n.y);
 			if (p != null && stage.getCurrentPlayer().getParty().isAlly(p.getParty())) {
 				trade = true;
 				if(p.rescuedUnit() == null && unit.rescuedUnit() == null && unit.canRescue(p)){
@@ -263,7 +266,7 @@ public class UnitMoved extends MenuContext<String> {
 			list.add("Summon");
 		
 		for (FieldSkill f : unit.getTheClass().fieldSkills) {
-			if (f.allowed(unit, this.stage.grid)) {
+			if (f.allowedWithFog(unit, this.stage.grid)) {
 				list.add(f.getName());
 			}
 		}

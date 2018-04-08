@@ -6,11 +6,14 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.HashSet;
-import java.util.HashMap;
 
+import org.newdawn.slick.Color;
+import org.newdawn.slick.util.ResourceLoader;
+
+import chu.engine.Stage;
 import net.fe.FEMultiplayer;
 import net.fe.Party;
 import net.fe.Player;
@@ -18,30 +21,17 @@ import net.fe.Session;
 import net.fe.editor.Level;
 import net.fe.editor.SpawnPoint;
 import net.fe.fightStage.AttackRecord;
-import net.fe.fightStage.CombatCalculator;
-import net.fe.fightStage.HealCalculator;
 import net.fe.modifier.Modifier;
-import net.fe.network.Chat;
 import net.fe.network.FEServer;
 import net.fe.network.Message;
-import net.fe.network.command.Command;
-import net.fe.network.message.ChatMessage;
 import net.fe.network.message.CommandMessage;
 import net.fe.network.message.EndGame;
 import net.fe.network.message.EndTurn;
 import net.fe.network.message.QuitMessage;
-import net.fe.overworldStage.context.TradeContext;
 import net.fe.overworldStage.objective.Objective;
-import net.fe.unit.Item;
-import net.fe.unit.RiseTome;
+import net.fe.rng.RNG;
 import net.fe.unit.Unit;
 import net.fe.unit.UnitIdentifier;
-
-import org.newdawn.slick.Color;
-import org.newdawn.slick.util.ResourceLoader;
-
-import chu.engine.Game;
-import chu.engine.Stage;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -63,6 +53,10 @@ public class OverworldStage extends Stage {
 	
 	/** The turn count. */
 	private int turnCount;
+	
+	private RNG hitRNG;
+	private RNG critRNG;
+	private RNG skillRNG;
 
 	/**
 	 * Instantiates a new overworld stage.
@@ -72,6 +66,9 @@ public class OverworldStage extends Stage {
 	public OverworldStage(Session s) {
 		super(null);
 		this.session = s;
+		hitRNG = s.getHitRNG();
+		critRNG = s.getCritRNG();
+		skillRNG = s.getSkillRNG();
 		System.out.println(session.getObjective().getDescription());
 		turnOrder = new ArrayList<Player>();
 		for(Player p : session.getNonSpectators()) {
@@ -147,6 +144,10 @@ public class OverworldStage extends Stage {
 	 */
 	public final Unit getUnit(int x, int y) {
 		return grid.getUnit(x, y);
+	}
+	
+	public final Unit getVisibleUnit(int x, int y) {
+		return grid.getVisibleUnit(x, y);
 	}
 
 	/**
@@ -270,12 +271,12 @@ public class OverworldStage extends Stage {
 				System.out.println("" + message.origin + " " + currentPlayer);
 				if(message.origin == getCurrentPlayer().getID() || message.origin == 0){
 					((EndTurn) message).checkHp((ui) -> this.getUnit(ui));
-					doEndTurn(message.origin);
+					doEndTurn();
 					currentPlayer++;
 					if(currentPlayer >= turnOrder.size()) {
 						currentPlayer = 0;
 					}
-					doStartTurn(message.origin);
+					doStartTurn();
 				}
 			}
 			else if(message instanceof QuitMessage) {
@@ -287,11 +288,12 @@ public class OverworldStage extends Stage {
 	}
 	
 	/**
-	 * Do end turn.
-	 *
-	 * @param playerID the player id
+	 * Perform actions that happen at the end of a phase
+	 * <p>
+	 * The phase to end is determined by the class's `getCurrentPlayer()`
 	 */
-	protected void doEndTurn(int playerID) {
+	protected void doEndTurn() {
+		// perform terrain effects
 		for(int x = 0; x < grid.width; x++){
 			for(int y = 0; y < grid.height; y++){
 				for(TerrainTrigger t: grid.getTerrain(x, y).getTriggers()){
@@ -303,21 +305,28 @@ public class OverworldStage extends Stage {
 			}
 		}
 		
+		// Refresh unit's `moved` status
 		for(Player p : session.getPlayers()) {
 			for(Unit u : p.getParty()) {
 				u.setMoved(false);
 			}
 		}
-		turnCount++;
+		
 		checkEndGame();
 	}
 	
 	/**
-	 * Do start turn.
-	 *
-	 * @param playerID the player id
+	 * Perform actions that happen at the start of a phase.
+	 * <p>
+	 * The phase to start is determined by the class's `getCurrentPlayer()`
 	 */
-	protected void doStartTurn(int playerID) {
+	protected void doStartTurn() {
+		// increment turn count if the starting phase is the first phase of a turn
+		if (currentPlayer == 0) {
+			turnCount++;
+		}
+		
+		// perform terrain effects
 		for(int x = 0; x < grid.width; x++){
 			for(int y = 0; y < grid.height; y++){
 				for(TerrainTrigger t: grid.getTerrain(x, y).getTriggers()){
@@ -471,6 +480,13 @@ public class OverworldStage extends Stage {
 		}
 		return units;
 	}
+	
+	public List<Unit> getVisibleUnits() {
+		List<Unit> units = getAllUnits();
+		Set<Node> fog = ((ClientOverworldStage) this).getFog().getNodes();
+		units.removeIf(unit -> fog.contains(new Node(unit.getOrigX(), unit.getOrigY())));
+		return units;
+	}
 
 	/**
 	 *  Returns a list of players in the turn order, 
@@ -484,6 +500,18 @@ public class OverworldStage extends Stage {
 			t[i] = turnOrder.get((currentPlayer+ i) % t.length);
 		}
 		return t;
+	}
+
+	public RNG getHitRNG() {
+		return hitRNG;
+	}
+
+	public RNG getCritRNG() {
+		return critRNG;
+	}
+
+	public RNG getSkillRNG() {
+		return skillRNG;
 	}
 
 }

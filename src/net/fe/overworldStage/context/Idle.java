@@ -4,6 +4,7 @@ import net.fe.Player;
 import net.fe.overworldStage.ClientOverworldStage;
 import net.fe.overworldStage.CursorContext;
 import net.fe.overworldStage.Zone;
+import net.fe.overworldStage.Zone.ZoneType;
 import net.fe.unit.Unit;
 import chu.engine.anim.AudioPlayer;
 
@@ -34,18 +35,6 @@ public class Idle extends CursorContext {
 	 * @see net.fe.overworldStage.OverworldContext#startContext()
 	 */
 	public void startContext(){
-//		boolean movable = false;
-//		for(Unit u: stage.getCurrentPlayer().getParty()){
-//			if(!u.hasMoved()){
-//				movable = true;
-//			}
-//		}
-//		if(movable){
-//			super.startContext();
-//			cursorChanged();
-//		} else {
-//			stage.end();
-//		}
 		super.startContext();
 		cursorChanged();
 	}
@@ -75,7 +64,7 @@ public class Idle extends CursorContext {
 		if(u!=null && u.getParty() == player.getParty() && !u.hasMoved()){
 			new UnitSelected(stage, this, u).startContext();
 		} else {
-			new EndMenu(stage, this).startContext();
+			new EndMenu(stage, this, u).startContext();
 		}
 
 	}
@@ -86,7 +75,7 @@ public class Idle extends CursorContext {
 		Unit target = null;
 		boolean found = false;
 		for (Unit unit : player.getParty()) {
-			if (unit.hasMoved())
+			if (unit.hasMoved() || unit.getHp() == 0)
 				continue;
 			
 			// If the current unit was found, the target is the next one.
@@ -112,6 +101,15 @@ public class Idle extends CursorContext {
 			cursor.setXCoord(target.getXCoord());
 			cursor.setYCoord(target.getYCoord());
 			cursorChanged();
+		}
+	}
+	
+	@Override
+	public void onInspectInventory() {
+		Unit u = getHoveredUnit();
+		if (u != null && u.getInventory().size() >= 1) {
+			AudioPlayer.playAudio("select");
+			new InspectInventoryContext(stage, this, u).startContext();
 		}
 	}
 
@@ -142,6 +140,7 @@ public class Idle extends CursorContext {
 	public void cursorChanged(){
 		Unit u = getHoveredUnit();
 		
+		stage.setUnitInfoUnit(u);
 		if(u!=null && !u.hasMoved()){
 			addZones(u);
 			if(u.getParty() == stage.getCurrentPlayer().getParty()){
@@ -156,11 +155,9 @@ public class Idle extends CursorContext {
 	 * @param u the u
 	 */
 	public void addZones(Unit u){
-		this.move = new Zone(stage.grid.getPossibleMoves(u), Zone.MOVE_LIGHT);
-		this.attack = Zone.minus(
-				new Zone(stage.grid.getAttackRange(u),Zone.ATTACK_LIGHT), move);
-		this.heal = Zone.minus(Zone.minus(
-				new Zone(stage.grid.getHealRange(u),Zone.HEAL_LIGHT), move), attack);
+		this.move = new Zone(stage.grid.getPossibleMoves(u), ZoneType.MOVE_LIGHT);
+		this.attack = new Zone(stage.grid.getAttackRange(u),ZoneType.ATTACK_LIGHT).minus(move);
+		this.heal = new Zone(stage.grid.getHealRange(u),ZoneType.HEAL_LIGHT).minus(move).minus(attack);
 		stage.addEntity(move);
 		stage.addEntity(attack);
 		stage.addEntity(heal);

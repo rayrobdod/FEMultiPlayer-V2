@@ -22,6 +22,7 @@ import net.fe.fightStage.anim.Platform;
 import net.fe.fightStage.anim.SkillIndicator;
 import net.fe.network.Message;
 import net.fe.overworldStage.Grid;
+import net.fe.overworldStage.Terrain;
 import net.fe.overworldStage.ClientOverworldStage;
 import net.fe.transition.FightOverworldTransition;
 import net.fe.unit.BattleStats;
@@ -188,9 +189,9 @@ public class FightStage extends Stage {
 			ClientOverworldStage returnTo,
 			Runnable returnCallback
 	) {
-		super(u1.partyColor.equals(u2.partyColor) ? "curing" :
-				u1.partyColor.equals(FEMultiplayer.getLocalPlayer().getParty().getColor()) ?
-						"fight" : "defense");
+		super(u1.partyColor.equals(u2.partyColor) ? "curing" : 
+			FEMultiplayer.getUnit(u1).getTheClass().name.equals("Lord") || FEMultiplayer.getUnit(u2).getTheClass().name.equals("Lord") ? "lord" :
+			u2.partyColor.equals(FEMultiplayer.getLocalPlayer().getParty().getColor()) ? "fight" : "defense");
 		shakeTimer = 0;
 		prevShakeTimer = 0;
 		timer = 0;
@@ -215,8 +216,13 @@ public class FightStage extends Stage {
 		addEntity(new Platform(right.getTerrain(), false, range));
 		addEntity(new HUD(left, right, this));
 		addEntity(new HUD(right, left, this));
-		bg = FEResources.getTexture(right.getTerrain().toString().toLowerCase()
-				+ "_bg");
+		if(right.getTerrain() == Terrain.NONE)
+			if(left.getTerrain() == Terrain.NONE)
+				bg = FEResources.getTexture(Terrain.PLAIN.toString().toLowerCase() + "_bg");
+			else
+				bg = FEResources.getTexture(left.getTerrain().toString().toLowerCase() + "_bg");
+		else
+			bg = FEResources.getTexture(right.getTerrain().toString().toLowerCase() + "_bg");
 
 		this.attackQ = attackQ;
 		this.returnTo = returnTo;

@@ -3,6 +3,7 @@ package net.fe.overworldStage.context;
 import net.fe.overworldStage.ClientOverworldStage;
 import net.fe.overworldStage.CursorContext;
 import net.fe.overworldStage.Zone;
+import net.fe.overworldStage.Zone.ZoneType;
 import net.fe.unit.Unit;
 import chu.engine.anim.AudioPlayer;
 
@@ -57,6 +58,15 @@ public class WaitForMessages extends CursorContext {
 		//Nothing
 	}
 	
+	@Override
+	public void onInspectInventory() {
+		Unit u = getHoveredUnit();
+		if (u != null && u.getInventory().size() >= 1) {
+			AudioPlayer.playAudio("select");
+			new InspectInventoryContext(stage, this, u).startContext();
+		}
+	}
+	
 	/* (non-Javadoc)
 	 * @see net.fe.overworldStage.CursorContext#cursorWillChange()
 	 */
@@ -74,6 +84,7 @@ public class WaitForMessages extends CursorContext {
 	public void cursorChanged(){
 		Unit u = getHoveredUnit();
 		AudioPlayer.playAudio("cursor");
+		stage.setUnitInfoUnit(u);
 		if(u!=null && !u.hasMoved()){
 			addZones(u);
 			if(u.getParty() == stage.getCurrentPlayer().getParty()){
@@ -88,11 +99,9 @@ public class WaitForMessages extends CursorContext {
 	 * @param u the u
 	 */
 	public void addZones(Unit u){
-		this.move = new Zone(stage.grid.getPossibleMoves(u), Zone.MOVE_LIGHT);
-		this.attack = Zone.minus(
-				new Zone(stage.grid.getAttackRange(u),Zone.ATTACK_LIGHT), move);
-		this.heal = Zone.minus(Zone.minus(
-				new Zone(stage.grid.getHealRange(u),Zone.HEAL_LIGHT), move), attack);
+		this.move = new Zone(stage.grid.getPossibleMoves(u), ZoneType.MOVE_LIGHT);
+		this.attack = new Zone(stage.grid.getAttackRange(u),ZoneType.ATTACK_LIGHT).minus(move);
+		this.heal = new Zone(stage.grid.getHealRange(u),ZoneType.HEAL_LIGHT).minus(move).minus(attack);
 		stage.addEntity(move);
 		stage.addEntity(attack);
 		stage.addEntity(heal);

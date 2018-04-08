@@ -74,8 +74,8 @@ public abstract class SelectTargetContext extends OverworldContext {
 	private void findTargets(Unit unit, boolean friendly) {
 		targets.clear();
 		for (Node n : zone.getNodes()) {
-			Unit u = grid.getUnit(n.x, n.y);
-			if(u!= null && validTarget(u)){
+			Unit u = grid.getVisibleUnit(n.x, n.y);
+			if(u != null && validTarget(u)){
 				targets.add(u);
 			}
 		}
@@ -100,7 +100,7 @@ public abstract class SelectTargetContext extends OverworldContext {
 	@Override
 	public void onSelect() {
 		AudioPlayer.playAudio("select");
-		unitSelected(grid.getUnit(cursor.getXCoord(), cursor.getYCoord()));
+		unitSelected(grid.getVisibleUnit(cursor.getXCoord(), cursor.getYCoord()));
 	}
 
 	/**
@@ -174,6 +174,7 @@ public abstract class SelectTargetContext extends OverworldContext {
 		AudioPlayer.playAudio("cursor");
 		cursor.setXCoord(targets.get(selected).getXCoord());
 		cursor.setYCoord(targets.get(selected).getYCoord());
+		stage.setUnitInfoUnit(targets.get(selected));
 	}
 
 	/* (non-Javadoc)
@@ -186,6 +187,7 @@ public abstract class SelectTargetContext extends OverworldContext {
 		
 		cursor.setXCoord(unit.getXCoord());
 		cursor.setYCoord(unit.getYCoord());
+		stage.setUnitInfoUnit(unit);
 	}
 
 }
