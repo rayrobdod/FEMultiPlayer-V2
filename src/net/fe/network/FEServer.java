@@ -23,7 +23,7 @@ import net.fe.unit.WeaponFactory;
  * @author Shawn
  *
  */
-public class FEServer extends Game {
+public final class FEServer {
 
 	public static final int DEFAULT_PORT = 21255;
 	private int port = DEFAULT_PORT;
@@ -79,11 +79,9 @@ public class FEServer extends Game {
 	/* (non-Javadoc)
 	 * @see chu.engine.Game#loop()
 	 */
-	@Override
 	public void loop() {
 		boolean yes = true;
 		while (yes) {
-			final long time = System.nanoTime();
 			final ArrayList<Message> messages = new ArrayList<>();
 			synchronized (server.messagesLock) {
 				try {
@@ -116,7 +114,6 @@ public class FEServer extends Game {
 			currentStage.beginStep(messages);
 			currentStage.onStep();
 			currentStage.endStep();
-			timeDelta = System.nanoTime() - time;
 		}
 	}
 
