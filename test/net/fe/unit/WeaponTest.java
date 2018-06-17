@@ -6,9 +6,12 @@ import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+
+import net.fe.unit.Weapon.Type;
 
 public final class WeaponTest {
 	
@@ -24,6 +27,38 @@ public final class WeaponTest {
 		Weapon left = new Weapon("asdf", 20, 0, 1, Weapon.Type.SWORD, 2,3,4, new Static1Range(1), new Statistics(), new ArrayList<>(), null);
 		Weapon right = new Weapon("asdf", 20, 0, 1, Weapon.Type.SWORD, 2,3,4, new Static1Range(1), new Statistics(), new ArrayList<>(), null);
 		assertEquals(left.hashCode(), right.hashCode());
+	}
+	
+	@Test
+	public void test_triMod() {
+		List<Type> typs = Arrays.asList(
+			Type.SWORD, Type.LANCE, Type.AXE,
+			Type.BOW, Type.CROSSBOW,
+			Type.LIGHT, Type.ANIMA, Type.DARK,
+			Type.STAFF
+		);
+		int[][] exp = {
+			{0, -1, 1, 0, 0, 0, 0, 0, 0},
+			{1, 0, -1, 0, 0, 0, 0, 0, 0},
+			{-1, 1, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, -1, 1, 0},
+			{0, 0, 0, 0, 0, 1, 0, -1, 0},
+			{0, 0, 0, 0, 0, -1, 1, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 0, 0}
+		};
+		
+		for (int leftIdx = 0; leftIdx < typs.size(); leftIdx++) {
+			for (int rightIdx = 0; rightIdx < typs.size(); rightIdx++) {
+				Type leftTyp = typs.get(leftIdx);
+				Type rightTyp = typs.get(rightIdx);
+				
+				Weapon left = new Weapon("asdf", 20, 0, 1, leftTyp, 2,3,4, new Static1Range(1), new Statistics(), new ArrayList<>(), null);
+				Weapon right = new Weapon("asdf", 20, 0, 1, rightTyp, 2,3,4, new Static1Range(1), new Statistics(), new ArrayList<>(), null);
+				assertEquals("" + leftTyp + " " + rightTyp, exp[leftIdx][rightIdx], left.triMod(right));
+			}
+		}
 	}
 	
 	

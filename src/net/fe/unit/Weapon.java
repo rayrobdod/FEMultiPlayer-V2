@@ -67,28 +67,66 @@ public final class Weapon extends Item {
 	}
 	
 	/**
-	 * Weapon categories
+	 * Represents a location in the weapon triangle.
+	 * Red beats green beats blue beats red.
+	 */
+	private enum TrianglePosition {
+		RED(1), BLUE(2), GREEN(3), NEUTRAL(0);
+		
+		/** A number used to reduce if statement count */
+		private final int mark;
+		private TrianglePosition(int mark) {
+			this.mark = mark;
+		}
+		
+		/**
+		 * Checks the relative advantage between two TrianglePositions
+		 * 
+		 * @return 1 if this position has the advantage over the rhs,
+		 		-1 if this position has the disadvantage over the rhs,
+		 		or 0 if this is neutral compared to the rhs.
+		 */
+		public int modifier(TrianglePosition rhs) {
+			if (this == NEUTRAL || rhs == NEUTRAL) {
+				return 0;
+			} else {
+				return ((4 + this.mark - rhs.mark) % 3) - 1;
+			}
+		}
+	}
+	
+	/**
+	 * Weapon categories.
+	 * 
+	 * Determines who can wield a weapon, the triangle position of a
+	 * weapon, and whether the weapon deals magical or physical damage
 	 */
 	public enum Type{
-		
 		/** Swords */
-		SWORD,
+		SWORD(TrianglePosition.RED, false),
 		/** Lances */
-		LANCE,
+		LANCE(TrianglePosition.BLUE, false),
 		/** Axes */
-		AXE,
+		AXE(TrianglePosition.GREEN, false),
 		/** Bows */
-		BOW,
+		BOW(TrianglePosition.NEUTRAL, false),
 		/** Crossbows */
-		CROSSBOW,
+		CROSSBOW(TrianglePosition.NEUTRAL, false),
 		/** Light tomes */
-		LIGHT,
+		LIGHT(TrianglePosition.RED, true),
 		/** Anima tomes */
-		ANIMA,
+		ANIMA(TrianglePosition.BLUE, true),
 		/** Dark Tomes */
-		DARK,
+		DARK(TrianglePosition.GREEN, true),
 		/** Staves */
-		STAFF;
+		STAFF(TrianglePosition.NEUTRAL, false);
+		
+		private final TrianglePosition trianglePosition;
+		private final boolean isMagic;
+		private Type(TrianglePosition triPos, boolean isMagic) {
+			this.trianglePosition = triPos;
+			this.isMagic = isMagic;
+		}
 		
 		/**
 		 * Weapon triangle modifier
@@ -97,33 +135,9 @@ public final class Weapon extends Item {
 		 * @return 1 if advantage, -1 if disadvantage
 		 */
 		public int triangleModifier(Type other){
-			switch(this){
-			case SWORD:
-				if(other == LANCE) return -1;
-				if(other == AXE) return 1;
-				return 0;
-			case LANCE:
-				if(other == AXE) return -1;
-				if(other == SWORD) return 1;
-				return 0;
-			case AXE:
-				if(other == SWORD) return -1;
-				if(other == LANCE) return 1;
-				return 0;
-				
-			case LIGHT:
-				if(other == ANIMA) return -1;
-				if(other == DARK) return 1;
-				return 0;
-			case ANIMA:
-				if(other == DARK) return -1;
-				if(other == LIGHT) return 1;
-				return 0;
-			case DARK:
-				if(other == LIGHT) return -1;
-				if(other == ANIMA) return 1;
-				return 0;
-			default:
+			if (this.isMagic == other.isMagic) {
+				return this.trianglePosition.modifier(other.trianglePosition);
+			} else {
 				return 0;
 			}
 		}
@@ -131,10 +145,11 @@ public final class Weapon extends Item {
 		/**
 		 * Checks if is magic.
 		 *
-		 * @return true, if is magic
+		 * @return true, if this weapon type deals damage based on Mag and Res.
+		 		false, if this weapon type deals damage based on Str and Def.
 		 */
 		public boolean isMagic(){
-			return this == ANIMA || this == LIGHT || this == DARK;
+			return this.isMagic;
 		}
 	}
 	
