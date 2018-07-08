@@ -9,11 +9,12 @@ import java.util.function.Function;
 import java.io.Serializable;
 
 import net.fe.fightStage.Brave;
+import net.fe.fightStage.CrossBow;
 import net.fe.fightStage.CombatTrigger;
 import net.fe.fightStage.EclipseSix;
 import net.fe.fightStage.LunaPlus;
 import net.fe.fightStage.Nosferatu;
-import net.fe.fightStage.CrossBow;
+import net.fe.fightStage.Reaver;
 
 import org.newdawn.slick.util.ResourceLoader;
 
@@ -261,6 +262,7 @@ public class WeaponFactory {
 			case "Luna" : return new LunaPlus();
 			case "Eclipse6" : return new EclipseSix();
 			case "Crossbow" : return new CrossBow();
+			case "Reaver" : return new Reaver();
 			default : throw new IllegalArgumentException("Unknown trigger name: " + s);
 		}
 	}

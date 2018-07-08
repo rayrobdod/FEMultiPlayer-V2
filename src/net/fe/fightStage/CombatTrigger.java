@@ -89,6 +89,15 @@ public abstract class CombatTrigger implements Serializable {
 	public abstract boolean attempt(Unit user, int range, Unit opponent, RNG rng);
 	
 	/**
+	 * Returns true if this effect represents a reaver effect.
+	 * <p>
+	 * Several places assume that if isReaver is true, then attempt is also true.
+	 */
+	public boolean isReaver() {
+		return false;
+	}
+	
+	/**
 	 * Something to do before the attack occurs. Modify statistics, for example.
 	 *
 	 * @param calc the calc

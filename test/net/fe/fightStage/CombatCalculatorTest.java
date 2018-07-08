@@ -7,6 +7,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
+import java.util.Collections;
+import net.fe.fightStage.Reaver;
 import net.fe.rng.RNG;
 import net.fe.unit.Class;
 import net.fe.unit.Unit;
@@ -146,6 +148,126 @@ public final class CombatCalculatorTest {
 		assertEquals(13, CombatCalculator.calculatePreviewDamage(left, right));
 	}
 	
+	@Test
+	public void calculatePreviewDamage_triangle_normalAdvantage() {
+		Statistics bases = new Statistics();
+		bases = bases.copy("HP", 20);
+		Unit axeUnit = new Unit("left", Class.createClass("Paladin"), '-', bases, new Statistics());
+		axeUnit.equip(createWeapon(Weapon.Type.AXE, 5));
+		Unit swordUnit = new Unit("right", Class.createClass("Paladin"), '-', bases, new Statistics());
+		swordUnit.equip(createWeapon(Weapon.Type.SWORD, 5));
+		
+		int neutralDamage = CombatCalculator.calculatePreviewDamage(axeUnit, axeUnit);
+		int advantageDamage = CombatCalculator.calculatePreviewDamage(swordUnit, axeUnit);
+		
+		assertEquals(1, advantageDamage - neutralDamage);
+	}
+	
+	@Test
+	public void calculatePreviewDamage_triangle_normalDisadvantage() {
+		Statistics bases = new Statistics();
+		bases = bases.copy("HP", 20);
+		Unit axeUnit = new Unit("left", Class.createClass("Paladin"), '-', bases, new Statistics());
+		axeUnit.equip(createWeapon(Weapon.Type.AXE, 5));
+		Unit swordUnit = new Unit("right", Class.createClass("Paladin"), '-', bases, new Statistics());
+		swordUnit.equip(createWeapon(Weapon.Type.SWORD, 5));
+		
+		int neutralDamage = CombatCalculator.calculatePreviewDamage(axeUnit, axeUnit);
+		int disadvantageDamage = CombatCalculator.calculatePreviewDamage(axeUnit, swordUnit);
+		
+		assertEquals(-1, disadvantageDamage - neutralDamage);
+	}
+	
+	@Test
+	public void calculatePreviewDamage_triangle_reaverAdvantage() {
+		Statistics bases = new Statistics();
+		bases = bases.copy("HP", 20);
+		Unit axeUnit = new Unit("left", Class.createClass("Paladin"), '-', bases, new Statistics());
+		axeUnit.equip(createReaverWeapon(Weapon.Type.AXE, 5));
+		Unit swordUnit = new Unit("right", Class.createClass("Paladin"), '-', bases, new Statistics());
+		swordUnit.equip(createWeapon(Weapon.Type.SWORD, 5));
+		
+		int neutralDamage = CombatCalculator.calculatePreviewDamage(axeUnit, axeUnit);
+		int advantageDamage = CombatCalculator.calculatePreviewDamage(swordUnit, axeUnit);
+		
+		assertEquals(-2, advantageDamage - neutralDamage);
+	}
+	
+	@Test
+	public void calculatePreviewDamage_triangle_reaverDisadvantage() {
+		Statistics bases = new Statistics();
+		bases = bases.copy("HP", 20);
+		Unit axeUnit = new Unit("left", Class.createClass("Paladin"), '-', bases, new Statistics());
+		axeUnit.equip(createReaverWeapon(Weapon.Type.AXE, 5));
+		Unit swordUnit = new Unit("right", Class.createClass("Paladin"), '-', bases, new Statistics());
+		swordUnit.equip(createWeapon(Weapon.Type.SWORD, 5));
+		
+		int neutralDamage = CombatCalculator.calculatePreviewDamage(axeUnit, axeUnit);
+		int disadvantageDamage = CombatCalculator.calculatePreviewDamage(axeUnit, swordUnit);
+		
+		assertEquals(2, disadvantageDamage - neutralDamage);
+	}
+	
+	@Test
+	public void calculatePreviewDamage_triangle_reaverAdvantage2() {
+		Statistics bases = new Statistics();
+		bases = bases.copy("HP", 20);
+		Unit axeUnit = new Unit("left", Class.createClass("Paladin"), '-', bases, new Statistics());
+		axeUnit.equip(createWeapon(Weapon.Type.AXE, 5));
+		Unit swordUnit = new Unit("right", Class.createClass("Paladin"), '-', bases, new Statistics());
+		swordUnit.equip(createReaverWeapon(Weapon.Type.SWORD, 5));
+		
+		int neutralDamage = CombatCalculator.calculatePreviewDamage(axeUnit, axeUnit);
+		int advantageDamage = CombatCalculator.calculatePreviewDamage(swordUnit, axeUnit);
+		
+		assertEquals(-2, advantageDamage - neutralDamage);
+	}
+	
+	@Test
+	public void calculatePreviewDamage_triangle_reaverDisadvantage2() {
+		Statistics bases = new Statistics();
+		bases = bases.copy("HP", 20);
+		Unit axeUnit = new Unit("left", Class.createClass("Paladin"), '-', bases, new Statistics());
+		axeUnit.equip(createWeapon(Weapon.Type.AXE, 5));
+		Unit swordUnit = new Unit("right", Class.createClass("Paladin"), '-', bases, new Statistics());
+		swordUnit.equip(createReaverWeapon(Weapon.Type.SWORD, 5));
+		
+		int neutralDamage = CombatCalculator.calculatePreviewDamage(axeUnit, axeUnit);
+		int disadvantageDamage = CombatCalculator.calculatePreviewDamage(axeUnit, swordUnit);
+		
+		assertEquals(2, disadvantageDamage - neutralDamage);
+	}
+	
+	@Test
+	public void calculatePreviewDamage_triangle_doubleReaverAdvantage() {
+		Statistics bases = new Statistics();
+		bases = bases.copy("HP", 20);
+		Unit axeUnit = new Unit("left", Class.createClass("Paladin"), '-', bases, new Statistics());
+		axeUnit.equip(createReaverWeapon(Weapon.Type.AXE, 5));
+		Unit swordUnit = new Unit("right", Class.createClass("Paladin"), '-', bases, new Statistics());
+		swordUnit.equip(createReaverWeapon(Weapon.Type.SWORD, 5));
+		
+		int neutralDamage = CombatCalculator.calculatePreviewDamage(axeUnit, axeUnit);
+		int advantageDamage = CombatCalculator.calculatePreviewDamage(swordUnit, axeUnit);
+		
+		assertEquals(1, advantageDamage - neutralDamage);
+	}
+	
+	@Test
+	public void calculatePreviewDamage_triangle_doubleReaverDisadvantage() {
+		Statistics bases = new Statistics();
+		bases = bases.copy("HP", 20);
+		Unit axeUnit = new Unit("left", Class.createClass("Paladin"), '-', bases, new Statistics());
+		axeUnit.equip(createReaverWeapon(Weapon.Type.AXE, 5));
+		Unit swordUnit = new Unit("right", Class.createClass("Paladin"), '-', bases, new Statistics());
+		swordUnit.equip(createReaverWeapon(Weapon.Type.SWORD, 5));
+		
+		int neutralDamage = CombatCalculator.calculatePreviewDamage(axeUnit, axeUnit);
+		int disadvantageDamage = CombatCalculator.calculatePreviewDamage(axeUnit, swordUnit);
+		
+		assertEquals(-1, disadvantageDamage - neutralDamage);
+	}
+	
 	
 	private Weapon createWeapon(Weapon.Type type, int might) {
 		
@@ -153,6 +275,15 @@ public final class CombatCalculatorTest {
 			"fork", 1, 0, 0,
 			type, might, 0, 0, (s) -> java.util.Arrays.asList(1),
 			new Statistics(), new java.util.ArrayList<>(), new java.util.ArrayList<>(), null
+		);
+		return retVal;
+	}
+	
+	private Weapon createReaverWeapon(Weapon.Type type, int might) {
+		Weapon retVal = new Weapon(
+			"forkreaver", 1, 0, 0,
+			type, might, 0, 0, (s) -> java.util.Arrays.asList(1),
+			new Statistics(), new java.util.ArrayList<>(), Collections.singletonList(new Reaver()), null
 		);
 		return retVal;
 	}

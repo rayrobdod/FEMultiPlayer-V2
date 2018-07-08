@@ -147,13 +147,14 @@ public final class Weapon extends Item {
 	 */
 	public int triMod(Weapon other){ 
 		if(other == null) return 0;
-		if(this.name.contains("reaver") || other.name.contains("reaver")){
-			if(this.name.contains("reaver") && other.name.contains("reaver")){
-				return type.triangleModifier(other.type);
-			}
-			return -2*type.triangleModifier(other.type);
+		boolean reaverAccumulator = false;
+		for (CombatTrigger i : this.getTriggers()) {
+			reaverAccumulator ^= i.isReaver();
 		}
-		return type.triangleModifier(other.type);
+		for (CombatTrigger i : other.getTriggers()) {
+			reaverAccumulator ^= i.isReaver();
+		}
+		return type.triangleModifier(other.type) * (reaverAccumulator ? -2 : 1);
 	}
 	
 	/**

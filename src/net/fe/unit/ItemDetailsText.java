@@ -10,6 +10,7 @@ import net.fe.fightStage.CombatTrigger;
 import net.fe.fightStage.EclipseSix;
 import net.fe.fightStage.LunaPlus;
 import net.fe.fightStage.Nosferatu;
+import net.fe.fightStage.Reaver;
 import net.fe.fightStage.CrossBow;
 
 /**
@@ -75,7 +76,7 @@ public final class ItemDetailsText extends Entity{
 		if(wep.name.contains("Brave")){
 			sb.append("Allows double attacks. ");
 		}
-		if(wep.name.contains("reaver")){
+		if(wep.getTriggers().contains(new Reaver())) {
 			sb.append("Reverses the weapon triangle. ");
 		}
 		if(wep.name.contains("Kill") || wep.name.equals("Wo Dao")){

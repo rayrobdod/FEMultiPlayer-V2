@@ -6,7 +6,7 @@ Silver Sword	Sword	1	13	80	0	10	1500	-	-	-	-
 Killing Edge	Sword	1	9	75	30	10	1300	-	-	-	-
 Armorslayer	Sword	1	8	80	0	9	1260	Armor	-	-	-
 Longsword	Sword	1	6	85	0	9	1260	Mount	-	-	-
-Lancereaver	Sword	1	9	75	5	7	1800	-	-	-	-
+Lancereaver	Sword	1	9	75	5	7	1800	-	Reaver	-	-
 Brave Sword	Sword	1	9	75	0	15	8000	-	Brave	-	-
 Audhulma	Sword	1	18	85	0	15	10000	-	-	-	Res 5
 Wo Dao	Sword	1	8	75	35	10	1200	-	-	-	-
@@ -25,7 +25,7 @@ Short Spear	Lance	1-2	9	60	0	9	900	-	-	-	-
 Killer Lance	Lance	1	10	70	30	10	1200	-	-	-	-
 Heavy Spear	Lance	1	9	70	0	8	1200	Armor	-	-	-
 Horseslayer	Lance	1	7	70	0	8	1040	Mount	-	-	-
-Axereaver	Lance	1	10	70	5	7	1950	-	-	-	-
+Axereaver	Lance	1	10	70	5	7	1950	-	Reaver	-	-
 Brave Lance	Lance	1	10	70	0	15	7500	-	Brave	-	-
 Gradivus	Lance	1-2	15	85	0	15	10000	-	-	-	Def 5
 Siegmund	Lance	1	17	80	0	15	-	-	-	Ephraim	Str 5
@@ -40,7 +40,7 @@ Tomahawk	Axe	1-2	13	65	0	7	3000	-	-	-	-
 Killer Axe	Axe	1	11	65	30	10	1000	-	-	-	-
 Hammer	Axe	1	10	55	0	10	800	Armor	-	-	-
 Halberd	Axe	1	10	60	0	8	810	Mount	-	-	-
-Swordreaver	Axe	1	11	65	5	7	2100	-	-	-	-
+Swordreaver	Axe	1	11	65	5	7	2100	-	Reaver	-	-
 Brave Axe	Axe	1	10	65	0	15	7500	-	Brave	-	-
 Garm	Axe	1	20	75	0	15	10000	-	-	-	Spd 5
 Armads	Axe	1	18	85	0	12	-	-	-	Hector	Def 5
