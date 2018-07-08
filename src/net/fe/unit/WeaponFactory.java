@@ -8,6 +8,13 @@ import java.util.Scanner;
 import java.util.function.Function;
 import java.io.Serializable;
 
+import net.fe.fightStage.Brave;
+import net.fe.fightStage.CombatTrigger;
+import net.fe.fightStage.EclipseSix;
+import net.fe.fightStage.LunaPlus;
+import net.fe.fightStage.Nosferatu;
+import net.fe.fightStage.CrossBow;
+
 import org.newdawn.slick.util.ResourceLoader;
 
 // TODO: Auto-generated Javadoc
@@ -90,11 +97,15 @@ public class WeaponFactory {
 			}
 			
 			if(!args[9].equals("-")){
-				w.pref = args[9];
+				w.triggers.add(decodeTrigger(args[9]));
 			}
 			
 			if(!args[10].equals("-")){
-				String[] modArgs = args[10].split(" ");
+				w.pref = args[10];
+			}
+			
+			if(!args[11].equals("-")){
+				String[] modArgs = args[11].split(" ");
 				w.modifiers = w.modifiers.copy(modArgs[0], Integer.parseInt(modArgs[1]));
 			}
 			
@@ -134,11 +145,13 @@ public class WeaponFactory {
 		public int maxUses, cost;
 		public final ArrayList<String> effective;
 		public String pref;
+		public final ArrayList<CombatTrigger> triggers;
 		
 		public WeaponBuilder() {
 			modifiers = new Statistics();
 			range = new StaticRange(1,1);
 			effective = new ArrayList<>();
+			triggers = new ArrayList<>();
 			pref = null;
 		}
 		
@@ -146,7 +159,7 @@ public class WeaponFactory {
 			return new Weapon(
 				name, maxUses, id, cost,
 				type, mt, hit, crit, range,
-				modifiers, effective, pref
+				modifiers, effective, triggers, pref
 			);
 		}
 	}
@@ -235,6 +248,20 @@ public class WeaponFactory {
 		}
 		@Override public int hashCode() {
 			return 0xFF;
+		}
+	}
+	
+	/**
+	 * Returns the CombatTrigger associated with the specified text string
+	 */
+	private static CombatTrigger decodeTrigger(String s) throws IllegalArgumentException {
+		switch(s) {
+			case "Brave" : return new Brave();
+			case "Nosferatu" : return new Nosferatu();
+			case "Luna" : return new LunaPlus();
+			case "Eclipse6" : return new EclipseSix();
+			case "Crossbow" : return new CrossBow();
+			default : throw new IllegalArgumentException("Unknown trigger name: " + s);
 		}
 	}
 }

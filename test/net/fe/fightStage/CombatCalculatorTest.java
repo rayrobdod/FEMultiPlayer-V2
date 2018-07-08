@@ -7,6 +7,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
+import net.fe.rng.RNG;
 import net.fe.unit.Class;
 import net.fe.unit.Unit;
 import net.fe.unit.Weapon;
@@ -106,7 +107,7 @@ public final class CombatCalculatorTest {
 		left.equip(createWeapon(Weapon.Type.AXE, 8));
 		left.addSkill(new CombatTrigger(CombatTrigger.NO_NAME_MOD, CombatTrigger.YOUR_TURN_MOD | CombatTrigger.SHOW_IN_PREVIEW) {
 			public int runDamageMod(Unit a, Unit d, int damage) { return 2; }
-			public boolean attempt(Unit user, int range, Unit opponent) { return true; }
+			public boolean attempt(Unit user, int range, Unit opponent, RNG rng) { return true; }
 			public CombatTrigger getCopy() {return this;}
 		});
 		
@@ -131,7 +132,7 @@ public final class CombatCalculatorTest {
 		left.equip(createWeapon(Weapon.Type.AXE, 8));
 		left.addSkill(new CombatTrigger(CombatTrigger.NO_NAME_MOD, CombatTrigger.YOUR_TURN_MOD) {
 			public int runDamageMod(Unit a, Unit d, int damage) { return 2; }
-			public boolean attempt(Unit user, int range, Unit opponent) { return true; }
+			public boolean attempt(Unit user, int range, Unit opponent, RNG rng) { return true; }
 			public CombatTrigger getCopy() {return this;}
 		});
 		
@@ -151,7 +152,7 @@ public final class CombatCalculatorTest {
 		Weapon retVal = new Weapon(
 			"fork", 1, 0, 0,
 			type, might, 0, 0, (s) -> java.util.Arrays.asList(1),
-			new Statistics(), new java.util.ArrayList<>(), null
+			new Statistics(), new java.util.ArrayList<>(), new java.util.ArrayList<>(), null
 		);
 		return retVal;
 	}

@@ -3,12 +3,7 @@ package net.fe.unit;
 import java.util.*;
 import java.util.function.Function;
 
-import net.fe.fightStage.Brave;
 import net.fe.fightStage.CombatTrigger;
-import net.fe.fightStage.EclipseSix;
-import net.fe.fightStage.LunaPlus;
-import net.fe.fightStage.Nosferatu;
-import net.fe.fightStage.CrossBow;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -34,6 +29,9 @@ public final class Weapon extends Item {
 	/** The effective. */
 	public final List<String> effective;
 	
+	/** The combat skills that are granted by using this weapon */
+	public final List<CombatTrigger> triggers;
+	
 	/** The pref. */
 	public final String pref;
 
@@ -54,7 +52,9 @@ public final class Weapon extends Item {
 			Type type, int mt, int hit, int crit, 
 			Function<Statistics, List<Integer>> range,
 			Statistics modifiers,
-			List<String> effective, String pref) {
+			List<String> effective,
+			List<CombatTrigger> triggers,
+			String pref) {
 		super(name, maxUses, id, cost);
 		this.type = type;
 		this.modifiers = modifiers;
@@ -62,6 +62,7 @@ public final class Weapon extends Item {
 		this.hit = hit;
 		this.crit = crit;
 		this.effective = java.util.Collections.unmodifiableList(new ArrayList<String>(effective));
+		this.triggers = java.util.Collections.unmodifiableList(new ArrayList<>(triggers));
 		this.range = range;
 		this.pref = pref;
 	}
@@ -170,18 +171,6 @@ public final class Weapon extends Item {
 	 * @return the triggers
 	 */
 	public List<CombatTrigger> getTriggers(){
-		ArrayList<CombatTrigger> triggers = new ArrayList<CombatTrigger>();
-		if(name.contains("Brave")){
-			triggers.add(new Brave());
-		} else if (name.equals("Nosferatu")){
-			triggers.add(new Nosferatu());
-		} else if (name.equals("Lunase")){
-			triggers.add(new LunaPlus());
-		} else if (name.equals("Eclipse")){
-			triggers.add(new EclipseSix());
-		} else if (type == Type.CROSSBOW) {
-			triggers.add(new CrossBow());
-		}
 		return triggers;
 	}
 	
@@ -192,14 +181,14 @@ public final class Weapon extends Item {
 	public Weapon getCopy(){
 		return new Weapon(name, getMaxUses(), id, getCost(),
 				type, mt, hit, crit, range,
-				modifiers, effective, pref);
+				modifiers, effective, triggers, pref);
 	}
 	
 	/** Returns an item identical to this one, with the exception of an updated mt, hit and crit */
 	public Weapon getCopyWithNewMtHitCrit(int newmt, int newhit, int newcrit){
 		return new Weapon(name, getMaxUses(), id, getCost(),
 				type, newmt, newhit, newcrit, range,
-				modifiers, effective, pref);
+				modifiers, effective, triggers, pref);
 	}
 
 	/* (non-Javadoc)
@@ -219,12 +208,13 @@ public final class Weapon extends Item {
 	
 	@Override
 	public int hashCode() {
-		return (((((super.hashCode() * 31 +
+		return ((((((super.hashCode() * 31 +
 				this.type.ordinal()) * 31 +
 				this.range.hashCode()) * 31 +
 				this.modifiers.hashCode()) * 31 +
 				java.util.Objects.hashCode(this.pref)) * 31 +
 				this.effective.hashCode()) * 31 +
+				this.triggers.hashCode()) * 31 +
 				(crit << 14 + hit << 7 + mt);
 	}
 	
@@ -245,6 +235,7 @@ public final class Weapon extends Item {
 					this.type == o2.type &&
 					this.range.equals(o2.range) &&
 					this.effective.equals(o2.effective) &&
+					this.triggers.equals(o2.triggers) &&
 					(this.pref == null ?
 							o2.pref == null :
 							this.pref.equals(o2.pref)
