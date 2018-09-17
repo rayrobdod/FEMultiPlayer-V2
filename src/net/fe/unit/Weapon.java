@@ -26,9 +26,6 @@ public final class Weapon extends Item {
 	/** The type. */
 	public final Type type;
 	
-	/** The effective. */
-	public final List<String> effective;
-	
 	/** The combat skills that are granted by using this weapon */
 	public final List<CombatTrigger> triggers;
 	
@@ -52,7 +49,6 @@ public final class Weapon extends Item {
 			Type type, int mt, int hit, int crit, 
 			Function<Statistics, List<Integer>> range,
 			Statistics modifiers,
-			List<String> effective,
 			List<CombatTrigger> triggers,
 			String pref) {
 		super(name, maxUses, id, cost);
@@ -61,7 +57,6 @@ public final class Weapon extends Item {
 		this.mt = mt;
 		this.hit = hit;
 		this.crit = crit;
-		this.effective = java.util.Collections.unmodifiableList(new ArrayList<String>(effective));
 		this.triggers = java.util.Collections.unmodifiableList(new ArrayList<>(triggers));
 		this.range = range;
 		this.pref = pref;
@@ -182,14 +177,14 @@ public final class Weapon extends Item {
 	public Weapon getCopy(){
 		return new Weapon(name, getMaxUses(), id, getCost(),
 				type, mt, hit, crit, range,
-				modifiers, effective, triggers, pref);
+				modifiers, triggers, pref);
 	}
 	
 	/** Returns an item identical to this one, with the exception of an updated mt, hit and crit */
 	public Weapon getCopyWithNewMtHitCrit(int newmt, int newhit, int newcrit){
 		return new Weapon(name, getMaxUses(), id, getCost(),
 				type, newmt, newhit, newcrit, range,
-				modifiers, effective, triggers, pref);
+				modifiers, triggers, pref);
 	}
 
 	/* (non-Javadoc)
@@ -209,12 +204,11 @@ public final class Weapon extends Item {
 	
 	@Override
 	public int hashCode() {
-		return ((((((super.hashCode() * 31 +
+		return (((((super.hashCode() * 31 +
 				this.type.ordinal()) * 31 +
 				this.range.hashCode()) * 31 +
 				this.modifiers.hashCode()) * 31 +
 				java.util.Objects.hashCode(this.pref)) * 31 +
-				this.effective.hashCode()) * 31 +
 				this.triggers.hashCode()) * 31 +
 				(crit << 14 + hit << 7 + mt);
 	}
@@ -235,7 +229,6 @@ public final class Weapon extends Item {
 					this.crit == o2.crit &&
 					this.type == o2.type &&
 					this.range.equals(o2.range) &&
-					this.effective.equals(o2.effective) &&
 					this.triggers.equals(o2.triggers) &&
 					(this.pref == null ?
 							o2.pref == null :
@@ -263,7 +256,6 @@ public final class Weapon extends Item {
 			"hit: " + hit + "; " +
 			"range: " + range + "; " +
 			"modifiers: " + modifiers + "; " +
-			"effective: " + effective + "; " +
 			"pref: " + pref + "]";
 	}
 }

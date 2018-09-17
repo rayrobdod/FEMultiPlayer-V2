@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 import java.util.Collections;
+import net.fe.fightStage.Effective;
 import net.fe.fightStage.Reaver;
 import net.fe.rng.RNG;
 import net.fe.unit.Class;
@@ -35,7 +36,7 @@ public final class CombatCalculatorTest {
 		rightVals = rightVals.copy("Res", 5);
 		Unit right = new Unit("right", Class.createClass("Phantom"), '-', rightVals, rightVals);
 		
-		assertEquals(13, CombatCalculator.calculateBaseDamage(left, right));
+		assertEquals(13, CombatCalculator.calculatePreviewStats(left, right, true).damage);
 	}
 	
 	@Test
@@ -55,7 +56,7 @@ public final class CombatCalculatorTest {
 		rightVals = rightVals.copy("Def", 5);
 		Unit right = new Unit("right", Class.createClass("Phantom"), '-', rightVals, rightVals);
 		
-		assertEquals(13, CombatCalculator.calculateBaseDamage(left, right));
+		assertEquals(13, CombatCalculator.calculatePreviewStats(left, right, true).damage);
 	}
 	
 	@Test
@@ -75,7 +76,7 @@ public final class CombatCalculatorTest {
 		rightVals = rightVals.copy("Res", 5);
 		Unit right = new Unit("right", Class.createClass("Phantom"), '-', rightVals, rightVals);
 		
-		assertEquals(13, CombatCalculator.calculatePreviewDamage(left, right));
+		assertEquals(13, CombatCalculator.calculatePreviewStats(left, right, true).damage);
 	}
 	
 	@Test
@@ -95,7 +96,7 @@ public final class CombatCalculatorTest {
 		rightVals = rightVals.copy("Def", 5);
 		Unit right = new Unit("right", Class.createClass("Phantom"), '-', rightVals, rightVals);
 		
-		assertEquals(13, CombatCalculator.calculatePreviewDamage(left, right));
+		assertEquals(13, CombatCalculator.calculatePreviewStats(left, right, true).damage);
 	}
 	
 	@Test
@@ -120,7 +121,7 @@ public final class CombatCalculatorTest {
 		rightVals = rightVals.copy("Def", 5);
 		Unit right = new Unit("right", Class.createClass("Phantom"), '-', rightVals, rightVals);
 		
-		assertEquals(2, CombatCalculator.calculatePreviewDamage(left, right));
+		assertEquals(2, CombatCalculator.calculatePreviewStats(left, right, true).damage);
 	}
 	
 	@Test
@@ -145,7 +146,71 @@ public final class CombatCalculatorTest {
 		rightVals = rightVals.copy("Def", 5);
 		Unit right = new Unit("right", Class.createClass("Phantom"), '-', rightVals, rightVals);
 		
-		assertEquals(13, CombatCalculator.calculatePreviewDamage(left, right));
+		assertEquals(13, CombatCalculator.calculatePreviewStats(left, right, true).damage);
+	}
+	
+	@Test
+	public void calculatePreviewDamage_EffectiveDamage() {
+		Weapon effectiveWeapon = createEffectiveWeapon(Weapon.Type.AXE, 5, "Phantom");
+		
+		Statistics leftVals = new Statistics();
+		leftVals = leftVals.copy("HP", 20);
+		leftVals = leftVals.copy("Str", 2);
+		Unit left = new Unit("left", Class.createClass("Phantom"), '-', leftVals, leftVals);
+		left.equip(effectiveWeapon);
+		
+		Statistics rightVals = new Statistics();
+		rightVals = rightVals.copy("HP", 20);
+		rightVals = rightVals.copy("Def", 3);
+		Unit right = new Unit("right", Class.createClass("Phantom"), '-', rightVals, rightVals);
+		
+		assertEquals(2 + 5 * 3 - 3, CombatCalculator.calculatePreviewStats(left, right, true).damage);
+	}
+	
+	@Test
+	public void calculatePreviewDamage_NotEffectiveDamage() {
+		Weapon effectiveWeapon = createEffectiveWeapon(Weapon.Type.AXE, 5, "Paladin");
+		
+		Statistics leftVals = new Statistics();
+		leftVals = leftVals.copy("HP", 20);
+		leftVals = leftVals.copy("Str", 2);
+		Unit left = new Unit("left", Class.createClass("Phantom"), '-', leftVals, leftVals);
+		left.equip(effectiveWeapon);
+		
+		Statistics rightVals = new Statistics();
+		rightVals = rightVals.copy("HP", 20);
+		rightVals = rightVals.copy("Def", 3);
+		Unit right = new Unit("right", Class.createClass("Phantom"), '-', rightVals, rightVals);
+		
+		assertEquals(2 + 5 - 3, CombatCalculator.calculatePreviewStats(left, right, true).damage);
+	}
+	
+	@Test
+	public void calculatePreviewDamage_EffectiveTriangleDamage() {
+		Weapon effectiveWeapon = createEffectiveWeapon(Weapon.Type.AXE, 5, "Paladin");
+		
+		Statistics leftVals = new Statistics();
+		leftVals = leftVals.copy("HP", 20);
+		leftVals = leftVals.copy("Str", 2);
+		Unit left = new Unit("left", Class.createClass("Phantom"), '-', leftVals, leftVals);
+		left.equip(effectiveWeapon);
+		
+		Statistics rightVals = new Statistics();
+		rightVals = rightVals.copy("HP", 20);
+		rightVals = rightVals.copy("Def", 3);
+		Unit right = new Unit("right", Class.createClass("Paladin"), '-', rightVals, rightVals);
+		
+		right.equip(createWeapon(Weapon.Type.AXE, 8));
+		int normalDamage = CombatCalculator.calculatePreviewStats(left, right, true).damage;
+		
+		right.equip(createWeapon(Weapon.Type.LANCE, 8));
+		int wtaDamage = CombatCalculator.calculatePreviewStats(left, right, true).damage;
+		
+		right.equip(createWeapon(Weapon.Type.SWORD, 8));
+		int wtdDamage = CombatCalculator.calculatePreviewStats(left, right, true).damage;
+		
+		assertEquals(3, wtaDamage - normalDamage);
+		assertEquals(3, normalDamage - wtdDamage);
 	}
 	
 	@Test
@@ -157,8 +222,8 @@ public final class CombatCalculatorTest {
 		Unit swordUnit = new Unit("right", Class.createClass("Paladin"), '-', bases, new Statistics());
 		swordUnit.equip(createWeapon(Weapon.Type.SWORD, 5));
 		
-		int neutralDamage = CombatCalculator.calculatePreviewDamage(axeUnit, axeUnit);
-		int advantageDamage = CombatCalculator.calculatePreviewDamage(swordUnit, axeUnit);
+		int neutralDamage = CombatCalculator.calculatePreviewStats(axeUnit, axeUnit, true).damage;
+		int advantageDamage = CombatCalculator.calculatePreviewStats(swordUnit, axeUnit, true).damage;
 		
 		assertEquals(1, advantageDamage - neutralDamage);
 	}
@@ -172,8 +237,8 @@ public final class CombatCalculatorTest {
 		Unit swordUnit = new Unit("right", Class.createClass("Paladin"), '-', bases, new Statistics());
 		swordUnit.equip(createWeapon(Weapon.Type.SWORD, 5));
 		
-		int neutralDamage = CombatCalculator.calculatePreviewDamage(axeUnit, axeUnit);
-		int disadvantageDamage = CombatCalculator.calculatePreviewDamage(axeUnit, swordUnit);
+		int neutralDamage = CombatCalculator.calculatePreviewStats(axeUnit, axeUnit, true).damage;
+		int disadvantageDamage = CombatCalculator.calculatePreviewStats(axeUnit, swordUnit, true).damage;
 		
 		assertEquals(-1, disadvantageDamage - neutralDamage);
 	}
@@ -187,8 +252,8 @@ public final class CombatCalculatorTest {
 		Unit swordUnit = new Unit("right", Class.createClass("Paladin"), '-', bases, new Statistics());
 		swordUnit.equip(createWeapon(Weapon.Type.SWORD, 5));
 		
-		int neutralDamage = CombatCalculator.calculatePreviewDamage(axeUnit, axeUnit);
-		int advantageDamage = CombatCalculator.calculatePreviewDamage(swordUnit, axeUnit);
+		int neutralDamage = CombatCalculator.calculatePreviewStats(axeUnit, axeUnit, true).damage;
+		int advantageDamage = CombatCalculator.calculatePreviewStats(swordUnit, axeUnit, true).damage;
 		
 		assertEquals(-2, advantageDamage - neutralDamage);
 	}
@@ -202,8 +267,8 @@ public final class CombatCalculatorTest {
 		Unit swordUnit = new Unit("right", Class.createClass("Paladin"), '-', bases, new Statistics());
 		swordUnit.equip(createWeapon(Weapon.Type.SWORD, 5));
 		
-		int neutralDamage = CombatCalculator.calculatePreviewDamage(axeUnit, axeUnit);
-		int disadvantageDamage = CombatCalculator.calculatePreviewDamage(axeUnit, swordUnit);
+		int neutralDamage = CombatCalculator.calculatePreviewStats(axeUnit, axeUnit, true).damage;
+		int disadvantageDamage = CombatCalculator.calculatePreviewStats(axeUnit, swordUnit, true).damage;
 		
 		assertEquals(2, disadvantageDamage - neutralDamage);
 	}
@@ -217,8 +282,8 @@ public final class CombatCalculatorTest {
 		Unit swordUnit = new Unit("right", Class.createClass("Paladin"), '-', bases, new Statistics());
 		swordUnit.equip(createReaverWeapon(Weapon.Type.SWORD, 5));
 		
-		int neutralDamage = CombatCalculator.calculatePreviewDamage(axeUnit, axeUnit);
-		int advantageDamage = CombatCalculator.calculatePreviewDamage(swordUnit, axeUnit);
+		int neutralDamage = CombatCalculator.calculatePreviewStats(axeUnit, axeUnit, true).damage;
+		int advantageDamage = CombatCalculator.calculatePreviewStats(swordUnit, axeUnit, true).damage;
 		
 		assertEquals(-2, advantageDamage - neutralDamage);
 	}
@@ -232,8 +297,8 @@ public final class CombatCalculatorTest {
 		Unit swordUnit = new Unit("right", Class.createClass("Paladin"), '-', bases, new Statistics());
 		swordUnit.equip(createReaverWeapon(Weapon.Type.SWORD, 5));
 		
-		int neutralDamage = CombatCalculator.calculatePreviewDamage(axeUnit, axeUnit);
-		int disadvantageDamage = CombatCalculator.calculatePreviewDamage(axeUnit, swordUnit);
+		int neutralDamage = CombatCalculator.calculatePreviewStats(axeUnit, axeUnit, true).damage;
+		int disadvantageDamage = CombatCalculator.calculatePreviewStats(axeUnit, swordUnit, true).damage;
 		
 		assertEquals(2, disadvantageDamage - neutralDamage);
 	}
@@ -247,8 +312,8 @@ public final class CombatCalculatorTest {
 		Unit swordUnit = new Unit("right", Class.createClass("Paladin"), '-', bases, new Statistics());
 		swordUnit.equip(createReaverWeapon(Weapon.Type.SWORD, 5));
 		
-		int neutralDamage = CombatCalculator.calculatePreviewDamage(axeUnit, axeUnit);
-		int advantageDamage = CombatCalculator.calculatePreviewDamage(swordUnit, axeUnit);
+		int neutralDamage = CombatCalculator.calculatePreviewStats(axeUnit, axeUnit, true).damage;
+		int advantageDamage = CombatCalculator.calculatePreviewStats(swordUnit, axeUnit, true).damage;
 		
 		assertEquals(1, advantageDamage - neutralDamage);
 	}
@@ -262,8 +327,8 @@ public final class CombatCalculatorTest {
 		Unit swordUnit = new Unit("right", Class.createClass("Paladin"), '-', bases, new Statistics());
 		swordUnit.equip(createReaverWeapon(Weapon.Type.SWORD, 5));
 		
-		int neutralDamage = CombatCalculator.calculatePreviewDamage(axeUnit, axeUnit);
-		int disadvantageDamage = CombatCalculator.calculatePreviewDamage(axeUnit, swordUnit);
+		int neutralDamage = CombatCalculator.calculatePreviewStats(axeUnit, axeUnit, true).damage;
+		int disadvantageDamage = CombatCalculator.calculatePreviewStats(axeUnit, swordUnit, true).damage;
 		
 		assertEquals(-1, disadvantageDamage - neutralDamage);
 	}
@@ -274,7 +339,7 @@ public final class CombatCalculatorTest {
 		Weapon retVal = new Weapon(
 			"fork", 1, 0, 0,
 			type, might, 0, 0, (s) -> java.util.Arrays.asList(1),
-			new Statistics(), new java.util.ArrayList<>(), new java.util.ArrayList<>(), null
+			new Statistics(), new java.util.ArrayList<>(), null
 		);
 		return retVal;
 	}
@@ -283,7 +348,16 @@ public final class CombatCalculatorTest {
 		Weapon retVal = new Weapon(
 			"forkreaver", 1, 0, 0,
 			type, might, 0, 0, (s) -> java.util.Arrays.asList(1),
-			new Statistics(), new java.util.ArrayList<>(), Collections.singletonList(new Reaver()), null
+			new Statistics(), Collections.singletonList(new Reaver()), null
+		);
+		return retVal;
+	}
+	
+	private Weapon createEffectiveWeapon(Weapon.Type type, int might, String effectiveClass) {
+		Weapon retVal = new Weapon(
+			"forkreaver", 1, 0, 0,
+			type, might, 0, 0, (s) -> java.util.Arrays.asList(1),
+			new Statistics(), Collections.singletonList(new Effective(3, Collections.singletonList(effectiveClass))), null
 		);
 		return retVal;
 	}

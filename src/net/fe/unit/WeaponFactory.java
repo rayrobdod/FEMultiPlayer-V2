@@ -12,6 +12,7 @@ import net.fe.fightStage.Brave;
 import net.fe.fightStage.CrossBow;
 import net.fe.fightStage.CombatTrigger;
 import net.fe.fightStage.EclipseSix;
+import net.fe.fightStage.Effective;
 import net.fe.fightStage.LunaPlus;
 import net.fe.fightStage.Nosferatu;
 import net.fe.fightStage.Reaver;
@@ -89,12 +90,26 @@ public class WeaponFactory {
 				w.cost = 0;
 			}
 			
-			if(args[8].equals("Mount")){
-				w.effective.addAll(mounted);
-			} else if (args[8].equals("Armor")){
-				w.effective.addAll(armored);
-			} else if (args[8].equals("Flier")){
-				w.effective.addAll(fliers);
+			if(!args[8].equals("-")) {
+				final String[] split = args[8].split("×");
+				
+				final int multiplier;
+				if (1 >= split.length) {
+					multiplier = 3;
+				} else {
+					multiplier = Integer.parseInt(split[1]);
+				}
+				
+				final ArrayList<String> classes = new ArrayList<>();
+				if(split[0].equals("Mount")){
+					classes.addAll(mounted);
+				} else if (split[0].equals("Armor")){
+					classes.addAll(armored);
+				} else if (split[0].equals("Flier")){
+					classes.addAll(fliers);
+				}
+				
+				w.triggers.add(new Effective(multiplier, classes));
 			}
 			
 			if(!args[9].equals("-")){
@@ -144,14 +159,12 @@ public class WeaponFactory {
 		public Function<Statistics, List<Integer>> range;
 		public int mt, hit, crit;
 		public int maxUses, cost;
-		public final ArrayList<String> effective;
 		public String pref;
 		public final ArrayList<CombatTrigger> triggers;
 		
 		public WeaponBuilder() {
 			modifiers = new Statistics();
 			range = new StaticRange(1,1);
-			effective = new ArrayList<>();
 			triggers = new ArrayList<>();
 			pref = null;
 		}
@@ -160,7 +173,7 @@ public class WeaponFactory {
 			return new Weapon(
 				name, maxUses, id, cost,
 				type, mt, hit, crit, range,
-				modifiers, effective, triggers, pref
+				modifiers, triggers, pref
 			);
 		}
 	}
