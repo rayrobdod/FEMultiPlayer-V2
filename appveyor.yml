@@ -58,6 +58,14 @@ build_script:
    - cmd: 'ECHO Main-Class: org.ninjacave.jarsplice.JarSpliceLauncher>>out\mapping-manifest.mf'
    - cmd: 'ECHO Class-Path: .>>out\mapping-manifest.mf'
    - cmd: 'jar cfm "out\FEMP-mapping.jar" "out\mapping-manifest.mf" -C out\mapping_cp .'
+   
+   - cmd: 'mkdir out\dist'
+   - cmd: 'COPY out\FEMP-client.jar out\dist\FEMP-client.jar'
+   - cmd: 'COPY out\FEMP-server.jar out\dist\FEMP-server.jar'
+   - cmd: 'COPY "dev\Instruction Manual.pdf" "out\dist\Instruction Manual.pdf"'
+   - cmd: 'XCOPY "sample_teams" "out\dist\teams" /S /I /Q'
+   - cmd: 'ECHO java -jar FEMP-client.jar>out\dist\FEMP-client.bat'
+   - cmd: 'ECHO PAUSE>>out\dist\FEMP-client.bat'
 test_script:
    - cmd: 'mkdir out\test_lib'
    - cmd: 'curl -sS -o out\test_lib\junit-platform-console-standalone-1.2.0.jar https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone/1.2.0/junit-platform-console-standalone-1.2.0.jar'
@@ -71,3 +79,4 @@ test_script:
    - ps: '$wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\out\test_reports\TEST-junit-vintage.xml))'
 artifacts:
 - path: out\*.jar
+- path: out\dist
