@@ -35,8 +35,11 @@ public final class Weapon extends Item {
 	/** The effective. */
 	private final List<String> effective;
 	
-	/** The pref. */
-	public final String pref;
+	/** Whether to show this item in the shop */
+	/* Probably to be replaced with ruleset framework changes,
+	 * i.e. the stuff that allows the one legendary weapon per team rule
+	 */
+	public final boolean showInShop;
 
 	
 	/**
@@ -55,7 +58,7 @@ public final class Weapon extends Item {
 			Type type, int mt, int hit, int crit, 
 			Function<Statistics, List<Integer>> range,
 			Statistics modifiers,
-			List<String> effective, String pref) {
+			List<String> effective, boolean showInShop) {
 		super(name, maxUses, id, cost);
 		this.type = type;
 		this.modifiers = modifiers;
@@ -64,7 +67,7 @@ public final class Weapon extends Item {
 		this.crit = crit;
 		this.effective = java.util.Collections.unmodifiableList(new ArrayList<String>(effective));
 		this.range = range;
-		this.pref = pref;
+		this.showInShop = showInShop;
 	}
 	
 	/**
@@ -120,7 +123,16 @@ public final class Weapon extends Item {
 		/** Dark Tomes */
 		DARK(TrianglePosition.GREEN, true),
 		/** Staves */
-		STAFF(TrianglePosition.NEUTRAL, false);
+		STAFF(TrianglePosition.NEUTRAL, false),
+		
+		SEALED_SWORD(TrianglePosition.RED, false),
+		DURANDAL(TrianglePosition.RED, false),
+		SOL_KATTI(TrianglePosition.RED, false),
+		SIEGLINDE(TrianglePosition.RED, false),
+		FALCHION(TrianglePosition.RED, false),
+		RAGNELL(TrianglePosition.RED, false),
+		SIEGMUND(TrianglePosition.BLUE, false),
+		ARMADS(TrianglePosition.GREEN, false);
 		
 		private final TrianglePosition trianglePosition;
 		private final boolean isMagic;
@@ -212,14 +224,14 @@ public final class Weapon extends Item {
 	public Weapon getCopy(){
 		return new Weapon(name, getMaxUses(), id, getCost(),
 				type, mt, hit, crit, range,
-				modifiers, effective, pref);
+				modifiers, effective, showInShop);
 	}
 	
 	/** Returns an item identical to this one, with the exception of an updated mt, hit and crit */
 	public Weapon getCopyWithNewMtHitCrit(int newmt, int newhit, int newcrit){
 		return new Weapon(name, getMaxUses(), id, getCost(),
 				type, newmt, newhit, newcrit, range,
-				modifiers, effective, pref);
+				modifiers, effective, showInShop);
 	}
 
 	/* (non-Javadoc)
@@ -243,7 +255,7 @@ public final class Weapon extends Item {
 				this.type.ordinal()) * 31 +
 				this.range.hashCode()) * 31 +
 				this.modifiers.hashCode()) * 31 +
-				java.util.Objects.hashCode(this.pref)) * 31 +
+				java.util.Objects.hashCode(this.showInShop)) * 31 +
 				this.effective.hashCode()) * 31 +
 				(crit << 14 + hit << 7 + mt);
 	}
@@ -265,10 +277,7 @@ public final class Weapon extends Item {
 					this.type == o2.type &&
 					this.range.equals(o2.range) &&
 					this.effective.equals(o2.effective) &&
-					(this.pref == null ?
-							o2.pref == null :
-							this.pref.equals(o2.pref)
-					) &&
+					this.showInShop == o2.showInShop &&
 					this.modifiers.equals(o2.modifiers);
 			} else {
 				return false;
@@ -292,6 +301,6 @@ public final class Weapon extends Item {
 			"range: " + range + "; " +
 			"modifiers: " + modifiers + "; " +
 			"effective: " + effective + "; " +
-			"pref: " + pref + "]";
+			"showInShop: " + showInShop + "]";
 	}
 }

@@ -17,15 +17,15 @@ public final class WeaponTest {
 	
 	@Test
 	public void test_equals() {
-		Weapon left = new Weapon("asdf", 20, 0, 1, Weapon.Type.SWORD, 2,3,4, new Static1Range(1), new Statistics(), new ArrayList<>(), null);
-		Weapon right = new Weapon("asdf", 20, 0, 1, Weapon.Type.SWORD, 2,3,4, new Static1Range(1), new Statistics(), new ArrayList<>(), null);
+		Weapon left = new Weapon("asdf", 20, 0, 1, Weapon.Type.SWORD, 2,3,4, new Static1Range(1), new Statistics(), new ArrayList<>(), true);
+		Weapon right = new Weapon("asdf", 20, 0, 1, Weapon.Type.SWORD, 2,3,4, new Static1Range(1), new Statistics(), new ArrayList<>(), true);
 		assertEquals(left, right);
 	}
 	
 	@Test
 	public void test_hashCode() {
-		Weapon left = new Weapon("asdf", 20, 0, 1, Weapon.Type.SWORD, 2,3,4, new Static1Range(1), new Statistics(), new ArrayList<>(), null);
-		Weapon right = new Weapon("asdf", 20, 0, 1, Weapon.Type.SWORD, 2,3,4, new Static1Range(1), new Statistics(), new ArrayList<>(), null);
+		Weapon left = new Weapon("asdf", 20, 0, 1, Weapon.Type.SWORD, 2,3,4, new Static1Range(1), new Statistics(), new ArrayList<>(), true);
+		Weapon right = new Weapon("asdf", 20, 0, 1, Weapon.Type.SWORD, 2,3,4, new Static1Range(1), new Statistics(), new ArrayList<>(), true);
 		assertEquals(left.hashCode(), right.hashCode());
 	}
 	
@@ -54,8 +54,8 @@ public final class WeaponTest {
 				Type leftTyp = typs.get(leftIdx);
 				Type rightTyp = typs.get(rightIdx);
 				
-				Weapon left = new Weapon("asdf", 20, 0, 1, leftTyp, 2,3,4, new Static1Range(1), new Statistics(), new ArrayList<>(), null);
-				Weapon right = new Weapon("asdf", 20, 0, 1, rightTyp, 2,3,4, new Static1Range(1), new Statistics(), new ArrayList<>(), null);
+				Weapon left = new Weapon("asdf", 20, 0, 1, leftTyp, 2,3,4, new Static1Range(1), new Statistics(), new ArrayList<>(), true);
+				Weapon right = new Weapon("asdf", 20, 0, 1, rightTyp, 2,3,4, new Static1Range(1), new Statistics(), new ArrayList<>(), true);
 				assertEquals("" + leftTyp + " " + rightTyp, exp[leftIdx][rightIdx], left.triMod(right));
 			}
 		}

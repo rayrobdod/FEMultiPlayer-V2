@@ -56,7 +56,7 @@ public class WeaponFactory {
 			WeaponBuilder w = new WeaponBuilder();
 			w.name = name;
 			w.id = id++;
-			w.type = Weapon.Type.valueOf(args[1].toUpperCase());
+			w.type = Weapon.Type.valueOf(args[1].toUpperCase().replace(" ", "_"));
 			
 			
 			String[] rangeArgs = args[2].split("-");
@@ -89,8 +89,10 @@ public class WeaponFactory {
 				w.effective.addAll(fliers);
 			}
 			
-			if(!args[9].equals("-")){
-				w.pref = args[9];
+			if(args[9].equals("Hide")){
+				w.showInShop = false;
+			} else {
+				w.showInShop = true;
 			}
 			
 			if(!args[10].equals("-")){
@@ -133,20 +135,20 @@ public class WeaponFactory {
 		public int mt, hit, crit;
 		public int maxUses, cost;
 		public final ArrayList<String> effective;
-		public String pref;
+		public boolean showInShop;
 		
 		public WeaponBuilder() {
 			modifiers = new Statistics();
 			range = new StaticRange(1,1);
 			effective = new ArrayList<>();
-			pref = null;
+			showInShop = true;
 		}
 		
 		public Weapon build() {
 			return new Weapon(
 				name, maxUses, id, cost,
 				type, mt, hit, crit, range,
-				modifiers, effective, pref
+				modifiers, effective, showInShop
 			);
 		}
 	}

@@ -126,8 +126,14 @@ public final class ItemDetailsText extends Entity{
 		if(wep.getCost() == 15000){
 			sb.append("Ultimate magic. ");
 		}
-		if(wep.pref != null) {
-			sb.append(wep.pref + " only. ");
+		if(!wep.showInShop) {
+			// This assumes that only pref weapons are accessible and not in the shop,
+			// and that there is a one-to-one correspondence between lords and prefs.
+			for (Unit u : UnitFactory.getLords()) {
+				if (u.equippable(wep)) {
+					sb.append(u.name + " only. ");
+				}
+			}
 		}
 		for(String stat: wep.modifiers.toMap().keySet()){
 			if(wep.modifiers.toMap().get(stat) != 0){

@@ -151,7 +151,7 @@ public final class CombatCalculatorTest {
 		Weapon effectiveWeapon = new Weapon(
 			"fork", 1, 0, 0,
 			Weapon.Type.AXE, 5, 0, 0, (s) -> java.util.Arrays.asList(1),
-			new Statistics(), java.util.Arrays.asList("Phantom"), null
+			new Statistics(), java.util.Arrays.asList("Phantom"), true
 		);
 		
 		Statistics leftVals = new Statistics();
@@ -173,7 +173,7 @@ public final class CombatCalculatorTest {
 		Weapon effectiveWeapon = new Weapon(
 			"fork", 1, 0, 0,
 			Weapon.Type.AXE, 5, 0, 0, (s) -> java.util.Arrays.asList(1),
-			new Statistics(), java.util.Arrays.asList("Paladin"), null
+			new Statistics(), java.util.Arrays.asList("Paladin"), true
 		);
 		
 		Statistics leftVals = new Statistics();
@@ -195,7 +195,7 @@ public final class CombatCalculatorTest {
 		Weapon effectiveWeapon = new Weapon(
 			"fork", 1, 0, 0,
 			Weapon.Type.AXE, 5, 0, 0, (s) -> java.util.Arrays.asList(1),
-			new Statistics(), java.util.Arrays.asList("Paladin"), null
+			new Statistics(), java.util.Arrays.asList("Paladin"), true
 		);
 		
 		Statistics leftVals = new Statistics();
@@ -228,7 +228,7 @@ public final class CombatCalculatorTest {
 		Weapon retVal = new Weapon(
 			"fork", 1, 0, 0,
 			type, might, 0, 0, (s) -> java.util.Arrays.asList(1),
-			new Statistics(), new java.util.ArrayList<>(), null
+			new Statistics(), new java.util.ArrayList<>(), true
 		);
 		return retVal;
 	}

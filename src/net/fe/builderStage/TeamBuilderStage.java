@@ -520,6 +520,7 @@ public class TeamBuilderStage extends Stage {
 		boolean cashout = false, expout = false;
 		for(int i = 0; i < select.getMaxUnits() && i < teamData.length; i++){
 			Unit u = select.getUnit(teamData[i][0]);
+			u.getInventory().clear();
 			int lv = Integer.parseInt(teamData[i][1]);
 			while(u.getLevel() != lv){
 				int expCost = Unit.getExpCost(u.getLevel() + 1);
@@ -535,9 +536,6 @@ public class TeamBuilderStage extends Stage {
 				String itemName = teamData[i][j];
 				if(itemName != null){
 					Item item = Item.getItem(itemName);
-					if(item instanceof Weapon && ((Weapon)item).pref != null) {
-						continue;
-					}
 					int goldCost = item.getCost();
 					if(goldCost <= funds){
 						funds -= goldCost;

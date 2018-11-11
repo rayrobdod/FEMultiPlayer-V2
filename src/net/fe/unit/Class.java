@@ -97,42 +97,42 @@ public final class Class implements Serializable {
 			return new Class("Lord", 
 					"A noble youth who commands armies.",
 					0, new Aether(), Arrays.asList(new Shove()),
-					Weapon.Type.SWORD);
+					Weapon.Type.SEALED_SWORD, Weapon.Type.SWORD);
 		if(name.equals("Eliwood"))
 			return new Class("Lord", 
 					"A courageous royal who commands armies.",
 					 0, new Sol(false), emptyFieldSkillList,
-					 Weapon.Type.SWORD, Weapon.Type.LANCE);
+					 Weapon.Type.DURANDAL, Weapon.Type.SWORD, Weapon.Type.LANCE);
 		if(name.equals("Lyn"))
 			return new Class("Lord", 
 					"A serene youth who commands armies.",
 					 0, new Astra(), Arrays.asList(new Shove()),
-					 Weapon.Type.SWORD, Weapon.Type.BOW);
+					 Weapon.Type.SOL_KATTI, Weapon.Type.SWORD, Weapon.Type.BOW);
 		if(name.equals("Hector"))
 			return new Class("Lord", 
 					"A mighty noble who commands armies.",
 					 0, new Luna(false), Arrays.asList(new Shove(), new Smite()), 
-					 Weapon.Type.AXE, Weapon.Type.SWORD);
+					 Weapon.Type.ARMADS, Weapon.Type.AXE, Weapon.Type.SWORD);
 		if(name.equals("Eirika"))
 			return new Class("Lord", 
 					"A brave princess who commands armies.",
 					 0, new Luna(false), emptyFieldSkillList,
-					 Weapon.Type.SWORD);
+					 Weapon.Type.SIEGLINDE, Weapon.Type.SWORD);
 		if(name.equals("Ephraim"))
 			return new Class("Lord", 
 					"A skilled prince who commands armies.",
 					 0, new Sol(false), emptyFieldSkillList,
-					 Weapon.Type.LANCE);
+					 Weapon.Type.SIEGMUND, Weapon.Type.LANCE);
 		if(name.equals("Marth"))
 			return new Class("Lord", 
 					"A legendary prince who commands armies.",
 					 0, new Aether(), Arrays.asList(new Shove()),
-					 Weapon.Type.SWORD);
+					 Weapon.Type.FALCHION, Weapon.Type.SWORD);
 		if(name.equals("Ike"))
 			return new Class("Lord", 
 					"A radiant hero who commands armies.",
 					 0, new Aether(), Arrays.asList(new Shove(), new Smite()),
-					 Weapon.Type.SWORD, Weapon.Type.AXE);
+					 Weapon.Type.RAGNELL, Weapon.Type.SWORD, Weapon.Type.AXE);
 		
 		//Other
 		if(name.equals("Sniper"))

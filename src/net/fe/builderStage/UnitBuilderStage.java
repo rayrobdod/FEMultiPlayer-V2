@@ -394,7 +394,7 @@ public class UnitBuilderStage extends Stage {
 				if(inv.getSelection() != null){
 					AudioPlayer.playAudio("cancel");
 					Item i = inv.getSelection().getItem();
-					if(!(i instanceof Weapon && ((Weapon) i).pref != null)){
+					if(!(i instanceof Weapon && !((Weapon) i).showInShop)){
 						back.setFunds(back.getFunds() + i.getCost());
 						unit.removeFromInventory(i);
 					}

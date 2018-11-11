@@ -73,7 +73,7 @@ public class ShopMenu extends Entity {
 			
 			if (i instanceof Weapon) {
 				Weapon w = (Weapon) i;
-				if(w.pref != null || w.name.startsWith("Debug") || w.getCost() == 1) continue;
+				if (! w.showInShop) continue;
 				switch(w.type){
 					case SWORD: shops[0].addItem(display); break;
 					case LANCE: shops[1].addItem(display); break;
@@ -84,6 +84,7 @@ public class ShopMenu extends Entity {
 					case ANIMA: shops[5].addItem(display); break;
 					case DARK: shops[6].addItem(display); break;
 					case STAFF: shops[7].addItem(display); break;
+					default: shops[8].addItem(display); break;
 				}
 			} else if (i instanceof RiseTome) {
 				shops[6].addItem(display);

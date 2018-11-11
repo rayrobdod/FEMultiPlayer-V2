@@ -577,11 +577,7 @@ public final class Unit extends GriddedEntity implements Serializable, DoNotDest
 	 * @return true, if successful
 	 */
 	public boolean equippable(Weapon w) {
-		if(w.pref!= null){
-			return name.equals(w.pref);
-		}
 		return clazz.usableWeapon.contains(w.type);
-
 	}
 
 	/**
@@ -770,7 +766,7 @@ public final class Unit extends GriddedEntity implements Serializable, DoNotDest
 			boolean remove = true;
 			if(i instanceof Weapon){
 				Weapon w = (Weapon) i;
-				if(w.pref != null){
+				if (! w.showInShop) {
 					remove = false;
 				}
 			}
