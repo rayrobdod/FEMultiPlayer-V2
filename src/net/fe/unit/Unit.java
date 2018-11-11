@@ -286,6 +286,8 @@ public final class Unit extends GriddedEntity implements Serializable, DoNotDest
 		rescuedUnit.rescued = false;
 		rescuedUnit.setMoved(true);
 		final OverworldStage grid = (OverworldStage) stage;
+		if(!grid.getCurrentPlayer().getParty().getUnits().contains(this))
+			rescuedUnit.setMoved(false);
 		grid.addUnit(rescuedUnit, x, y);
 		rescuedUnit.rX = this.x - x * 16;
 		rescuedUnit.rY = this.y - y * 16;
@@ -670,50 +672,25 @@ public final class Unit extends GriddedEntity implements Serializable, DoNotDest
 	}
 
 	/**
-	 * Use.
+	 * Use an item from this unit's inventory
 	 *
-	 * @param index the index
-	 * @return the int
+	 * @param index the index of the item to use
 	 */
-	public int use(int index) {
-		return use(inventory.get(index), true);
+	public void use(int index) {
+		use(inventory.get(index));
 	}
 	
 	/**
-	 * Use.
+	 * Use an item from this unit's inventory
 	 *
-	 * @param index the index
-	 * @param destroy the destroy
-	 * @return the int
+	 * @param i the item to use
 	 */
-	public int use(int index, boolean destroy){
-		return use(inventory.get(index), destroy);
-	}
-	
-	/**
-	 * Use.
-	 *
-	 * @param i the i
-	 * @return the int
-	 */
-	public int use(Item i){
-		return use(i, true);
-	}
-
-	/**
-	 * Use.
-	 *
-	 * @param i the i
-	 * @param destroy the destroy
-	 * @return the int
-	 */
-	public int use(Item i, boolean destroy) {
-		int ans = i.use(this);
-		if(i.getUses() <= 0 && destroy){
+	public void use(Item i) {
+		i.use(this);
+		if(i.getUses() <= 0){
 			inventory.remove(i);
 			reEquip();
 		}
-		return ans;
 	}
 
 	/**
