@@ -89,7 +89,7 @@ public class WeaponFactory {
 				w.effective.addAll(fliers);
 			}
 			
-			if(args[9].equals("Hide")){
+			if(args[9].equals("Nobuy")){
 				w.showInShop = false;
 			} else {
 				w.showInShop = true;

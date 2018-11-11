@@ -169,10 +169,16 @@ public final class Weapon extends Item {
 			return this.isMagic;
 		}
 		
+		/**
+		 * The name of the animation to use when using this weapon type in a melee attack
+		 */
 		public String animName() {
 			return this.animName;
 		}
 		
+		/**
+		 * The name of the animation to use when using this weapon type in a ranged attack
+		 */
 		public String rangedAnimName() {
 			return this.rangedAnimName;
 		}
