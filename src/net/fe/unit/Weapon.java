@@ -107,38 +107,42 @@ public final class Weapon extends Item {
 	 */
 	public enum Type{
 		/** Swords */
-		SWORD(TrianglePosition.RED, false),
+		SWORD(TrianglePosition.RED, false, "sword", "rangedsword"),
 		/** Lances */
-		LANCE(TrianglePosition.BLUE, false),
+		LANCE(TrianglePosition.BLUE, false, "lance", "javelin"),
 		/** Axes */
-		AXE(TrianglePosition.GREEN, false),
+		AXE(TrianglePosition.GREEN, false, "axe", "handaxe"),
 		/** Bows */
-		BOW(TrianglePosition.NEUTRAL, false),
+		BOW(TrianglePosition.NEUTRAL, false, "bow", "bow"),
 		/** Crossbows */
-		CROSSBOW(TrianglePosition.NEUTRAL, false),
+		CROSSBOW(TrianglePosition.NEUTRAL, false, "bow", "bow"),
 		/** Light tomes */
-		LIGHT(TrianglePosition.RED, true),
+		LIGHT(TrianglePosition.RED, true, "magic", "magic"),
 		/** Anima tomes */
-		ANIMA(TrianglePosition.BLUE, true),
+		ANIMA(TrianglePosition.BLUE, true, "magic", "magic"),
 		/** Dark Tomes */
-		DARK(TrianglePosition.GREEN, true),
+		DARK(TrianglePosition.GREEN, true, "magic", "magic"),
 		/** Staves */
-		STAFF(TrianglePosition.NEUTRAL, false),
+		STAFF(TrianglePosition.NEUTRAL, false, "staff", "staff"),
 		
-		SEALED_SWORD(TrianglePosition.RED, false),
-		DURANDAL(TrianglePosition.RED, false),
-		SOL_KATTI(TrianglePosition.RED, false),
-		SIEGLINDE(TrianglePosition.RED, false),
-		FALCHION(TrianglePosition.RED, false),
-		RAGNELL(TrianglePosition.RED, false),
-		SIEGMUND(TrianglePosition.BLUE, false),
-		ARMADS(TrianglePosition.GREEN, false);
+		SEALED_SWORD(TrianglePosition.RED, false, "sword", "rangedsword"),
+		DURANDAL(TrianglePosition.RED, false, "sword", "rangedsword"),
+		SOL_KATTI(TrianglePosition.RED, false, "sword", "rangedsword"),
+		SIEGLINDE(TrianglePosition.RED, false, "sword", "rangedsword"),
+		FALCHION(TrianglePosition.RED, false, "sword", "rangedsword"),
+		RAGNELL(TrianglePosition.RED, false, "sword", "rangedsword"),
+		SIEGMUND(TrianglePosition.BLUE, false, "lance", "javelin"),
+		ARMADS(TrianglePosition.GREEN, false, "axe", "handaxe");
 		
 		private final TrianglePosition trianglePosition;
 		private final boolean isMagic;
-		private Type(TrianglePosition triPos, boolean isMagic) {
+		private final String animName;
+		private final String rangedAnimName;
+		private Type(TrianglePosition triPos, boolean isMagic, String animName, String rangedAnimName) {
 			this.trianglePosition = triPos;
 			this.isMagic = isMagic;
+			this.animName = animName;
+			this.rangedAnimName = rangedAnimName;
 		}
 		
 		/**
@@ -163,6 +167,14 @@ public final class Weapon extends Item {
 		 */
 		public boolean isMagic(){
 			return this.isMagic;
+		}
+		
+		public String animName() {
+			return this.animName;
+		}
+		
+		public String rangedAnimName() {
+			return this.rangedAnimName;
 		}
 	}
 	

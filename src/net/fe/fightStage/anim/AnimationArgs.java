@@ -45,40 +45,21 @@ public final class AnimationArgs {
 		Weapon w = u.getWeapon();
 		if(w == null){
 			Type wType = u.getTheClass().usableWeapon.get(0);
-			if(wType.isMagic()){
-				wepAnimName = "magic";
-				classification = AttackAnimationType.MAGIC;
-			} else if (wType == Weapon.Type.CROSSBOW) {
-				wepAnimName = "bow";
-				classification = AttackAnimationType.NORMAL;
-			} else {
-				wepAnimName = wType.toString().toLowerCase();
-				classification = AttackAnimationType.NORMAL;
-			}
+			wepAnimName = wType.animName();
+			classification = AttackAnimationType.NORMAL;
 		}else if(w.isMagic()){
 			wepAnimName = "magic";
 			classification = AttackAnimationType.MAGIC;
 		} else if (w.type == Weapon.Type.AXE && w.range.apply(u.getStats()).contains(2)) {
 			classification = AttackAnimationType.HANDAXE;
-			wepAnimName = "handaxe";
+			wepAnimName = Weapon.Type.AXE.rangedAnimName();
 		} else {
 			if (w.range.apply(u.getStats()).contains(range) && range > 1) {
 				classification = AttackAnimationType.RANGED;
-				switch (w.type) {
-					case AXE: wepAnimName = "handaxe"; break;
-					case LANCE: wepAnimName = "javelin"; break;
-					case SWORD: wepAnimName = "rangedsword"; break;
-					case BOW: wepAnimName = "bow"; break;
-					case CROSSBOW: wepAnimName = "bow"; break;
-					default: wepAnimName = "magic"; break;
-				}
+				wepAnimName = w.type.rangedAnimName();
 			} else {
 				classification = AttackAnimationType.NORMAL;
-				if (w.type == Weapon.Type.CROSSBOW) {
-					wepAnimName = "bow";
-				} else {
-					wepAnimName = w.type.toString().toLowerCase();
-				}
+				wepAnimName = w.type.animName();
 			}
 		}
 	}
