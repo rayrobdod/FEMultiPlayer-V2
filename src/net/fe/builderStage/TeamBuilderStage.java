@@ -22,6 +22,7 @@ import net.fe.unit.MapAnimation;
 import net.fe.unit.Unit;
 import net.fe.unit.UnitIcon;
 import net.fe.unit.Weapon;
+import net.fe.unit.WeaponFactory;
 
 import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.Color;
@@ -209,6 +210,7 @@ public class TeamBuilderStage extends Stage {
 		
 		int y = yStart;
 		float d = 0.1f;
+		this.equipDefaults(units);
 		for(Unit u: units){
 			addEntity(new UnitIcon(u, 10, y-2, d));
 			y+=vgap;
@@ -224,11 +226,17 @@ public class TeamBuilderStage extends Stage {
 	 * @param units the new units
 	 */
 	public void setUnits(List<Unit> units){
-		this.units.removeAll(units);
-		for(Unit u: this.units){
+		List<Unit> toAdd = new ArrayList<>(units);
+		toAdd.removeAll(this.units);
+		List<Unit> toRemove = new ArrayList<>(this.units);
+		toRemove.removeAll(units);
+		
+		for(Unit u: toRemove){
 			funds += u.squeezeGold();
 			exp += u.squeezeExp();
 		}
+		equipDefaults(toAdd);
+		
 		this.units = units;
 		for(Entity e: entities){
 			if(e instanceof UnitIcon) e.destroy();
@@ -597,6 +605,21 @@ public class TeamBuilderStage extends Stage {
 			}
 		}
 	}
+	
+	/**
+	 * Adds a default set of weapons to each unit's inventory.
+	 */
+	private void equipDefaults(Iterable<Unit> units) {
+		for(Unit u: units) {
+			for (Weapon.Type t : u.getTheClass().usableWeapon) {
+				Weapon w = WeaponFactory.getDefaultForType(t);
+				if (w.getCost() < funds && u.getInventory().size() < 4) {
+					funds -= w.getCost();
+					u.addToInventory(w);
+				}
+			}
+		}
+	}
 }
 
 class Cursor extends Entity{
@@ -664,5 +687,4 @@ class Cursor extends Entity{
 	public void setIndex(int i){
 		index = i;
 	}
-	
 }

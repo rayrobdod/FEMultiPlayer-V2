@@ -124,6 +124,21 @@ public class WeaponFactory {
 		return weapons.values();
 	}
 	
+	public static Weapon getDefaultForType(Weapon.Type typ) {
+		switch (typ) {
+			case SWORD: return getWeapon("Silver Sword");
+			case LANCE: return getWeapon("Silver Lance");
+			case AXE: return getWeapon("Silver Axe");
+			case BOW: return getWeapon("Silver Bow");
+			case CROSSBOW: return getWeapon("Crossbow");
+			case LIGHT: return getWeapon("Divine");
+			case ANIMA: return getWeapon("Elfire");
+			case DARK: return getWeapon("Nosferatu");
+			case STAFF: return getWeapon("Mend");
+			default: return weapons.values().stream().filter((x) -> x.type.equals(typ)).findAny().get();
+		}
+	}
+	
 	
 	
 	private static final class WeaponBuilder {

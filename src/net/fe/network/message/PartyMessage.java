@@ -92,6 +92,7 @@ public final class PartyMessage extends Message {
 						"\n\tServer: " + u3.getTheClass()
 					);
 				}
+				u.unequip();
 				if (! u.getTriggers().equals(u3.getTriggers())) {
 					return Optional.of("unit's skills don't match expected" +
 						"\n\tClient: " + u.getTriggers() +

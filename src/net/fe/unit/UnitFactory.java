@@ -103,23 +103,6 @@ public class UnitFactory {
 				System.err.println(line);
 			}
 			Unit u = new Unit(name, clazz, gender, bases, growths);
-			if(name.equals("Roy")){
-				u.addToInventory(WeaponFactory.getWeapon("Sealed Sword"));
-			} else if (name.equals("Lyn")){
-				u.addToInventory(WeaponFactory.getWeapon("Sol Katti"));
-			} else if (name.equals("Eliwood")){
-				u.addToInventory(WeaponFactory.getWeapon("Durandal"));
-			} else if (name.equals("Hector")){
-				u.addToInventory(WeaponFactory.getWeapon("Armads"));
-			} else if(name.equals("Eirika")){
-				u.addToInventory(WeaponFactory.getWeapon("Sieglinde"));
-			} else if(name.equals("Ephraim")){
-				u.addToInventory(WeaponFactory.getWeapon("Siegmund"));
-			} else if(name.equals("Marth")){
-				u.addToInventory(WeaponFactory.getWeapon("Falchion"));
-			} else if(name.equals("Ike")){
-				u.addToInventory(WeaponFactory.getWeapon("Ragnell"));
-			}
 			
 			units.put(name, u);
 		}
