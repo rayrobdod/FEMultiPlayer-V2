@@ -1,5 +1,8 @@
 version: yml.{build}
 clone_depth: 5
+install:
+   - cmd: choco install openjdk --version 11.0.1
+   - cmd: refreshenv
 build_script:
    - cmd: 'mkdir out\classes'
    - cmd: 'dir /S /B /A:-D src >out\classes.list'
@@ -58,6 +61,17 @@ build_script:
    - cmd: 'ECHO Main-Class: org.ninjacave.jarsplice.JarSpliceLauncher>>out\mapping-manifest.mf'
    - cmd: 'ECHO Class-Path: .>>out\mapping-manifest.mf'
    - cmd: 'jar cfm "out\FEMP-mapping.jar" "out\mapping-manifest.mf" -C out\mapping_cp .'
+
+   - ps: |
+      $deps = & 'C:\Program Files\OpenJDK\jdk-11.0.1\bin\jdeps' --list-deps "$PWD\out\FEMP-client.jar"
+      $deps = ForEach($dep in $deps) {$dep.Trim()}
+      $deps = $deps.Where({-not $_.StartsWith('JDK removed')})
+      $deps = $deps -join ","
+      & jlink --no-header-files --no-man-pages --compress=2 --strip-debug --add-modules $deps --output out\link
+   - cmd: cp "out\FEMP-client.jar" "out\link\lib\FEMP-client.jar"
+   - ps: |
+      $clientManifest = @('bin\java.exe -jar lib\FEMP-client.jar', 'PAUSE')
+      [System.IO.File]::WriteAllLines("$PWD\out\link\femp-client.bat", $clientManifest, (New-Object System.Text.UTF8Encoding $False))
 test_script:
    - cmd: 'mkdir out\test_lib'
    - cmd: 'curl -sS -o out\test_lib\junit-platform-console-standalone-1.2.0.jar https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone/1.2.0/junit-platform-console-standalone-1.2.0.jar'
@@ -69,5 +83,8 @@ test_script:
 
    - ps: '$wc = New-Object System.Net.WebClient'
    - ps: '$wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\out\test_reports\TEST-junit-vintage.xml))'
+   
+   - cmd: 'out\link\bin\java -version'
 artifacts:
 - path: out\*.jar
+- path: out\link
