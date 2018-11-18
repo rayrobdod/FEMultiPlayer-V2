@@ -17,7 +17,6 @@ import net.fe.overworldStage.Zone;
 import net.fe.overworldStage.Zone.RangeIndicator;
 import net.fe.overworldStage.Zone.RangeIndicator.RangeType;
 import net.fe.unit.Item;
-import net.fe.unit.RiseTome;
 import net.fe.unit.Unit;
 import net.fe.unit.Weapon;
 
@@ -116,10 +115,8 @@ public class UnitMoved extends MenuContext<String> {
 			new TakeTarget(stage, this, zone, unit).startContext();
 		} else if (action.equals("Drop")){
 			new DropTarget(stage, this, zone, unit).startContext();
-		} else if (action.equals("Summon")){
-			new Summon(stage, this, zone, unit).startContext();
 		} else {
-			for (FieldSkill f : unit.getTheClass().fieldSkills) {
+			for (FieldSkill f : unit.getFieldSkills()) {
 				if (action.equals(f.getName())) {
 					f.onSelect(stage, this, zone, unit).startContext();
 				}
@@ -161,14 +158,14 @@ public class UnitMoved extends MenuContext<String> {
 					new Node(unit.getXCoord(), unit.getYCoord()),
 					unit.getTotalWepRange(true)), RangeType.HEAL_DARK);
 			stage.addEntity(zone);
-		} else if (Arrays.asList("Trade", "Give", "Take", "Drop", "Rescue", "Summon")
+		} else if (Arrays.asList("Trade", "Give", "Take", "Drop", "Rescue")
 				.contains(menu.getSelection())) {
 			zone = new RangeIndicator(grid.getRange(
 					new Node(unit.getXCoord(), unit.getYCoord()), 1),
 					RangeType.MOVE_DARK);
 			stage.addEntity(zone);
 		} else {
-			for (FieldSkill f : unit.getTheClass().fieldSkills) {
+			for (FieldSkill f : unit.getFieldSkills()) {
 				if (menu.getSelection().equals(f.getName())) {
 					zone = f.getZone(unit, grid);
 					stage.addEntity(zone);
@@ -220,7 +217,6 @@ public class UnitMoved extends MenuContext<String> {
 		boolean give = false;
 		boolean take = false;
 		boolean drop = false;
-		boolean summon = false;
 		range = grid.getRange(new Node(u.getXCoord(), u.getYCoord()), 1);
 		for (Node n : range) {
 			Unit p = grid.getVisibleUnit(n.x, n.y);
@@ -242,19 +238,6 @@ public class UnitMoved extends MenuContext<String> {
 					.rescuedUnit().getStats().mov){
 				drop = true;
 			}
-			
-			//summon
-			if (p == null
-					&& grid.getVisibleTerrain(n.x, n.y).getMoveCost(
-							net.fe.unit.Class.createClass("Phantom")) <
-							unit.getStats().mov && 
-							unit.getTheClass().usableWeapon.contains(Weapon.Type.DARK)) {
-				for (Item i : unit.getInventory()) {
-					if (i instanceof RiseTome)
-						summon = true;
-				}
-			}
-			
 		}
 		if (trade && !fromTrade && !fromTake)
 			list.add("Trade");
@@ -266,10 +249,8 @@ public class UnitMoved extends MenuContext<String> {
 			list.add("Take");
 		if (drop && !fromTrade)
 			list.add("Drop");
-		if (summon)
-			list.add("Summon");
 		
-		for (FieldSkill f : unit.getTheClass().fieldSkills) {
+		for (FieldSkill f : unit.getFieldSkills()) {
 			if (f.allowed(unit, this.stage.grid)) {
 				list.add(f.getName());
 			}

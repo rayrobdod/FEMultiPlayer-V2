@@ -8,10 +8,10 @@ import net.fe.overworldStage.OverworldStage;
 import net.fe.overworldStage.ClientOverworldStage;
 import net.fe.overworldStage.Path;
 import net.fe.overworldStage.Node;
+import net.fe.unit.FieldSkillItem;
 import net.fe.unit.UnitIdentifier;
 import net.fe.unit.Unit;
 import net.fe.unit.Item;
-import net.fe.unit.RiseTome;
 import java.util.Optional;
 
 public final class SummonCommand extends Command {
@@ -33,7 +33,7 @@ public final class SummonCommand extends Command {
 		int tomeToUse = -1;
 		List<Item> items = unit.getInventory();
 		for(int z = 0; z < items.size(); z++){
-			if (items.get(z) instanceof RiseTome){
+			if (isRiseTome(items.get(z))) {
 				tomeToUse = z;
 			}
 		}
@@ -60,7 +60,7 @@ public final class SummonCommand extends Command {
 				int tomeToUse = 0;
 				List<Item> items = unit.getInventory();
 				for(int i = 0; i < items.size(); i++){
-					if (items.get(i) instanceof RiseTome){
+					if (isRiseTome(items.get(i))) {
 						tomeToUse = i;
 					}
 				}
@@ -78,5 +78,11 @@ public final class SummonCommand extends Command {
 	@Override
 	public String toString() {
 		return "Summon[" + dropX + "," + dropY + "]";
+	}
+	
+	
+	public static boolean isRiseTome(Item i) {
+		return (i instanceof FieldSkillItem) &&
+			((FieldSkillItem) i).skill.equals(FieldSkillItem.RISE_TOME.skill);
 	}
 }

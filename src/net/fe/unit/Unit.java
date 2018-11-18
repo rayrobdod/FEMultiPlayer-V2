@@ -26,6 +26,7 @@ import net.fe.fightStage.CombatTrigger;
 import net.fe.overworldStage.ClientOverworldStage;
 import net.fe.overworldStage.Corpse;
 import net.fe.overworldStage.DoNotDestroy;
+import net.fe.overworldStage.FieldSkill;
 import net.fe.overworldStage.Grid;
 import net.fe.overworldStage.Node;
 import net.fe.overworldStage.OverworldStage;
@@ -706,6 +707,23 @@ public final class Unit extends GriddedEntity implements Serializable, DoNotDest
 		if(getWeapon() != null)
 			triggers.addAll(getWeapon().getTriggers());
 		return triggers;
+	}
+	
+	/**
+	 * Returns the field skills that this unit has access to.
+	 */
+	public List<FieldSkill> getFieldSkills() {
+		final ArrayList<FieldSkill> retval = new ArrayList<FieldSkill>();
+		retval.addAll(this.getTheClass().fieldSkills);
+		for (Item i : this.getInventory()) {
+			if (i instanceof FieldSkillItem) {
+				FieldSkill newSkill = ((FieldSkillItem) i).skill;
+				if (! retval.contains(newSkill)) {
+					retval.add(newSkill);
+				}
+			}
+		}
+		return java.util.Collections.unmodifiableList(retval);
 	}
 	
 	//Development

@@ -216,7 +216,9 @@ public final class Weapon extends Item {
 			int first = this.type.compareTo(((Weapon) that).type);
 			if(first != 0) return first;
 			int second = this.getCost() - that.getCost();
-			return second;
+			if(second != 0) return second;
+			int third = this.id - that.id;
+			return third;
 		} else {
 			return -1;
 		}

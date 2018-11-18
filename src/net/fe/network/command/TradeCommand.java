@@ -13,7 +13,6 @@ import net.fe.overworldStage.context.TradeContext;
 import net.fe.unit.UnitIdentifier;
 import net.fe.unit.Unit;
 import net.fe.unit.Item;
-import net.fe.unit.RiseTome;
 import java.util.Optional;
 
 public final class TradeCommand extends Command {

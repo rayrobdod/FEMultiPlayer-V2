@@ -21,7 +21,6 @@ import net.fe.unit.HealingItem;
 import net.fe.unit.Item;
 import net.fe.unit.ItemDetailsText;
 import net.fe.unit.MapAnimation;
-import net.fe.unit.RiseTome;
 import net.fe.unit.Unit;
 import net.fe.unit.Weapon;
 

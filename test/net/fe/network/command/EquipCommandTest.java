@@ -24,7 +24,6 @@ import net.fe.unit.Class;
 import net.fe.unit.Unit;
 import net.fe.unit.UnitIdentifier;
 import net.fe.unit.HealingItem;
-import net.fe.unit.RiseTome;
 import net.fe.unit.Weapon;
 import net.fe.unit.Statistics;
 

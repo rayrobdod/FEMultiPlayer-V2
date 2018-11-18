@@ -44,8 +44,7 @@ public final class ItemDetailsText extends Entity{
 			if (item instanceof HealingItem) {
 				HealingItem potion = (HealingItem) item;
 				Renderer.drawString("default_med", "Heals " + potion.amount + " HP", this.x + 8, this.y + 28, this.renderDepth);
-			} else if (item instanceof RiseTome){
-				RiseTome rise = (RiseTome) item;
+			} else if (net.fe.network.command.SummonCommand.isRiseTome(item)){
 				Renderer.drawString("default_med", "Summons a phantom warrior", this.x + 8, this.y + 28, this.renderDepth);
 			} else if (item instanceof Weapon){
 				Weapon wep = (Weapon) item;
