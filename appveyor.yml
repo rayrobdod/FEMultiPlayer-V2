@@ -9,10 +9,10 @@ build_script:
    - cmd: 'javac -Xlint:deprecation -Xlint:unchecked -d "out\classes" -sourcepath "src" -cp "json-simple\json-simple-1.1.1.jar;lwjgl-2.9.0\jar\lwjgl.jar;lwjgl-2.9.0\jar\slick-util.jar" @out\classes.list'
 
    - cmd: 'XCOPY out\classes out\client_cp /S /I /Q'
-   - cmd: '"C:\Program Files\7-Zip\7z.exe" x -oout\client_cp -r -y json-simple\json-simple-1.1.1.jar'
-   - cmd: '"C:\Program Files\7-Zip\7z.exe" x -oout\client_cp -r -y lwjgl-2.9.0\jar\lwjgl.jar'
-   - cmd: '"C:\Program Files\7-Zip\7z.exe" x -oout\client_cp -r -y lwjgl-2.9.0\jar\slick-util.jar'
-   - cmd: '"C:\Program Files\7-Zip\7z.exe" x -oout\client_cp -r -y lwjgl-2.9.0\jar\jarsplice-0.40.jar'
+   - cmd: '7z x -oout\client_cp -r -y json-simple\json-simple-1.1.1.jar'
+   - cmd: '7z x -oout\client_cp -r -y lwjgl-2.9.0\jar\lwjgl.jar'
+   - cmd: '7z x -oout\client_cp -r -y lwjgl-2.9.0\jar\slick-util.jar'
+   - cmd: '7z x -oout\client_cp -r -y lwjgl-2.9.0\jar\jarsplice-0.40.jar'
    - cmd: 'rm out\client_cp\META-INF\MANIFEST.MF'
    - cmd: 'XCOPY levels out\client_cp\levels /S /I /Q'
    - cmd: 'XCOPY res out\client_cp\res /S /I /Q'
@@ -30,9 +30,9 @@ build_script:
    - cmd: 'ECHO .wav>out\server-res-exclude.txt'
    - cmd: 'ECHO .png>>out\server-res-exclude.txt'
    - cmd: 'XCOPY out\classes out\server_cp /S /I /Q'
-   - cmd: '"C:\Program Files\7-Zip\7z.exe" x -oout\server_cp -r -y json-simple\json-simple-1.1.1.jar'
-   - cmd: '"C:\Program Files\7-Zip\7z.exe" x -oout\server_cp -r -y lwjgl-2.9.0\jar\lwjgl.jar'
-   - cmd: '"C:\Program Files\7-Zip\7z.exe" x -oout\server_cp -r -y lwjgl-2.9.0\jar\slick-util.jar'
+   - cmd: '7z x -oout\server_cp -r -y json-simple\json-simple-1.1.1.jar'
+   - cmd: '7z x -oout\server_cp -r -y lwjgl-2.9.0\jar\lwjgl.jar'
+   - cmd: '7z x -oout\server_cp -r -y lwjgl-2.9.0\jar\slick-util.jar'
    - cmd: 'rm out\server_cp\META-INF\MANIFEST.MF'
    - cmd: 'XCOPY levels out\server_cp\levels /S /I /Q'
    - cmd: 'XCOPY res out\server_cp\res /S /I /Q /EXCLUDE:out\server-res-exclude.txt'
@@ -45,10 +45,10 @@ build_script:
    - cmd: 'ECHO \map_mugshots\>>out\mapping-res-exclude.txt'
    - cmd: 'ECHO \palette\>>out\mapping-res-exclude.txt'
    - cmd: 'XCOPY out\classes out\mapping_cp /S /I /Q'
-   - cmd: '"C:\Program Files\7-Zip\7z.exe" x -oout\mapping_cp -r -y json-simple\json-simple-1.1.1.jar'
-   - cmd: '"C:\Program Files\7-Zip\7z.exe" x -oout\mapping_cp -r -y lwjgl-2.9.0\jar\lwjgl.jar'
-   - cmd: '"C:\Program Files\7-Zip\7z.exe" x -oout\mapping_cp -r -y lwjgl-2.9.0\jar\slick-util.jar'
-   - cmd: '"C:\Program Files\7-Zip\7z.exe" x -oout\mapping_cp -r -y lwjgl-2.9.0\jar\jarsplice-0.40.jar'
+   - cmd: '7z x -oout\mapping_cp -r -y json-simple\json-simple-1.1.1.jar'
+   - cmd: '7z x -oout\mapping_cp -r -y lwjgl-2.9.0\jar\lwjgl.jar'
+   - cmd: '7z x -oout\mapping_cp -r -y lwjgl-2.9.0\jar\slick-util.jar'
+   - cmd: '7z x -oout\mapping_cp -r -y lwjgl-2.9.0\jar\jarsplice-0.40.jar'
    - cmd: 'rm out\mapping_cp\META-INF\MANIFEST.MF'
    - cmd: 'XCOPY res out\mapping_cp\res /S /I /Q /EXCLUDE:out\mapping-res-exclude.txt'
    - cmd: 'XCOPY shaders out\mapping_cp\shaders /S /I /Q'
@@ -67,11 +67,15 @@ build_script:
       $deps = ForEach($dep in $deps) {$dep.Trim()}
       $deps = $deps.Where({-not $_.StartsWith('JDK removed')})
       $deps = $deps -join ","
+      echo $deps
       & jlink --no-header-files --no-man-pages --compress=2 --strip-debug --add-modules $deps --output out\link
-   - cmd: cp "out\FEMP-client.jar" "out\link\lib\FEMP-client.jar"
+   - cmd: cp "out\FEMP-client.jar" "out\link\lib\femp.jar"
    - ps: |
-      $clientManifest = @('bin\java.exe -jar lib\FEMP-client.jar', 'PAUSE')
-      [System.IO.File]::WriteAllLines("$PWD\out\link\femp-client.bat", $clientManifest, (New-Object System.Text.UTF8Encoding $False))
+      $clientScript = @('bin\java.exe -jar lib\femp.jar', 'PAUSE')
+      [System.IO.File]::WriteAllLines("$PWD\out\link\femp-client.bat", $clientScript, (New-Object System.Text.UTF8Encoding $False))
+   - ps: |
+      $serverScript = @('bin\java.exe -cp lib\femp.jar net.fe.network.FEServer', 'PAUSE')
+      [System.IO.File]::WriteAllLines("$PWD\out\link\femp-server.bat", $serverScript, (New-Object System.Text.UTF8Encoding $False))
 test_script:
    - cmd: 'mkdir out\test_lib'
    - cmd: 'curl -sS -o out\test_lib\junit-platform-console-standalone-1.2.0.jar https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone/1.2.0/junit-platform-console-standalone-1.2.0.jar'
