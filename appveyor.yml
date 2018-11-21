@@ -8,6 +8,7 @@ build_script:
    - cmd: 'dir /S /B /A:-D src >out\classes.list'
    - cmd: 'javac -Xlint:deprecation -Xlint:unchecked -d "out\classes" -sourcepath "src" -cp "json-simple\json-simple-1.1.1.jar;lwjgl-2.9.0\jar\lwjgl.jar;lwjgl-2.9.0\jar\slick-util.jar" @out\classes.list'
 
+  # produce a standalone client jar
    - cmd: 'XCOPY out\classes out\client_cp /S /I /Q'
    - cmd: '7z x -oout\client_cp -r -y json-simple\json-simple-1.1.1.jar'
    - cmd: '7z x -oout\client_cp -r -y lwjgl-2.9.0\jar\lwjgl.jar'
@@ -27,6 +28,7 @@ build_script:
    - cmd: 'ECHO Class-Path: .>>out\client-manifest.mf'
    - cmd: 'jar cfm "out\FEMP-client.jar" "out\client-manifest.mf" -C out\client_cp .'
 
+  # produce a standalone server jar
    - cmd: 'ECHO .wav>out\server-res-exclude.txt'
    - cmd: 'ECHO .png>>out\server-res-exclude.txt'
    - cmd: 'XCOPY out\classes out\server_cp /S /I /Q'
@@ -38,6 +40,7 @@ build_script:
    - cmd: 'XCOPY res out\server_cp\res /S /I /Q /EXCLUDE:out\server-res-exclude.txt'
    - cmd: 'jar cfe "out\FEMP-server.jar" "net.fe.network.FEServer" -C out\server_cp .'
 
+  # produce a standalone map editor jar
    - cmd: 'ECHO .wav>out\mapping-res-exclude.txt'
    - cmd: 'ECHO \battle_anim\>>out\mapping-res-exclude.txt'
    - cmd: 'ECHO \map_anim\>>out\mapping-res-exclude.txt'
@@ -62,20 +65,33 @@ build_script:
    - cmd: 'ECHO Class-Path: .>>out\mapping-manifest.mf'
    - cmd: 'jar cfm "out\FEMP-mapping.jar" "out\mapping-manifest.mf" -C out\mapping_cp .'
 
+  # produce a standalone jlinked executable thing
+   - cmd: 'XCOPY out\classes out\link_cp /S /I /Q'
+   - cmd: '7z x -oout\link_cp -r -y json-simple\json-simple-1.1.1.jar'
+   - cmd: '7z x -oout\link_cp -r -y lwjgl-2.9.0\jar\lwjgl.jar'
+   - cmd: '7z x -oout\link_cp -r -y lwjgl-2.9.0\jar\slick-util.jar'
+   - cmd: 'rm out\link_cp\META-INF\MANIFEST.MF'
+   - cmd: 'XCOPY levels out\link_cp\levels /S /I /Q'
+   - cmd: 'XCOPY res out\link_cp\res /S /I /Q'
+   - cmd: 'XCOPY shaders out\link_cp\shaders /S /I /Q'
+   - ps: |
+      $manifest = @('Manifest-Version: 1.0', 'Main-Class: net.fe.FEMultiplayer')
+      [System.IO.File]::WriteAllLines("$PWD\out\link-manifest.mf", $manifest, (New-Object System.Text.UTF8Encoding $False))
    - ps: |
       $deps = & 'C:\Program Files\OpenJDK\jdk-11.0.1\bin\jdeps' --list-deps "$PWD\out\FEMP-client.jar"
       $deps = ForEach($dep in $deps) {$dep.Trim()}
       $deps = $deps.Where({-not $_.StartsWith('JDK removed')})
       $deps = $deps -join ","
       echo $deps
-      & jlink --no-header-files --no-man-pages --compress=2 --strip-debug --add-modules $deps --output out\link
-   - cmd: cp "out\FEMP-client.jar" "out\link\lib\femp.jar"
+      & jlink --no-header-files --no-man-pages --compress=2 --strip-debug --add-modules $deps --output out\link_win
+   - cmd: 'jar cfm "out\link_win\lib\femp.jar" "out\link-manifest.mf" -C out\link_cp .'
+   - cmd: 'XCOPY lwjgl-2.9.0\native\windows out\link_win\bin\ /S /I /Q'
    - ps: |
-      $clientScript = @('bin\java.exe -jar lib\femp.jar', 'PAUSE')
-      [System.IO.File]::WriteAllLines("$PWD\out\link\femp-client.bat", $clientScript, (New-Object System.Text.UTF8Encoding $False))
+      $clientScript = @('bin\java.exe -cp lib\femp.jar net.fe.FEMultiplayer', 'PAUSE')
+      [System.IO.File]::WriteAllLines("$PWD\out\link_win\femp-client.bat", $clientScript, (New-Object System.Text.UTF8Encoding $False))
    - ps: |
       $serverScript = @('bin\java.exe -cp lib\femp.jar net.fe.network.FEServer', 'PAUSE')
-      [System.IO.File]::WriteAllLines("$PWD\out\link\femp-server.bat", $serverScript, (New-Object System.Text.UTF8Encoding $False))
+      [System.IO.File]::WriteAllLines("$PWD\out\link_win\femp-server.bat", $serverScript, (New-Object System.Text.UTF8Encoding $False))
 test_script:
    - cmd: 'mkdir out\test_lib'
    - cmd: 'curl -sS -o out\test_lib\junit-platform-console-standalone-1.2.0.jar https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone/1.2.0/junit-platform-console-standalone-1.2.0.jar'
@@ -88,7 +104,7 @@ test_script:
    - ps: '$wc = New-Object System.Net.WebClient'
    - ps: '$wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\out\test_reports\TEST-junit-vintage.xml))'
    
-   - cmd: 'out\link\bin\java -version'
+   - cmd: 'out\link_win\bin\java -version'
 artifacts:
 - path: out\*.jar
-- path: out\link
+- path: out\link_win
