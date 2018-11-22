@@ -92,6 +92,21 @@ build_script:
    - ps: |
       $serverScript = @('bin\java.exe -cp lib\femp.jar net.fe.network.FEServer', 'PAUSE')
       [System.IO.File]::WriteAllLines("$PWD\out\link_win\femp-server.bat", $serverScript, (New-Object System.Text.UTF8Encoding $False))
+
+   - cmd: 'curl -sS -o out\openjdk-11.0.1_linux-x64_bin.tar.gz https://download.java.net/java/GA/jdk11/13/GPL/openjdk-11.0.1_linux-x64_bin.tar.gz'
+   - cmd: '7z x -oout\openjdk-11.0.1_linux-x64_bin.tar -r -y out\openjdk-11.0.1_linux-x64_bin.tar.gz'
+   - cmd: '7z x -oout\openjdk-11.0.1_linux-x64_bin -r -y out\openjdk-11.0.1_linux-x64_bin.tar'
+   - ps: |
+      & jlink --no-header-files --no-man-pages --compress=2 --strip-debug --module-path out\openjdk-11.0.1_linux-x64_bin\jdk-11.0.1\jmods --add-modules $deps --output out\link_linux
+   - cmd: 'jar cfm "out\link_linux\lib\femp.jar" "out\link-manifest.mf" -C out\link_cp .'
+   - cmd: 'XCOPY lwjgl-2.9.0\native\linux out\link_linux\bin\ /S /I /Q'
+   - ps: |
+      $clientScript = @('bin\java -cp lib\femp.jar net.fe.FEMultiplayer')
+      [System.IO.File]::WriteAllLines("$PWD\out\link_linux\femp-client.sh", $clientScript, (New-Object System.Text.UTF8Encoding $False))
+   - ps: |
+      $serverScript = @('bin\java -cp lib\femp.jar net.fe.network.FEServer')
+      [System.IO.File]::WriteAllLines("$PWD\out\link_linux\femp-server.sh", $serverScript, (New-Object System.Text.UTF8Encoding $False))
+
 test_script:
    - cmd: 'mkdir out\test_lib'
    - cmd: 'curl -sS -o out\test_lib\junit-platform-console-standalone-1.2.0.jar https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone/1.2.0/junit-platform-console-standalone-1.2.0.jar'
@@ -105,6 +120,8 @@ test_script:
    - ps: '$wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\out\test_reports\TEST-junit-vintage.xml))'
    
    - cmd: 'out\link_win\bin\java -version'
+   - cmd: 'dir out\link_linux\lib'
 artifacts:
 - path: out\*.jar
 - path: out\link_win
+- path: out\link_linux
