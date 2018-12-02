@@ -91,7 +91,7 @@ public class WeaponFactory {
 			}
 			
 			if(!args[8].equals("-")) {
-				final String[] split = args[8].split("×");
+				final String[] split = args[8].split(" ");
 				
 				final int multiplier;
 				if (1 >= split.length) {
