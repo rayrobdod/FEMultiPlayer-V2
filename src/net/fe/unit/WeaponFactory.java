@@ -270,12 +270,12 @@ public class WeaponFactory {
 	 */
 	private static CombatTrigger decodeTrigger(String s) throws IllegalArgumentException {
 		switch(s) {
-			case "Brave" : return new Brave();
-			case "Nosferatu" : return new Nosferatu();
-			case "Luna" : return new LunaPlus();
-			case "Eclipse6" : return new EclipseSix();
-			case "Crossbow" : return new CrossBow();
-			case "Reaver" : return new Reaver();
+			case "StrikeTwice" : return new Brave();
+			case "DrainHpHalf" : return new Nosferatu();
+			case "Pierce" : return new LunaPlus();
+			case "HpToOne" : return new EclipseSix();
+			case "MightOnly" : return new CrossBow();
+			case "ReverseTriangle" : return new Reaver();
 			default : throw new IllegalArgumentException("Unknown trigger name: " + s);
 		}
 	}

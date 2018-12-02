@@ -6,8 +6,8 @@ Silver Sword	Sword	1	13	80	0	10	1500	-	-	-	-
 Killing Edge	Sword	1	9	75	30	10	1300	-	-	-	-
 Armorslayer	Sword	1	8	80	0	9	1260	Armor	-	-	-
 Longsword	Sword	1	6	85	0	9	1260	Mount	-	-	-
-Lancereaver	Sword	1	9	75	5	7	1800	-	Reaver	-	-
-Brave Sword	Sword	1	9	75	0	15	8000	-	Brave	-	-
+Lancereaver	Sword	1	9	75	5	7	1800	-	ReverseTriangle	-	-
+Brave Sword	Sword	1	9	75	0	15	8000	-	StrikeTwice	-	-
 Audhulma	Sword	1	18	85	0	15	10000	-	-	-	Res 5
 Wo Dao	Sword	1	8	75	35	10	1200	-	-	-	-
 Durandal	Sword	1	17	90	0	10	-	-	-	Eliwood	Str 5
@@ -25,8 +25,8 @@ Short Spear	Lance	1-2	9	60	0	9	900	-	-	-	-
 Killer Lance	Lance	1	10	70	30	10	1200	-	-	-	-
 Heavy Spear	Lance	1	9	70	0	8	1200	Armor	-	-	-
 Horseslayer	Lance	1	7	70	0	8	1040	Mount	-	-	-
-Axereaver	Lance	1	10	70	5	7	1950	-	Reaver	-	-
-Brave Lance	Lance	1	10	70	0	15	7500	-	Brave	-	-
+Axereaver	Lance	1	10	70	5	7	1950	-	ReverseTriangle	-	-
+Brave Lance	Lance	1	10	70	0	15	7500	-	StrikeTwice	-	-
 Gradivus	Lance	1-2	15	85	0	15	10000	-	-	-	Def 5
 Siegmund	Lance	1	17	80	0	15	-	-	-	Ephraim	Str 5
 #
@@ -40,22 +40,22 @@ Tomahawk	Axe	1-2	13	65	0	7	3000	-	-	-	-
 Killer Axe	Axe	1	11	65	30	10	1000	-	-	-	-
 Hammer	Axe	1	10	55	0	10	800	Armor	-	-	-
 Halberd	Axe	1	10	60	0	8	810	Mount	-	-	-
-Swordreaver	Axe	1	11	65	5	7	2100	-	Reaver	-	-
-Brave Axe	Axe	1	10	65	0	15	7500	-	Brave	-	-
+Swordreaver	Axe	1	11	65	5	7	2100	-	ReverseTriangle	-	-
+Brave Axe	Axe	1	10	65	0	15	7500	-	StrikeTwice	-	-
 Garm	Axe	1	20	75	0	15	10000	-	-	-	Spd 5
 Armads	Axe	1	18	85	0	12	-	-	-	Hector	Def 5
 Iron Bow	Bow	2	6	85	0	22	540	Flier	-	-	-
 Steel Bow	Bow	2	9	70	0	15	720	Flier	-	-	-
 Silver Bow	Bow	2	13	75	0	10	1600	Flier	-	-	-
 Killer Bow	Bow	2	9	75	30	10	1400	Flier	-	-	-
-Brave Bow	Bow	2	10	70	0	15	7500	Flier	Brave	-	-
+Brave Bow	Bow	2	10	70	0	15	7500	Flier	StrikeTwice	-	-
 Debug Short Bow	Bow	1-2	5	85	10	11	1760	Flier	-	-	-
 Longbow	Bow	2-3	5	65	0	10	2000	Flier	-	-	-
 Double Bow	Bow	2-3	18	85	5	12	10000	Flier	-	-	Str 5
-Bowgun	Crossbow	1-2	24	100	0	12	2000	Flier	Crossbow	-	-
-Crossbow	Crossbow	1-2	28	100	0	10	3000	Flier	Crossbow	-	-
-Aqqar	Crossbow	1-2	32	100	0	8	5000	Flier	Crossbow	-	-
-Arbalest	Crossbow	1-2	38	100	15	10	10000	Flier	Crossbow	-	-
+Bowgun	Crossbow	1-2	24	100	0	12	2000	Flier	MightOnly	-	-
+Crossbow	Crossbow	1-2	28	100	0	10	3000	Flier	MightOnly	-	-
+Aqqar	Crossbow	1-2	32	100	0	8	5000	Flier	MightOnly	-	-
+Arbalest	Crossbow	1-2	38	100	15	10	10000	Flier	MightOnly	-	-
 Fire	Anima	1-2	5	90	0	20	560	-	-	-	-
 Elfire	Anima	1-2	10	85	0	15	1200	-	-	-	-
 Fimbulvetr	Anima	1-2	13	80	0	10	6000	-	-	-	-
@@ -66,9 +66,9 @@ Debug Purge	Light	3-10	10	70	5	2	3000	-	-	-	-
 Aura	Light	1-2	12	85	15	10	8000	-	-	-	-
 Aureola	Light	1-2	15	90	5	10	15000	-	-	-	Res 5
 Flux	Dark	1-2	7	80	0	22	900	-	-	-	-
-Eclipse	Dark	3-10	0	10	-900	2	4000	-	Eclipse6	-	-
-Lunase	Dark	1-2	0	50	0	17	4200	-	Luna	-	-
-Nosferatu	Dark	1-2	10	70	0	10	3200	-	Nosferatu	-	-
+Eclipse	Dark	3-10	0	10	-900	2	4000	-	HpToOne	-	-
+Lunase	Dark	1-2	0	50	0	17	4200	-	Pierce	-	-
+Nosferatu	Dark	1-2	10	70	0	10	3200	-	DrainHpHalf	-	-
 Debug Fenrir	Dark	1-2	15	70	0	10	9000	-	-	-	-
 Ereshkigal	Dark	1-2	20	95	0	12	15000	-	-	-	Skl 5
 Heal	Staff	1	10	100	0	15	600	-	-	-	-
